@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package calendar;
+
+service Calendar {
+
+}
+
+message Calendar {
+    string id = 1;
+    string client_id = 2;
+    string order_end_time = 3;
+    string day = 4;
+    string month = 5;
+    string year = 6;
+}

@@ -31,7 +31,7 @@ func (s *ClientService) CreateUser(ctx context.Context, req *pb.Client) (*pb.Emp
 		s.logger.Error("error while creating user", l.Error(err))
 		return nil, status.Error(codes.Internal, "Error while creating user")
 	}
-	return nil, nil
+	return &pb.Empty{}, nil
 }
 
 func (s *ClientService) GetClientById(ctx context.Context, req *pb.ClientId) (*pb.Client, error) {

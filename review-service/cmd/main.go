@@ -2,6 +2,7 @@ package main
 
 import (
 	"net"
+    "google.golang.org/grpc/reflection"
 
 	"github.com/hdn-project/review-service/config"
 	pb "github.com/hdn-project/review-service/genproto"
@@ -38,7 +39,7 @@ func main() {
     pb.RegisterUserServiceServer(s, userService)
     log.Info("main: server running",
         logger.String("port", cfg.RPCPort))
-
+    reflection.Register(s)
     if err := s.Serve(lis); err != nil {
         log.Fatal("Error while listening: %v", logger.Error(err))
     }

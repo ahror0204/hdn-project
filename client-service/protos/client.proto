@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package client;
+
+service ClientService {
+    rpc CreateUser(Client) returns (Empty);
+    rpc GetClientById(ClientId) returns (Client);
+    rpc DeleteById(ClientId) returns (Empty);
+    rpc UpdateClient(Client) returns (Empty);
+}
+
+message ClientId{
+    string id = 1;
+}
+message Empty {}
+
+message Client {
+    string id = 1;
+    string calendar_id = 2;
+    string first_name = 3;
+    string last_name = 4;
+    repeated string phone_numbers = 5;
+    string email = 6;
+    string status = 7;
+    string payment_card = 8;
+    string created_at = 9;
+    string updated_at = 10;
+    string deleted_at = 11;
+   
+
+
+}

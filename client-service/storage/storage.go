@@ -8,22 +8,22 @@ import (
 
 //IStorage ...
 type IStorage interface {
-    User() repo.UserStorageI
+    Client() repo.ClientStorageI
 }
 
 type storagePg struct {
     db         *sqlx.DB
-    userRepo   repo.UserStorageI
+    clientRepo   repo.ClientStorageI
 }
 
 //NewStoragePg ...
 func NewStoragePg(db *sqlx.DB) *storagePg {
     return &storagePg{
         db:         db,
-        userRepo:   postgres.NewUserRepo(db),
+        clientRepo:   postgres.NewClientRepo(db),
     }
 }
 
-func (s storagePg) User() repo.UserStorageI {
-    return s.userRepo
+func (s storagePg) Client() repo.ClientStorageI {
+    return s.clientRepo
 }

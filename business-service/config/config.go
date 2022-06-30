@@ -12,7 +12,7 @@ type Config struct {
     PostgresHost      string
     PostgresPort      int
     PostgresDatabase  string
-    PostgresUser      string
+    PostgresBusiness      string
     PostgresPassword  string
     LogLevel          string
     RPCPort           string
@@ -28,9 +28,9 @@ func Load() Config {
 
     c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
     c.PostgresPort = cast.ToInt(getOrReturnDefault("POSTGRES_PORT", 5432))
-    c.PostgresDatabase = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "templatedb"))
-    c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "postgres"))
-    c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_PASSWORD", "123"))
+    c.PostgresDatabase = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "businessdb"))
+    c.PostgresBusiness = cast.ToString(getOrReturnDefault("POSTGRES_BUSINESS", "postgres"))
+    c.PostgresPassword = cast.ToString(getOrReturnDefault("POSTGRES_PASSWORD", "1"))
 
     c.LogLevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))
 

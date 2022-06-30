@@ -9,6 +9,5 @@ CREATE TABLE IF NOT EXISTS clients(
     payment_card VARCHAR(255),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    deleted_at TIMESTAMP,
-    FOREIGN KEY (calendar_id) REFERENCES calendars(id) 
+    deleted_at TIMESTAMP
 );

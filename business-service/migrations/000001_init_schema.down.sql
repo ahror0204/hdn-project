@@ -1,0 +1,4 @@
+-- DROP TABLE business;
+-- DROP TABLE men_services;
+-- DROP TABLE women_services;
+-- DROP TABLE staff;

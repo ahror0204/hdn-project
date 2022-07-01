@@ -8,11 +8,11 @@ service BusinessService {
 
 message Business {
     string id = 1;
-    string name = 2;
+    string salon_name = 2;
     repeated string phone_numbers = 3;
     string status = 4;
     repeated Staff staff = 5;
-    string location = 8;
+    string location = 6;
 }
 
 message Staff {
@@ -26,8 +26,9 @@ message Staff {
     string business_id = 8;
     string calendar_id = 9;
     string client_id = 10;
-    string men_services_id = 11;
-    string women_services_id = 12;
+    string gender = 11;
+    string men_services_id = 12;
+    string women_services_id = 13;
 }
 
 message MenServices {

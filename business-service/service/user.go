@@ -7,6 +7,8 @@ import (
 	l "github.com/hdn-project/business-service/pkg/logger"
 	"github.com/hdn-project/business-service/storage"
 	"github.com/jmoiron/sqlx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 //BusinessService ...
@@ -24,5 +26,12 @@ func NewBusinessService(db *sqlx.DB, log l.Logger) *BusinessService {
 }
 
 func (s *BusinessService) CreateBusiness(ctx context.Context, req *pb.Business) (*pb.Business, error) {
-	return nil, nil
+	
+	business, err := s.storage.Business().CreateBusiness(req)
+	if err != nil {
+		s.logger.Error("failed while creating business", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while creating business")
+	}
+
+	return business, nil
 }

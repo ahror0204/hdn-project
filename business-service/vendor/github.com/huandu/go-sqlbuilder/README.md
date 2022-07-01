@@ -185,7 +185,7 @@ func ExampleStruct() {
     // Output:
     // SELECT user.id, user.name, user.status FROM user WHERE id = ?
     // [1234]
-    // sqlbuilder.User{ID:1234, Name:"huandu", Status:1}
+    // sqlbuilder.Business{ID:1234, Name:"huandu", Status:1}
 }
 ```
 

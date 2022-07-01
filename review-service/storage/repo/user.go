@@ -5,6 +5,6 @@ import (
 )
 
 //UserStorageI ...
-type UserStorageI interface {
-    Create(*pb.User) (*pb.User, error)
+type ReviewStorageI interface {
+    Create(*pb.Review) (*pb.Review, error)
 }

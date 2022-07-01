@@ -3,6 +3,23 @@ syntax = "proto3";
 package review;
 
 service ReviewService {
+   
 
 }
+message Empty {
+}
 
+message ReviewId{
+    string id = 1;
+}
+
+message Review {
+    string id = 1;
+    string client_id = 2;
+    string business_id = 3;
+    string like = 4;
+    string dislike = 5;
+    string comment = 6;
+    string created_at = 7;
+    string updated_at = 8;
+}

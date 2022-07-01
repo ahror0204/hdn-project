@@ -1,5 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/baxrom/go/src/github.com/hdn-project/review-service'
-CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -o /home/baxrom/go/src/github.com/hdn-project/review-service/bin/ /main.go
+ 
+CGO_ENABLED=0 GOOS=darwin go build -mod=vendor -a -installsuffix cgo -o /home/baxrom/go/src/github.com/hdn-project/review-service/bin/template ./cmd/main.go
 make: Leaving directory '/home/baxrom/go/src/github.com/hdn-project/review-service'
  

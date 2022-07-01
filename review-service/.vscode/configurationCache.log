@@ -1,1 +1,1 @@
-{"buildTargets":["build","proto-gen"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
+{"buildTargets":["build","lint","migrate-create","migrate-down","migrate-force","migrate-up","proto-gen"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

@@ -5,15 +5,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type userRepo struct {
+type reviewRepo struct {
     db *sqlx.DB
 }
 
 //NewUserRepo ...
-func NewUserRepo(db *sqlx.DB) *userRepo {
-    return &userRepo{db: db}
+func NewReviewRepo(db *sqlx.DB) *reviewRepo{
+    return &reviewRepo{db: db}
 }
 
-func (r *userRepo) Create(user *pb.User) (*pb.User, error) {
+func (r *reviewRepo) Create(user *pb.Review) (*pb.Review, error) {
     return nil, nil
 }

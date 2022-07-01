@@ -15,7 +15,7 @@ import (
 func main() {
     cfg := config.Load()
 
-    log := logger.New(cfg.LogLevel, "template-service")
+    log := logger.New(cfg.LogLevel, "review-service")
     defer logger.Cleanup(log)
 
     log.Info("main: sqlxConfig",
@@ -28,7 +28,7 @@ func main() {
         log.Fatal("sqlx connection to postgres error", logger.Error(err))
     }
 
-    userService := service.NewUserService(connDB, log)
+    reviewService := service.NewReviewService(connDB, log)
 
     lis, err := net.Listen("tcp", cfg.RPCPort)
     if err != nil {
@@ -36,7 +36,7 @@ func main() {
     }
 
     s := grpc.NewServer()
-    pb.RegisterUserServiceServer(s, userService)
+    pb.RegisterReviewServiceServer(s, reviewService)
     log.Info("main: server running",
         logger.String("port", cfg.RPCPort))
     reflection.Register(s)

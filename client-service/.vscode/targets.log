@@ -8,14 +8,18 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jun 29 16:06:28 2022
+# Make data base, printed on Fri Jul  1 08:34:47 2022
 
 # Variables
 
 # environment
+G_ENABLE_DIAGNOSTIC = 0
+# environment
 GDK_BACKEND = x11
 # environment
 LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
@@ -25,13 +29,15 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-27999df9-62e6-4c0f-8818-70bb199f828d.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-b418ec40-1bfe-4ef9-8d3f-4541603621e6.sock
 # environment
 LC_NAME = en_US.UTF-8
 # environment
 LC_NUMERIC = en_US.UTF-8
 # environment
 VSCODE_CWD = /home/baxrom/go/src/github.com/hdn-project
+# makefile (from 'Makefile', line 2)
+APP = template
 # environment
 LC_ADDRESS = en_US.UTF-8
 # default
@@ -57,7 +63,7 @@ PWD = /home/baxrom/go/src/github.com/hdn-project/client-service
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
-OLDPWD = /home/baxrom/go/src/github.com
+OLDPWD = /home/baxrom/go/src/github.com/hdn-project/review-service
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -69,13 +75,13 @@ VSCODE_CODE_CACHE_PATH = /home/baxrom/.config/Code/CachedData/30d9c6cd9483b2cc58
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.7MZMO1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.RUVAO1
 # default
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
 # environment
-GNOME_TERMINAL_SERVICE = :1.270
+GNOME_TERMINAL_SERVICE = :1.1032
 # makefile
 MAKEFLAGS = pqrR
 # makefile
@@ -111,13 +117,13 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 8747
+VSCODE_PID = 3339
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/baxrom:@/tmp/.ICE-unix/1617,unix/baxrom:/tmp/.ICE-unix/1617
+SESSION_MANAGER = local/baxrom:@/tmp/.ICE-unix/1642,unix/baxrom:/tmp/.ICE-unix/1642
 # automatic
 *F = $(notdir $*)
 # environment
@@ -143,9 +149,11 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
 SHLVL = 1
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/82613c92_0621_4c83_b33b_1041a342ed73
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/7f7a3479_05a8_40de_968b_a3a9f9984ae2
 # environment
 MAKELEVEL := 0
+# makefile (from 'Makefile', line 3)
+APP_CMD_DIR = ./cmd
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
@@ -164,6 +172,8 @@ SNAP_USER_COMMON = /home/baxrom/snap/code/common
 LC_TIME = en_US.UTF-8
 # environment
 SNAP = /snap/code/99
+# environment
+INVOCATION_ID = 26fb332a396e4791a2050e3442c9ae35
 # environment
 SNAP_REVISION = 99
 # environment
@@ -201,7 +211,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 1636
+SYSTEMD_EXEC_PID = 37650
 # environment
 DISPLAY = :0
 # environment
@@ -217,6 +227,8 @@ SNAP_DATA = /var/snap/code/99
 # environment
 SNAP_CONTEXT = Oeh3A3OxPZY380uqOPI14nOZD8DtEfPAd16hs05uY5Mbt83oA_82
 # environment
+MANAGERPID = 1486
+# environment
 LC_MEASUREMENT = en_US.UTF-8
 # environment
 LC_PAPER = en_US.UTF-8
@@ -226,6 +238,8 @@ XDG_RUNTIME_DIR = /run/user/1000
 COLORTERM = truecolor
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/baxrom/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+# environment
+JOURNAL_STREAM = 8:173632
 # environment
 GOMODCACHE = /home/baxrom/go/pkg/mod
 # environment
@@ -277,11 +291,12 @@ XDG_MENU_PREFIX = gnome-
 # environment
 GDMSESSION = ubuntu
 # environment
+ 
 LC_IDENTIFICATION = en_US.UTF-8
 # environment
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
 # variable set hash-table stats:
-# Load=134/1024=13%, Rehash=0, Collisions=13/164=8%
+# Load=141/1024=14%, Rehash=0, Collisions=14/171=8%
 
 # Pattern-specific Variable Values
 
@@ -289,7 +304,7 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 38, inode 924222): 17 files, no impossibilities.
+# . (device 40, inode 924222): 17 files, no impossibilities.
 
 # 17 files, no impossibilities in 1 directories.
 
@@ -299,10 +314,24 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Files
 
+migrate-create:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 23):
+	migrate create -ext sql -dir migrations -seq init_schema
+
+lint:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 12):
+	golangci-lint -c .golangci.yaml run --build-tags "musl" ./...
+
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-24 11:57:18.873695106
+#  Last modified 2022-06-30 20:45:01.229397605
 #  File has been updated.
 #  Successfully updated.
 
@@ -310,9 +339,15 @@ proto-gen:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 7):
+#  recipe to execute (from 'Makefile', line 9):
 	./scripts/gen-proto.sh	${CURRENT_DIR}
-	ls genproto/*.pb.go | xargs -n1 -IX bash -c "sed -e '/bool/ s/,omitempty//' X > X.tmp && mv X{.tmp,}"
+
+migrate-force:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 20):
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clinetdb?sslmode=disable force 
 
 # Not a target:
 .DEFAULT:
@@ -331,24 +366,37 @@ build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 4):
-	CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go
+#  recipe to execute (from 'Makefile', line 6):
+	CGO_ENABLED=0 GOOS=darwin go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go
+
+migrate-down:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 17):
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clientdb?sslmode=disable down
+
+migrate-up:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 14):
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clientdb?sslmode=disable up
 
 # files hash-table stats:
- 
-# Load=6/1024=1%, Rehash=0, Collisions=0/16=0%
+# Load=11/1024=1%, Rehash=0, Collisions=0/21=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 24 / storage = 186 B / avg = 7 B
-# current buf: size = 8162 B / used = 186 B / count = 24 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 29 / storage = 244 B / avg = 8 B
+# current buf: size = 8162 B / used = 244 B / count = 29 / avg = 8 B
 
-# strcache performance: lookups = 30 / hit rate = 20%
+# strcache performance: lookups = 40 / hit rate = 27%
 # hash-table stats:
-# Load=24/8192=0%, Rehash=0, Collisions=0/30=0%
-# Finished Make data base on Wed Jun 29 16:06:28 2022
+# Load=29/8192=0%, Rehash=0, Collisions=0/40=0%
+# Finished Make data base on Fri Jul  1 08:34:47 2022
 
  

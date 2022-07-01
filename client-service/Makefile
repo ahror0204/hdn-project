@@ -15,3 +15,9 @@ migrate-up:
 
 migrate-down:
 	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clientdb?sslmode=disable down
+
+migrate-force:
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clinetdb?sslmode=disable force 
+
+migrate-create:
+	migrate create -ext sql -dir migrations -seq init_schema

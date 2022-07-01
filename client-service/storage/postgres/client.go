@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -21,12 +22,12 @@ func NewClientRepo(db *sqlx.DB) *clientRepo {
 func (r *clientRepo) CreateUser(user *pb.Client) (*pb.Empty, error) {
 	id, err := uuid.NewV4()
 	if err != nil {
+		fmt.Println("Error while generating uuid: ")
 		return nil, err
 	}
-	user.Id = id.String()
 	tim := time.Now()
 	query := `INSERT INTO clients (id,calendar_id, first_name, last_name,phone_numbers,email,status, payment_card,created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
-	_, err = r.db.Exec(query, user.Id, user.CalendarId, user.FirstName, user.LastName, pq.Array(user.PhoneNumbers), user.Email, user.Status, user.PaymentCard,tim)
+	_, err = r.db.Query(query, id, user.CalendarId, user.FirstName, user.LastName, pq.Array(user.PhoneNumbers), user.Email, user.Status, user.PaymentCard,tim)
 	if err != nil {
 		return nil, err
 	}

@@ -2,46 +2,51 @@ syntax = "proto3";
 
 package business;
 
-// service Business {
-
-// }
+service BusinessService {
+    rpc CreateBusiness (Business) returns (Business);
+}
 
 message Business {
     string id = 1;
-    string first_name = 2;
-    string last_name = 3;
-    string saloon_name = 4;
-    repeated string phone_numbers = 5;
-    string status = 6;
-    Payment payment_card = 7;
-    string calendar_id = 8;
-    string comment_id = 9;
-    string client_id = 10;
-    string location = 11;
+    string name = 2;
+    repeated string phone_numbers = 3;
+    string status = 4;
+    repeated Staff staff = 5;
+    string location = 8;
 }
 
-message Payment {
-    string click = 1;
-    string payme = 2;
-    string apelsin = 3;
+message Staff {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    repeated string phone_numbers = 4;
+    string cost = 5;
+    string status = 6;
+    string comment_id = 7;
+    string business_id = 8;
+    string calendar_id = 9;
+    string client_id = 10;
+    string men_services_id = 11;
+    string women_services_id = 12;
 }
 
 message MenServices {
-    string hair_cut = 1;
-    string beard_cut = 2;
-    string hair_coloring = 3;
-    string special_hair_cut = 4;
-    string beard_coloring = 5;
-    string beard_trim = 6;
-    string beard_shave = 7;
-    string face_shave = 8;
-    string boy_hair_cut = 9;
+    string id = 1;
+    string hair_cut = 2;
+    string beard_cut = 3;
+    string hair_coloring = 4;
+    string special_hair_cut = 5;
+    string beard_coloring = 6;
+    string beard_trim = 7;
+    string beard_shave = 8;
+    string face_shave = 9;
+    string boy_hair_cut = 10;
 }
 
 message WomenServices {
-    string hair_cut = 1;
-    string hair_coloring = 2;
-    string eyebrow_arching = 3;
-    string special_hair_cut = 4;
-    string beard_coloring = 5;
+    string id = 1;
+    string hair_cut = 2;
+    string hair_coloring = 3;
+    string eyebrow_arching = 4;
+    string special_hair_cut = 5;
 }

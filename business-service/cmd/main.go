@@ -27,7 +27,7 @@ func main() {
 		log.Fatal("sqlx connection to postgres error", logger.Error(err))
 	}
 
-	userService := service.NewUserService(connDB, log)
+	businessService := service.NewBusinessService(connDB, log)
 
 	lis, err := net.Listen("tcp", cfg.RPCPort)
 	if err != nil {
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterUserServiceServer(s, userService)
+	pb.RegisterBusinessServiceServer(s, businessService)
 	log.Info("main: server running",
 		logger.String("port", cfg.RPCPort))
 

@@ -5,15 +5,18 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type userRepo struct {
+type businessRepo struct {
 	db *sqlx.DB
 }
 
-//NewUserRepo ...
-func NewUserRepo(db *sqlx.DB) *userRepo {
-	return &userRepo{db: db}
+//NewBusinessRepo ...
+func NewBusinessRepo(db *sqlx.DB) *businessRepo {
+	return &businessRepo{db: db}
 }
 
-func (r *userRepo) Create(user *pb.User) (*pb.User, error) {
+func (r *businessRepo) CreateBusiness(business *pb.Business) (*pb.Business, error) {
+
+	busQuery := `INSERT INT`
+
 	return nil, nil
 }

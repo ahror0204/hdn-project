@@ -32,22 +32,22 @@ message Staff {
 }
 
 message MenServices {
-    string id = 1;
-    string hair_cut = 2;
-    string beard_cut = 3;
-    string hair_coloring = 4;
-    string special_hair_cut = 5;
-    string beard_coloring = 6;
-    string beard_trim = 7;
-    string beard_shave = 8;
-    string face_shave = 9;
-    string boy_hair_cut = 10;
+    bool id = 1;
+    bool hair_cut = 2;
+    bool beard_cut = 3;
+    bool hair_coloring = 4;
+    bool special_hair_cut = 5;
+    bool beard_coloring = 6;
+    bool beard_trim = 7;
+    bool beard_shave = 8;
+    bool face_shave = 9;
+    bool boy_hair_cut = 10;
 }
 
 message WomenServices {
-    string id = 1;
-    string hair_cut = 2;
-    string hair_coloring = 3;
-    string eyebrow_arching = 4;
-    string special_hair_cut = 5;
+    bool id = 1;
+    bool hair_cut = 2;
+    bool hair_coloring = 3;
+    bool eyebrow_arching = 4;
+    bool special_hair_cut = 5;
 }

@@ -23,6 +23,21 @@ func NewReviewService(db *sqlx.DB, log l.Logger) *ReviewService {
     }
 }
 
-func (s *ReviewService) Create(ctx context.Context, req *pb.Review) (*pb.Review, error) {
-    return nil, nil
+func (s *ReviewService) CreateComment(ctx context.Context, req *pb.Comment) (*pb.Empty, error) {
+    _, err := s.storage.Review().CreateComment(req)
+    if err != nil {
+        s.logger.Error("Error while creating review", l.Error(err))
+        return nil, err
+    }
+    return &pb.Empty{}, nil
+}
+
+
+func (s *ReviewService) CreateReply(ctx context.Context, req *pb.ReplyComments) (*pb.Empty, error) {
+    _, err := s.storage.Review().CreateReply(req)
+    if err != nil {
+        s.logger.Error("Error while creating review", l.Error(err))
+        return nil, err
+    }
+    return &pb.Empty{}, nil
 }

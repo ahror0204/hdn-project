@@ -8,6 +8,8 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -110,32 +112,31 @@ func (m *ReviewId) GetId() string {
 	return ""
 }
 
-type Review struct {
+type Comment struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	ClientId             string   `protobuf:"bytes,2,opt,name=client_id,json=clientId,proto3" json:"client_id"`
 	BusinessId           string   `protobuf:"bytes,3,opt,name=business_id,json=businessId,proto3" json:"business_id"`
 	Like                 string   `protobuf:"bytes,4,opt,name=like,proto3" json:"like"`
 	Dislike              string   `protobuf:"bytes,5,opt,name=dislike,proto3" json:"dislike"`
-	Comment              string   `protobuf:"bytes,6,opt,name=comment,proto3" json:"comment"`
+	Comment              []string `protobuf:"bytes,6,rep,name=comment,proto3" json:"comment"`
 	CreatedAt            string   `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
-	UpdatedAt            string   `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Review) Reset()         { *m = Review{} }
-func (m *Review) String() string { return proto.CompactTextString(m) }
-func (*Review) ProtoMessage()    {}
-func (*Review) Descriptor() ([]byte, []int) {
+func (m *Comment) Reset()         { *m = Comment{} }
+func (m *Comment) String() string { return proto.CompactTextString(m) }
+func (*Comment) ProtoMessage()    {}
+func (*Comment) Descriptor() ([]byte, []int) {
 	return fileDescriptor_deed8eefad2f709e, []int{2}
 }
-func (m *Review) XXX_Unmarshal(b []byte) error {
+func (m *Comment) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Review) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Comment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Review.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Comment.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -145,70 +146,134 @@ func (m *Review) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *Review) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Review.Merge(m, src)
+func (m *Comment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Comment.Merge(m, src)
 }
-func (m *Review) XXX_Size() int {
+func (m *Comment) XXX_Size() int {
 	return m.Size()
 }
-func (m *Review) XXX_DiscardUnknown() {
-	xxx_messageInfo_Review.DiscardUnknown(m)
+func (m *Comment) XXX_DiscardUnknown() {
+	xxx_messageInfo_Comment.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Review proto.InternalMessageInfo
+var xxx_messageInfo_Comment proto.InternalMessageInfo
 
-func (m *Review) GetId() string {
+func (m *Comment) GetId() string {
 	if m != nil {
 		return m.Id
 	}
 	return ""
 }
 
-func (m *Review) GetClientId() string {
+func (m *Comment) GetClientId() string {
 	if m != nil {
 		return m.ClientId
 	}
 	return ""
 }
 
-func (m *Review) GetBusinessId() string {
+func (m *Comment) GetBusinessId() string {
 	if m != nil {
 		return m.BusinessId
 	}
 	return ""
 }
 
-func (m *Review) GetLike() string {
+func (m *Comment) GetLike() string {
 	if m != nil {
 		return m.Like
 	}
 	return ""
 }
 
-func (m *Review) GetDislike() string {
+func (m *Comment) GetDislike() string {
 	if m != nil {
 		return m.Dislike
 	}
 	return ""
 }
 
-func (m *Review) GetComment() string {
+func (m *Comment) GetComment() []string {
 	if m != nil {
 		return m.Comment
 	}
-	return ""
+	return nil
 }
 
-func (m *Review) GetCreatedAt() string {
+func (m *Comment) GetCreatedAt() string {
 	if m != nil {
 		return m.CreatedAt
 	}
 	return ""
 }
 
-func (m *Review) GetUpdatedAt() string {
+type ReplyComments struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	ReviewId             string   `protobuf:"bytes,2,opt,name=review_id,json=reviewId,proto3" json:"review_id"`
+	ReplyComment         []string `protobuf:"bytes,3,rep,name=reply_comment,json=replyComment,proto3" json:"reply_comment"`
+	CreatedAt            string   `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ReplyComments) Reset()         { *m = ReplyComments{} }
+func (m *ReplyComments) String() string { return proto.CompactTextString(m) }
+func (*ReplyComments) ProtoMessage()    {}
+func (*ReplyComments) Descriptor() ([]byte, []int) {
+	return fileDescriptor_deed8eefad2f709e, []int{3}
+}
+func (m *ReplyComments) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplyComments) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReplyComments.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReplyComments) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplyComments.Merge(m, src)
+}
+func (m *ReplyComments) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplyComments) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplyComments.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplyComments proto.InternalMessageInfo
+
+func (m *ReplyComments) GetId() string {
 	if m != nil {
-		return m.UpdatedAt
+		return m.Id
+	}
+	return ""
+}
+
+func (m *ReplyComments) GetReviewId() string {
+	if m != nil {
+		return m.ReviewId
+	}
+	return ""
+}
+
+func (m *ReplyComments) GetReplyComment() []string {
+	if m != nil {
+		return m.ReplyComment
+	}
+	return nil
+}
+
+func (m *ReplyComments) GetCreatedAt() string {
+	if m != nil {
+		return m.CreatedAt
 	}
 	return ""
 }
@@ -216,28 +281,34 @@ func (m *Review) GetUpdatedAt() string {
 func init() {
 	proto.RegisterType((*Empty)(nil), "review.Empty")
 	proto.RegisterType((*ReviewId)(nil), "review.ReviewId")
-	proto.RegisterType((*Review)(nil), "review.Review")
+	proto.RegisterType((*Comment)(nil), "review.Comment")
+	proto.RegisterType((*ReplyComments)(nil), "review.ReplyComments")
 }
 
 func init() { proto.RegisterFile("review.proto", fileDescriptor_deed8eefad2f709e) }
 
 var fileDescriptor_deed8eefad2f709e = []byte{
-	// 236 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0xd0, 0x3b, 0x4e, 0xc3, 0x40,
-	0x10, 0xc6, 0x71, 0xd6, 0x24, 0x7e, 0x0c, 0x4f, 0x4d, 0xb5, 0x02, 0x61, 0x90, 0x2b, 0x2a, 0x0a,
-	0x38, 0x41, 0x90, 0x28, 0xdc, 0x86, 0x03, 0x44, 0x89, 0x67, 0x8a, 0x11, 0xf1, 0x43, 0xf6, 0x26,
-	0x88, 0x9b, 0x70, 0x24, 0x4a, 0x0e, 0x40, 0x81, 0xcc, 0x45, 0x90, 0x67, 0xed, 0x26, 0xdd, 0x7e,
-	0xff, 0x5f, 0xb5, 0x03, 0xa7, 0x2d, 0xef, 0x85, 0xdf, 0x1f, 0x9a, 0xb6, 0x76, 0x35, 0x86, 0x7e,
-	0x65, 0x11, 0xcc, 0x5f, 0xca, 0xc6, 0x7d, 0x64, 0x57, 0x10, 0x2f, 0x35, 0xe5, 0x84, 0xe7, 0x10,
-	0x08, 0x59, 0x73, 0x67, 0xee, 0x93, 0x65, 0x20, 0x94, 0xfd, 0x18, 0x08, 0x3d, 0x1e, 0x12, 0x5e,
-	0x43, 0x52, 0x6c, 0x85, 0x2b, 0xb7, 0x12, 0xb2, 0x81, 0xe6, 0xd8, 0x87, 0x9c, 0xf0, 0x16, 0x4e,
-	0x36, 0xbb, 0x4e, 0x2a, 0xee, 0xba, 0x81, 0x8f, 0x95, 0x61, 0x4a, 0x39, 0x21, 0xc2, 0x6c, 0x2b,
-	0x6f, 0x6c, 0x67, 0x2a, 0xfa, 0x46, 0x0b, 0x11, 0x49, 0xa7, 0x79, 0xae, 0x79, 0x9a, 0x83, 0x14,
-	0x75, 0x59, 0x72, 0xe5, 0x6c, 0xe8, 0x65, 0x9c, 0x78, 0x03, 0x50, 0xb4, 0xbc, 0x76, 0x4c, 0xab,
-	0xb5, 0xb3, 0x91, 0x62, 0x32, 0x96, 0x85, 0xf2, 0xae, 0xa1, 0x89, 0x63, 0xcf, 0x63, 0x59, 0xb8,
-	0xc7, 0x0b, 0x38, 0xf3, 0xbf, 0x7b, 0xe5, 0x76, 0x2f, 0x05, 0x3f, 0x5f, 0x7e, 0xf5, 0xa9, 0xf9,
-	0xee, 0x53, 0xf3, 0xdb, 0xa7, 0xe6, 0xf3, 0x2f, 0x3d, 0xda, 0x84, 0x7a, 0xb5, 0xa7, 0xff, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0xb7, 0x84, 0xa5, 0xda, 0x45, 0x01, 0x00, 0x00,
+	// 309 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0x4b, 0x4e, 0xc3, 0x30,
+	0x10, 0x86, 0x71, 0x1f, 0x49, 0x33, 0x6d, 0x00, 0x59, 0x42, 0xb2, 0x8a, 0x08, 0x55, 0xd8, 0xb0,
+	0x2a, 0x12, 0x3d, 0x01, 0x54, 0x2c, 0xb2, 0x0d, 0x07, 0x88, 0xda, 0xd8, 0x0b, 0x8b, 0xbc, 0xe4,
+	0xb8, 0x45, 0xdd, 0x71, 0x0c, 0x4e, 0xc3, 0x9a, 0x25, 0x47, 0x40, 0xe1, 0x22, 0xc8, 0x93, 0x58,
+	0x2a, 0x11, 0xbb, 0xcc, 0xf7, 0x69, 0xc6, 0xf3, 0xdb, 0x81, 0x99, 0x12, 0x7b, 0x29, 0x5e, 0x97,
+	0x95, 0x2a, 0x75, 0x49, 0x9d, 0xb6, 0x0a, 0x5d, 0x18, 0x3f, 0xe5, 0x95, 0x3e, 0x84, 0x73, 0x98,
+	0xc4, 0x88, 0x22, 0x4e, 0x4f, 0x61, 0x20, 0x39, 0x23, 0x0b, 0x72, 0xeb, 0xc5, 0x03, 0xc9, 0xc3,
+	0x0f, 0x02, 0xee, 0xba, 0xcc, 0x73, 0x51, 0xe8, 0xbe, 0xa3, 0x97, 0xe0, 0xa5, 0x99, 0x14, 0x85,
+	0x4e, 0x24, 0x67, 0x03, 0xc4, 0x93, 0x16, 0x44, 0x9c, 0x5e, 0xc3, 0x74, 0xbb, 0xab, 0x65, 0x21,
+	0xea, 0xda, 0xe8, 0x21, 0x6a, 0xb0, 0x28, 0xe2, 0x94, 0xc2, 0x28, 0x93, 0x2f, 0x82, 0x8d, 0xd0,
+	0xe0, 0x37, 0x65, 0xe0, 0x72, 0x59, 0x23, 0x1e, 0x23, 0xb6, 0xa5, 0x31, 0x69, 0xbb, 0x06, 0x73,
+	0x16, 0x43, 0x63, 0xba, 0x92, 0x5e, 0x01, 0xa4, 0x4a, 0x6c, 0xb4, 0xe0, 0xc9, 0x46, 0x33, 0x17,
+	0xdb, 0xbc, 0x8e, 0x3c, 0xe8, 0xf0, 0x8d, 0x80, 0x1f, 0x8b, 0x2a, 0x3b, 0x74, 0x29, 0xea, 0xff,
+	0x62, 0xb4, 0x37, 0x72, 0x14, 0x43, 0xd9, 0xfb, 0xb8, 0x01, 0x5f, 0x99, 0xee, 0xc4, 0x9e, 0x3e,
+	0xc4, 0xd3, 0x67, 0xea, 0x68, 0x64, 0x6f, 0x85, 0x51, 0x6f, 0x85, 0xfb, 0x9d, 0xd9, 0xc0, 0xcc,
+	0x7b, 0x16, 0x6a, 0x2f, 0x53, 0x41, 0xef, 0xc0, 0x5f, 0xa3, 0xb5, 0x03, 0xce, 0x96, 0xdd, 0x0b,
+	0x75, 0x60, 0xee, 0x5b, 0x80, 0x2f, 0x44, 0x57, 0x30, 0x6d, 0x1b, 0x30, 0x09, 0xbd, 0xb0, 0xf6,
+	0x4f, 0xb0, 0x5e, 0xd3, 0xe3, 0xf9, 0x67, 0x13, 0x90, 0xaf, 0x26, 0x20, 0xdf, 0x4d, 0x40, 0xde,
+	0x7f, 0x82, 0x93, 0xad, 0x83, 0x3f, 0xc0, 0xea, 0x37, 0x00, 0x00, 0xff, 0xff, 0xe0, 0xcf, 0x81,
+	0xb6, 0x10, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -252,6 +323,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ReviewServiceClient interface {
+	CreateComment(ctx context.Context, in *Comment, opts ...grpc.CallOption) (*Empty, error)
+	CreateReply(ctx context.Context, in *ReplyComments, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type reviewServiceClient struct {
@@ -262,24 +335,96 @@ func NewReviewServiceClient(cc *grpc.ClientConn) ReviewServiceClient {
 	return &reviewServiceClient{cc}
 }
 
+func (c *reviewServiceClient) CreateComment(ctx context.Context, in *Comment, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/review.ReviewService/CreateComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *reviewServiceClient) CreateReply(ctx context.Context, in *ReplyComments, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/review.ReviewService/CreateReply", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReviewServiceServer is the server API for ReviewService service.
 type ReviewServiceServer interface {
+	CreateComment(context.Context, *Comment) (*Empty, error)
+	CreateReply(context.Context, *ReplyComments) (*Empty, error)
 }
 
 // UnimplementedReviewServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedReviewServiceServer struct {
 }
 
+func (*UnimplementedReviewServiceServer) CreateComment(ctx context.Context, req *Comment) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
+}
+func (*UnimplementedReviewServiceServer) CreateReply(ctx context.Context, req *ReplyComments) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateReply not implemented")
+}
+
 func RegisterReviewServiceServer(s *grpc.Server, srv ReviewServiceServer) {
 	s.RegisterService(&_ReviewService_serviceDesc, srv)
+}
+
+func _ReviewService_CreateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Comment)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).CreateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/review.ReviewService/CreateComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).CreateComment(ctx, req.(*Comment))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReviewService_CreateReply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReplyComments)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).CreateReply(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/review.ReviewService/CreateReply",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).CreateReply(ctx, req.(*ReplyComments))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _ReviewService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "review.ReviewService",
 	HandlerType: (*ReviewServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "review.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateComment",
+			Handler:    _ReviewService_CreateComment_Handler,
+		},
+		{
+			MethodName: "CreateReply",
+			Handler:    _ReviewService_CreateReply_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "review.proto",
 }
 
 func (m *Empty) Marshal() (dAtA []byte, err error) {
@@ -343,7 +488,7 @@ func (m *ReviewId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *Review) Marshal() (dAtA []byte, err error) {
+func (m *Comment) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -353,12 +498,12 @@ func (m *Review) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Review) MarshalTo(dAtA []byte) (int, error) {
+func (m *Comment) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Review) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Comment) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -366,13 +511,6 @@ func (m *Review) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.UpdatedAt) > 0 {
-		i -= len(m.UpdatedAt)
-		copy(dAtA[i:], m.UpdatedAt)
-		i = encodeVarintReview(dAtA, i, uint64(len(m.UpdatedAt)))
-		i--
-		dAtA[i] = 0x42
 	}
 	if len(m.CreatedAt) > 0 {
 		i -= len(m.CreatedAt)
@@ -382,11 +520,13 @@ func (m *Review) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 	}
 	if len(m.Comment) > 0 {
-		i -= len(m.Comment)
-		copy(dAtA[i:], m.Comment)
-		i = encodeVarintReview(dAtA, i, uint64(len(m.Comment)))
-		i--
-		dAtA[i] = 0x32
+		for iNdEx := len(m.Comment) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Comment[iNdEx])
+			copy(dAtA[i:], m.Comment[iNdEx])
+			i = encodeVarintReview(dAtA, i, uint64(len(m.Comment[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
 	}
 	if len(m.Dislike) > 0 {
 		i -= len(m.Dislike)
@@ -413,6 +553,63 @@ func (m *Review) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.ClientId)
 		copy(dAtA[i:], m.ClientId)
 		i = encodeVarintReview(dAtA, i, uint64(len(m.ClientId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintReview(dAtA, i, uint64(len(m.Id)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReplyComments) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReplyComments) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplyComments) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.CreatedAt) > 0 {
+		i -= len(m.CreatedAt)
+		copy(dAtA[i:], m.CreatedAt)
+		i = encodeVarintReview(dAtA, i, uint64(len(m.CreatedAt)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.ReplyComment) > 0 {
+		for iNdEx := len(m.ReplyComment) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ReplyComment[iNdEx])
+			copy(dAtA[i:], m.ReplyComment[iNdEx])
+			i = encodeVarintReview(dAtA, i, uint64(len(m.ReplyComment[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.ReviewId) > 0 {
+		i -= len(m.ReviewId)
+		copy(dAtA[i:], m.ReviewId)
+		i = encodeVarintReview(dAtA, i, uint64(len(m.ReviewId)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -465,7 +662,7 @@ func (m *ReviewId) Size() (n int) {
 	return n
 }
 
-func (m *Review) Size() (n int) {
+func (m *Comment) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -491,15 +688,43 @@ func (m *Review) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovReview(uint64(l))
 	}
-	l = len(m.Comment)
-	if l > 0 {
-		n += 1 + l + sovReview(uint64(l))
+	if len(m.Comment) > 0 {
+		for _, s := range m.Comment {
+			l = len(s)
+			n += 1 + l + sovReview(uint64(l))
+		}
 	}
 	l = len(m.CreatedAt)
 	if l > 0 {
 		n += 1 + l + sovReview(uint64(l))
 	}
-	l = len(m.UpdatedAt)
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ReplyComments) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovReview(uint64(l))
+	}
+	l = len(m.ReviewId)
+	if l > 0 {
+		n += 1 + l + sovReview(uint64(l))
+	}
+	if len(m.ReplyComment) > 0 {
+		for _, s := range m.ReplyComment {
+			l = len(s)
+			n += 1 + l + sovReview(uint64(l))
+		}
+	}
+	l = len(m.CreatedAt)
 	if l > 0 {
 		n += 1 + l + sovReview(uint64(l))
 	}
@@ -649,7 +874,7 @@ func (m *ReviewId) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *Review) Unmarshal(dAtA []byte) error {
+func (m *Comment) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -672,10 +897,10 @@ func (m *Review) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Review: wiretype end group for non-group")
+			return fmt.Errorf("proto: Comment: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Review: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Comment: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -868,7 +1093,7 @@ func (m *Review) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Comment = string(dAtA[iNdEx:postIndex])
+			m.Comment = append(m.Comment, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -902,9 +1127,60 @@ func (m *Review) Unmarshal(dAtA []byte) error {
 			}
 			m.CreatedAt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 8:
+		default:
+			iNdEx = preIndex
+			skippy, err := skipReview(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthReview
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReplyComments) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowReview
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReplyComments: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReplyComments: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -932,7 +1208,103 @@ func (m *Review) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UpdatedAt = string(dAtA[iNdEx:postIndex])
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReviewId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowReview
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthReview
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthReview
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReviewId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReplyComment", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowReview
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthReview
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthReview
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReplyComment = append(m.ReplyComment, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowReview
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthReview
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthReview
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CreatedAt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

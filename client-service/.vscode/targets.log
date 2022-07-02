@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jul  1 08:34:47 2022
+# Make data base, printed on Sat Jul  2 09:30:16 2022
 
 # Variables
 
@@ -29,7 +29,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-b418ec40-1bfe-4ef9-8d3f-4541603621e6.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ab73a592-b426-436a-b456-2bc4c93aabb5.sock
 # environment
 LC_NAME = en_US.UTF-8
 # environment
@@ -63,7 +63,7 @@ PWD = /home/baxrom/go/src/github.com/hdn-project/client-service
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
-OLDPWD = /home/baxrom/go/src/github.com/hdn-project/review-service
+OLDPWD = /home/baxrom/go/src/github.com
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -75,13 +75,13 @@ VSCODE_CODE_CACHE_PATH = /home/baxrom/.config/Code/CachedData/30d9c6cd9483b2cc58
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.RUVAO1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.RTNAO1
 # default
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
 # environment
-GNOME_TERMINAL_SERVICE = :1.1032
+GNOME_TERMINAL_SERVICE = :1.111
 # makefile
 MAKEFLAGS = pqrR
 # makefile
@@ -117,13 +117,15 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 3339
+VSCODE_PID = 2765
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/baxrom:@/tmp/.ICE-unix/1642,unix/baxrom:/tmp/.ICE-unix/1642
+BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+SESSION_MANAGER = local/baxrom:@/tmp/.ICE-unix/1673,unix/baxrom:/tmp/.ICE-unix/1673
 # automatic
 *F = $(notdir $*)
 # environment
@@ -149,7 +151,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
 SHLVL = 1
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/7f7a3479_05a8_40de_968b_a3a9f9984ae2
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/06ba5ddf_cb9d_4a07_b3b9_8d87ead0de30
 # environment
 MAKELEVEL := 0
 # makefile (from 'Makefile', line 3)
@@ -173,7 +175,7 @@ LC_TIME = en_US.UTF-8
 # environment
 SNAP = /snap/code/99
 # environment
-INVOCATION_ID = 26fb332a396e4791a2050e3442c9ae35
+INVOCATION_ID = 1a9a3ed0152c4568ad69bd604cbabd25
 # environment
 SNAP_REVISION = 99
 # environment
@@ -207,11 +209,13 @@ LOGNAME = baxrom
 # makefile (from 'Makefile', line 1)
 CURRENT_DIR = $(shell pwd)
 # environment
+GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
 SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 37650
+SYSTEMD_EXEC_PID = 2908
 # environment
 DISPLAY = :0
 # environment
@@ -227,9 +231,11 @@ SNAP_DATA = /var/snap/code/99
 # environment
 SNAP_CONTEXT = Oeh3A3OxPZY380uqOPI14nOZD8DtEfPAd16hs05uY5Mbt83oA_82
 # environment
-MANAGERPID = 1486
+MANAGERPID = 1516
 # environment
 LC_MEASUREMENT = en_US.UTF-8
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2716
 # environment
 LC_PAPER = en_US.UTF-8
 # environment
@@ -239,7 +245,7 @@ COLORTERM = truecolor
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/baxrom/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
-JOURNAL_STREAM = 8:173632
+JOURNAL_STREAM = 8:36696
 # environment
 GOMODCACHE = /home/baxrom/go/pkg/mod
 # environment
@@ -272,6 +278,7 @@ GOPROXY = https://proxy.golang.org,direct
 <F = $(notdir $<)
 # environment
 SNAP_VERSION = 30d9c6cd
+ 
 # default
 SUFFIXES := 
 # environment
@@ -291,12 +298,11 @@ XDG_MENU_PREFIX = gnome-
 # environment
 GDMSESSION = ubuntu
 # environment
- 
 LC_IDENTIFICATION = en_US.UTF-8
 # environment
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
 # variable set hash-table stats:
-# Load=141/1024=14%, Rehash=0, Collisions=14/171=8%
+# Load=144/1024=14%, Rehash=0, Collisions=14/174=8%
 
 # Pattern-specific Variable Values
 
@@ -397,6 +403,6 @@ migrate-up:
 # strcache performance: lookups = 40 / hit rate = 27%
 # hash-table stats:
 # Load=29/8192=0%, Rehash=0, Collisions=0/40=0%
-# Finished Make data base on Fri Jul  1 08:34:47 2022
+# Finished Make data base on Sat Jul  2 09:30:16 2022
 
  

@@ -3,8 +3,8 @@ syntax = "proto3";
 package review;
 
 service ReviewService {
-   
-
+    rpc CreateComment(Comment) returns (Empty);
+    rpc CreateReply(ReplyComments) returns (Empty);
 }
 message Empty {
 }
@@ -13,13 +13,19 @@ message ReviewId{
     string id = 1;
 }
 
-message Review {
+message Comment {
     string id = 1;
     string client_id = 2;
     string business_id = 3;
     string like = 4;
     string dislike = 5;
-    string comment = 6;
+    repeated string comment = 6;
     string created_at = 7;
-    string updated_at = 8;
+}
+
+message ReplyComments {
+    string id = 1;
+    string review_id = 2;
+    repeated string reply_comment = 3;
+    string created_at = 4;
 }

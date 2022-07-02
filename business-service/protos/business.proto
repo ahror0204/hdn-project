@@ -42,6 +42,7 @@ message MenServices {
     string beard_shave = 8;
     string face_shave = 9;
     string boy_hair_cut = 10;
+    string others = 11;
 }
 
 message WomenServices {
@@ -50,4 +51,5 @@ message WomenServices {
     string hair_coloring = 3;
     string eyebrow_arching = 4;
     string special_hair_cut = 5;
+    string others = 6;
 }

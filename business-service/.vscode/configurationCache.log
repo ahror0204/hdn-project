@@ -1,0 +1,1 @@
+{"buildTargets":["build","create-migrations","migrate-down","migrate-forse","migrate-up","proto-gen"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

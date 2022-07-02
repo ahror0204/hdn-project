@@ -6,5 +6,6 @@ import (
 
 //UserStorageI ...
 type ReviewStorageI interface {
-    Create(*pb.Review) (*pb.Review, error)
+    CreateComment(*pb.Comment) (*pb.Empty, error)
+	CreateReply(*pb.ReplyComments) (*pb.Empty, error)
 }

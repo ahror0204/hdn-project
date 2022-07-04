@@ -4,7 +4,11 @@ package business;
 
 service BusinessService {
     rpc CreateBusiness (Business) returns (Business);
+    rpc CreateService (ServiceTypeDef) returns (ServiceTypeDef);
+    
 }
+
+
 
 message Business {
     string id = 1;
@@ -26,14 +30,12 @@ message Staff {
     string business_id = 8;
     string calendar_id = 9;
     string client_id = 10;
-    string gender = 11;
-    string men_services_id = 12;
-    string women_services_id = 13;
+    string men_services_id = 11;
+    string women_services_id = 12;
 }
 
 message MenServices {
-<<<<<<< HEAD
-    bool id = 1;
+    string id = 1;
     bool hair_cut = 2;
     bool beard_cut = 3;
     bool hair_coloring = 4;
@@ -43,34 +45,21 @@ message MenServices {
     bool beard_shave = 8;
     bool face_shave = 9;
     bool boy_hair_cut = 10;
+    string others = 11;
+    string client_id = 12;
 }
 
 message WomenServices {
-    bool id = 1;
+    string id = 1;
     bool hair_cut = 2;
     bool hair_coloring = 3;
     bool eyebrow_arching = 4;
     bool special_hair_cut = 5;
-=======
-    string id = 1;
-    string hair_cut = 2;
-    string beard_cut = 3;
-    string hair_coloring = 4;
-    string special_hair_cut = 5;
-    string beard_coloring = 6;
-    string beard_trim = 7;
-    string beard_shave = 8;
-    string face_shave = 9;
-    string boy_hair_cut = 10;
-    string others = 11;
+    string client_id = 6;
 }
 
-message WomenServices {
-    string id = 1;
-    string hair_cut = 2;
-    string hair_coloring = 3;
-    string eyebrow_arching = 4;
-    string special_hair_cut = 5;
-    string others = 6;
->>>>>>> 7c84a4921ca41b17b24209273634838f124378fd
+message ServiceTypeDef{
+    MenServices men_service = 1;
+    WomenServices women_service = 2;
 }
+

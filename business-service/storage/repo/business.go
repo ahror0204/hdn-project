@@ -7,4 +7,5 @@ import (
 //BusinessStorageI ...
 type BusinessStorageI interface {
 	CreateBusiness(*pb.Business) (*pb.Business, error)
+	CreateService(*pb.ServiceTypeDef) (*pb.ServiceTypeDef, error)
 }

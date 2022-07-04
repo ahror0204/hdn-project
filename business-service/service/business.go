@@ -35,3 +35,13 @@ func (s *BusinessService) CreateBusiness(ctx context.Context, req *pb.Business) 
 
 	return business, nil
 }
+
+func (s *BusinessService) DefServiceType (ctx context.Context, req *pb.ServiceTypeRequest) (*pb.ServiceTypeResponse, error) {
+	
+	service, err := s.storage.Business().DefServiceType(req.Gender, req.ClientId)
+	if err != nil {
+		s.logger.Error("failed while defining service type", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while defining service type")
+	}
+	return service, nil
+}

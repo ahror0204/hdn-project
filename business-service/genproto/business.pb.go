@@ -33,6 +33,9 @@ type Business struct {
 	Status               string   `protobuf:"bytes,4,opt,name=status,proto3" json:"status"`
 	Staff                []*Staff `protobuf:"bytes,5,rep,name=staff,proto3" json:"staff"`
 	Location             string   `protobuf:"bytes,6,opt,name=location,proto3" json:"location"`
+	CreatedAt            string   `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt            string   `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	DeletedAt            string   `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -113,6 +116,27 @@ func (m *Business) GetLocation() string {
 	return ""
 }
 
+func (m *Business) GetCreatedAt() string {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return ""
+}
+
+func (m *Business) GetUpdatedAt() string {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return ""
+}
+
+func (m *Business) GetDeletedAt() string {
+	if m != nil {
+		return m.DeletedAt
+	}
+	return ""
+}
+
 type Staff struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	FirstName            string   `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name"`
@@ -124,9 +148,11 @@ type Staff struct {
 	BusinessId           string   `protobuf:"bytes,8,opt,name=business_id,json=businessId,proto3" json:"business_id"`
 	CalendarId           string   `protobuf:"bytes,9,opt,name=calendar_id,json=calendarId,proto3" json:"calendar_id"`
 	ClientId             string   `protobuf:"bytes,10,opt,name=client_id,json=clientId,proto3" json:"client_id"`
-	Gender               string   `protobuf:"bytes,11,opt,name=gender,proto3" json:"gender"`
-	MenServicesId        string   `protobuf:"bytes,12,opt,name=men_services_id,json=menServicesId,proto3" json:"men_services_id"`
-	WomenServicesId      string   `protobuf:"bytes,13,opt,name=women_services_id,json=womenServicesId,proto3" json:"women_services_id"`
+	MenServicesId        string   `protobuf:"bytes,11,opt,name=men_services_id,json=menServicesId,proto3" json:"men_services_id"`
+	WomenServicesId      string   `protobuf:"bytes,12,opt,name=women_services_id,json=womenServicesId,proto3" json:"women_services_id"`
+	CreatedAt            string   `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt            string   `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	DeletedAt            string   `protobuf:"bytes,15,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -235,13 +261,6 @@ func (m *Staff) GetClientId() string {
 	return ""
 }
 
-func (m *Staff) GetGender() string {
-	if m != nil {
-		return m.Gender
-	}
-	return ""
-}
-
 func (m *Staff) GetMenServicesId() string {
 	if m != nil {
 		return m.MenServicesId
@@ -256,17 +275,40 @@ func (m *Staff) GetWomenServicesId() string {
 	return ""
 }
 
+func (m *Staff) GetCreatedAt() string {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return ""
+}
+
+func (m *Staff) GetUpdatedAt() string {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return ""
+}
+
+func (m *Staff) GetDeletedAt() string {
+	if m != nil {
+		return m.DeletedAt
+	}
+	return ""
+}
+
 type MenServices struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	HairCut              string   `protobuf:"bytes,2,opt,name=hair_cut,json=hairCut,proto3" json:"hair_cut"`
-	BeardCut             string   `protobuf:"bytes,3,opt,name=beard_cut,json=beardCut,proto3" json:"beard_cut"`
-	HairColoring         string   `protobuf:"bytes,4,opt,name=hair_coloring,json=hairColoring,proto3" json:"hair_coloring"`
-	SpecialHairCut       string   `protobuf:"bytes,5,opt,name=special_hair_cut,json=specialHairCut,proto3" json:"special_hair_cut"`
-	BeardColoring        string   `protobuf:"bytes,6,opt,name=beard_coloring,json=beardColoring,proto3" json:"beard_coloring"`
-	BeardTrim            string   `protobuf:"bytes,7,opt,name=beard_trim,json=beardTrim,proto3" json:"beard_trim"`
-	BeardShave           string   `protobuf:"bytes,8,opt,name=beard_shave,json=beardShave,proto3" json:"beard_shave"`
-	FaceShave            string   `protobuf:"bytes,9,opt,name=face_shave,json=faceShave,proto3" json:"face_shave"`
-	BoyHairCut           string   `protobuf:"bytes,10,opt,name=boy_hair_cut,json=boyHairCut,proto3" json:"boy_hair_cut"`
+	HairCut              bool     `protobuf:"varint,2,opt,name=hair_cut,json=hairCut,proto3" json:"hair_cut"`
+	BeardCut             bool     `protobuf:"varint,3,opt,name=beard_cut,json=beardCut,proto3" json:"beard_cut"`
+	HairColoring         bool     `protobuf:"varint,4,opt,name=hair_coloring,json=hairColoring,proto3" json:"hair_coloring"`
+	SpecialHairCut       bool     `protobuf:"varint,5,opt,name=special_hair_cut,json=specialHairCut,proto3" json:"special_hair_cut"`
+	BeardColoring        bool     `protobuf:"varint,6,opt,name=beard_coloring,json=beardColoring,proto3" json:"beard_coloring"`
+	BeardTrim            bool     `protobuf:"varint,7,opt,name=beard_trim,json=beardTrim,proto3" json:"beard_trim"`
+	BeardShave           bool     `protobuf:"varint,8,opt,name=beard_shave,json=beardShave,proto3" json:"beard_shave"`
+	FaceShave            bool     `protobuf:"varint,9,opt,name=face_shave,json=faceShave,proto3" json:"face_shave"`
+	BoyHairCut           bool     `protobuf:"varint,10,opt,name=boy_hair_cut,json=boyHairCut,proto3" json:"boy_hair_cut"`
+	Others               string   `protobuf:"bytes,11,opt,name=others,proto3" json:"others"`
+	ClientId             string   `protobuf:"bytes,12,opt,name=client_id,json=clientId,proto3" json:"client_id"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -312,75 +354,90 @@ func (m *MenServices) GetId() string {
 	return ""
 }
 
-func (m *MenServices) GetHairCut() string {
+func (m *MenServices) GetHairCut() bool {
 	if m != nil {
 		return m.HairCut
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetBeardCut() string {
+func (m *MenServices) GetBeardCut() bool {
 	if m != nil {
 		return m.BeardCut
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetHairColoring() string {
+func (m *MenServices) GetHairColoring() bool {
 	if m != nil {
 		return m.HairColoring
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetSpecialHairCut() string {
+func (m *MenServices) GetSpecialHairCut() bool {
 	if m != nil {
 		return m.SpecialHairCut
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetBeardColoring() string {
+func (m *MenServices) GetBeardColoring() bool {
 	if m != nil {
 		return m.BeardColoring
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetBeardTrim() string {
+func (m *MenServices) GetBeardTrim() bool {
 	if m != nil {
 		return m.BeardTrim
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetBeardShave() string {
+func (m *MenServices) GetBeardShave() bool {
 	if m != nil {
 		return m.BeardShave
 	}
-	return ""
+	return false
 }
 
-func (m *MenServices) GetFaceShave() string {
+func (m *MenServices) GetFaceShave() bool {
 	if m != nil {
 		return m.FaceShave
+	}
+	return false
+}
+
+func (m *MenServices) GetBoyHairCut() bool {
+	if m != nil {
+		return m.BoyHairCut
+	}
+	return false
+}
+
+func (m *MenServices) GetOthers() string {
+	if m != nil {
+		return m.Others
 	}
 	return ""
 }
 
-func (m *MenServices) GetBoyHairCut() string {
+func (m *MenServices) GetClientId() string {
 	if m != nil {
-		return m.BoyHairCut
+		return m.ClientId
 	}
 	return ""
 }
 
 type WomenServices struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
-	HairCut              string   `protobuf:"bytes,2,opt,name=hair_cut,json=hairCut,proto3" json:"hair_cut"`
-	HairColoring         string   `protobuf:"bytes,3,opt,name=hair_coloring,json=hairColoring,proto3" json:"hair_coloring"`
-	EyebrowArching       string   `protobuf:"bytes,4,opt,name=eyebrow_arching,json=eyebrowArching,proto3" json:"eyebrow_arching"`
-	SpecialHairCut       string   `protobuf:"bytes,5,opt,name=special_hair_cut,json=specialHairCut,proto3" json:"special_hair_cut"`
+	HairCut              bool     `protobuf:"varint,2,opt,name=hair_cut,json=hairCut,proto3" json:"hair_cut"`
+	HairColoring         bool     `protobuf:"varint,3,opt,name=hair_coloring,json=hairColoring,proto3" json:"hair_coloring"`
+	EyebrowArching       bool     `protobuf:"varint,4,opt,name=eyebrow_arching,json=eyebrowArching,proto3" json:"eyebrow_arching"`
+	SpecialHairCut       bool     `protobuf:"varint,5,opt,name=special_hair_cut,json=specialHairCut,proto3" json:"special_hair_cut"`
+	ClientId             string   `protobuf:"bytes,6,opt,name=client_id,json=clientId,proto3" json:"client_id"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -426,32 +483,282 @@ func (m *WomenServices) GetId() string {
 	return ""
 }
 
-func (m *WomenServices) GetHairCut() string {
+func (m *WomenServices) GetHairCut() bool {
 	if m != nil {
 		return m.HairCut
 	}
-	return ""
+	return false
 }
 
-func (m *WomenServices) GetHairColoring() string {
+func (m *WomenServices) GetHairColoring() bool {
 	if m != nil {
 		return m.HairColoring
 	}
-	return ""
+	return false
 }
 
-func (m *WomenServices) GetEyebrowArching() string {
+func (m *WomenServices) GetEyebrowArching() bool {
 	if m != nil {
 		return m.EyebrowArching
 	}
-	return ""
+	return false
 }
 
-func (m *WomenServices) GetSpecialHairCut() string {
+func (m *WomenServices) GetSpecialHairCut() bool {
 	if m != nil {
 		return m.SpecialHairCut
 	}
+	return false
+}
+
+func (m *WomenServices) GetClientId() string {
+	if m != nil {
+		return m.ClientId
+	}
 	return ""
+}
+
+type ServiceTypeDef struct {
+	MenService           *MenServices   `protobuf:"bytes,1,opt,name=men_service,json=menService,proto3" json:"men_service"`
+	WomenService         *WomenServices `protobuf:"bytes,2,opt,name=women_service,json=womenService,proto3" json:"women_service"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *ServiceTypeDef) Reset()         { *m = ServiceTypeDef{} }
+func (m *ServiceTypeDef) String() string { return proto.CompactTextString(m) }
+func (*ServiceTypeDef) ProtoMessage()    {}
+func (*ServiceTypeDef) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{4}
+}
+func (m *ServiceTypeDef) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceTypeDef) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceTypeDef.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceTypeDef) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceTypeDef.Merge(m, src)
+}
+func (m *ServiceTypeDef) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceTypeDef) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceTypeDef.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceTypeDef proto.InternalMessageInfo
+
+func (m *ServiceTypeDef) GetMenService() *MenServices {
+	if m != nil {
+		return m.MenService
+	}
+	return nil
+}
+
+func (m *ServiceTypeDef) GetWomenService() *WomenServices {
+	if m != nil {
+		return m.WomenService
+	}
+	return nil
+}
+
+type Empty struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Empty) Reset()         { *m = Empty{} }
+func (m *Empty) String() string { return proto.CompactTextString(m) }
+func (*Empty) ProtoMessage()    {}
+func (*Empty) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{5}
+}
+func (m *Empty) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Empty) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Empty.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Empty) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Empty.Merge(m, src)
+}
+func (m *Empty) XXX_Size() int {
+	return m.Size()
+}
+func (m *Empty) XXX_DiscardUnknown() {
+	xxx_messageInfo_Empty.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Empty proto.InternalMessageInfo
+
+type Id struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Id) Reset()         { *m = Id{} }
+func (m *Id) String() string { return proto.CompactTextString(m) }
+func (*Id) ProtoMessage()    {}
+func (*Id) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{6}
+}
+func (m *Id) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Id) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Id.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Id) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Id.Merge(m, src)
+}
+func (m *Id) XXX_Size() int {
+	return m.Size()
+}
+func (m *Id) XXX_DiscardUnknown() {
+	xxx_messageInfo_Id.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Id proto.InternalMessageInfo
+
+func (m *Id) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type GetAllBusinessResponse struct {
+	Business             []*Business `protobuf:"bytes,1,rep,name=business,proto3" json:"business"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *GetAllBusinessResponse) Reset()         { *m = GetAllBusinessResponse{} }
+func (m *GetAllBusinessResponse) String() string { return proto.CompactTextString(m) }
+func (*GetAllBusinessResponse) ProtoMessage()    {}
+func (*GetAllBusinessResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{7}
+}
+func (m *GetAllBusinessResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetAllBusinessResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetAllBusinessResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetAllBusinessResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAllBusinessResponse.Merge(m, src)
+}
+func (m *GetAllBusinessResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetAllBusinessResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAllBusinessResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAllBusinessResponse proto.InternalMessageInfo
+
+func (m *GetAllBusinessResponse) GetBusiness() []*Business {
+	if m != nil {
+		return m.Business
+	}
+	return nil
+}
+
+type GetListBusinessRequest struct {
+	Limit                int64    `protobuf:"varint,1,opt,name=limit,proto3" json:"limit"`
+	Page                 int64    `protobuf:"varint,2,opt,name=page,proto3" json:"page"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetListBusinessRequest) Reset()         { *m = GetListBusinessRequest{} }
+func (m *GetListBusinessRequest) String() string { return proto.CompactTextString(m) }
+func (*GetListBusinessRequest) ProtoMessage()    {}
+func (*GetListBusinessRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{8}
+}
+func (m *GetListBusinessRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetListBusinessRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetListBusinessRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetListBusinessRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetListBusinessRequest.Merge(m, src)
+}
+func (m *GetListBusinessRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetListBusinessRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetListBusinessRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetListBusinessRequest proto.InternalMessageInfo
+
+func (m *GetListBusinessRequest) GetLimit() int64 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+func (m *GetListBusinessRequest) GetPage() int64 {
+	if m != nil {
+		return m.Page
+	}
+	return 0
 }
 
 func init() {
@@ -459,48 +766,70 @@ func init() {
 	proto.RegisterType((*Staff)(nil), "business.Staff")
 	proto.RegisterType((*MenServices)(nil), "business.MenServices")
 	proto.RegisterType((*WomenServices)(nil), "business.WomenServices")
+	proto.RegisterType((*ServiceTypeDef)(nil), "business.ServiceTypeDef")
+	proto.RegisterType((*Empty)(nil), "business.Empty")
+	proto.RegisterType((*Id)(nil), "business.Id")
+	proto.RegisterType((*GetAllBusinessResponse)(nil), "business.GetAllBusinessResponse")
+	proto.RegisterType((*GetListBusinessRequest)(nil), "business.GetListBusinessRequest")
 }
 
 func init() { proto.RegisterFile("business.proto", fileDescriptor_fb4ce4f7d40c421f) }
 
 var fileDescriptor_fb4ce4f7d40c421f = []byte{
-	// 576 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0xc1, 0x6e, 0xd3, 0x40,
-	0x10, 0x86, 0x71, 0xdc, 0xa4, 0xf1, 0x24, 0x76, 0xca, 0x1e, 0x90, 0x29, 0x6a, 0x88, 0x52, 0x15,
-	0x22, 0x0e, 0x3d, 0x94, 0x0b, 0x57, 0xda, 0x0b, 0x11, 0xa2, 0x87, 0x04, 0x89, 0xa3, 0xb5, 0xb6,
-	0x37, 0xcd, 0x4a, 0xf6, 0x6e, 0xb4, 0xbb, 0x69, 0x95, 0x97, 0xe0, 0xcc, 0x73, 0x70, 0xe3, 0x0d,
-	0x38, 0x70, 0xe0, 0x11, 0x50, 0x78, 0x11, 0xe4, 0xd9, 0x75, 0xd2, 0x92, 0x1c, 0xe0, 0x96, 0xf9,
-	0xfe, 0xd9, 0xd9, 0x7f, 0x66, 0x9c, 0x85, 0x28, 0x5d, 0x6a, 0x2e, 0x98, 0xd6, 0xe7, 0x0b, 0x25,
-	0x8d, 0x24, 0xed, 0x3a, 0x1e, 0x7e, 0xf3, 0xa0, 0x7d, 0xe9, 0x02, 0x12, 0x41, 0x83, 0xe7, 0xb1,
-	0x37, 0xf0, 0x46, 0xc1, 0xa4, 0xc1, 0x73, 0x72, 0x02, 0xa0, 0x69, 0x21, 0x45, 0x22, 0x68, 0xc9,
-	0xe2, 0x06, 0xf2, 0x00, 0xc9, 0x35, 0x2d, 0x19, 0x39, 0x85, 0x70, 0x31, 0x97, 0x82, 0x25, 0x62,
-	0x59, 0xa6, 0x4c, 0xe9, 0xd8, 0x1f, 0xf8, 0xa3, 0x60, 0xd2, 0x45, 0x78, 0x6d, 0x19, 0x79, 0x02,
-	0x2d, 0x6d, 0xa8, 0x59, 0xea, 0xf8, 0x00, 0xcf, 0xbb, 0x88, 0x9c, 0x41, 0x53, 0x1b, 0x3a, 0x9b,
-	0xc5, 0xcd, 0x81, 0x3f, 0xea, 0x5c, 0xf4, 0xce, 0x37, 0x16, 0xa7, 0x15, 0x9e, 0x58, 0x95, 0x1c,
-	0x43, 0xbb, 0x90, 0x19, 0x35, 0x5c, 0x8a, 0xb8, 0x85, 0x05, 0x36, 0xf1, 0xf0, 0xb3, 0x0f, 0x4d,
-	0x4c, 0xde, 0x67, 0x7c, 0xc6, 0x95, 0x36, 0x0f, 0x8c, 0x23, 0x41, 0xe3, 0xcf, 0x20, 0x28, 0x68,
-	0xad, 0xfa, 0xae, 0x2a, 0x75, 0xe2, 0x4e, 0x57, 0x07, 0x7b, 0xba, 0x22, 0x70, 0x90, 0x49, 0x6d,
-	0xe2, 0x26, 0x1e, 0xc6, 0xdf, 0xf7, 0x3a, 0x6d, 0x3d, 0xe8, 0xf4, 0x04, 0x20, 0x93, 0x65, 0xc9,
-	0x84, 0x49, 0x78, 0x1e, 0x1f, 0x5a, 0x33, 0x8e, 0x8c, 0x73, 0xf2, 0x1c, 0x3a, 0x75, 0xeb, 0x95,
-	0xde, 0x46, 0x1d, 0x6a, 0x64, 0x13, 0x32, 0x5a, 0x30, 0x91, 0x53, 0x55, 0x25, 0x04, 0x36, 0xa1,
-	0x46, 0xe3, 0xbc, 0x6a, 0x27, 0x2b, 0xb8, 0xab, 0x0f, 0xb6, 0x1d, 0x0b, 0xc6, 0x79, 0xe5, 0xea,
-	0x86, 0x89, 0x9c, 0xa9, 0xb8, 0x63, 0x5d, 0xd9, 0x88, 0xbc, 0x80, 0x5e, 0xc9, 0x44, 0xa2, 0x99,
-	0xba, 0xe5, 0x19, 0xc3, 0xab, 0xbb, 0x98, 0x10, 0x96, 0x4c, 0x4c, 0x1d, 0x1d, 0xe7, 0xe4, 0x15,
-	0x3c, 0xbe, 0x93, 0x7f, 0x67, 0x86, 0x98, 0xd9, 0x43, 0x61, 0x9b, 0x3b, 0xfc, 0xd1, 0x80, 0xce,
-	0x87, 0x2d, 0xd9, 0x59, 0xcb, 0x53, 0x68, 0xcf, 0x29, 0x57, 0x49, 0xb6, 0x34, 0x6e, 0x29, 0x87,
-	0x55, 0x7c, 0xb5, 0x34, 0x55, 0x0f, 0x29, 0xa3, 0x2a, 0x47, 0xcd, 0xad, 0x04, 0x41, 0x25, 0x9e,
-	0x42, 0x68, 0xcf, 0xc9, 0x42, 0x2a, 0x2e, 0x6e, 0xdc, 0xa7, 0xd4, 0xc5, 0xc3, 0x8e, 0x91, 0x11,
-	0x1c, 0xe9, 0x05, 0xcb, 0x38, 0x2d, 0x92, 0xcd, 0x25, 0x76, 0x3d, 0x91, 0xe3, 0xef, 0xdc, 0x5d,
-	0x67, 0x10, 0xb9, 0xbb, 0xea, 0x7a, 0x76, 0x61, 0xa1, 0xbd, 0xb0, 0x2e, 0x78, 0x02, 0x60, 0xd3,
-	0x8c, 0xe2, 0x65, 0xbd, 0x37, 0x24, 0x1f, 0x15, 0x2f, 0x71, 0x6f, 0x28, 0xeb, 0x39, 0xbd, 0x65,
-	0x9b, 0xbd, 0x55, 0x68, 0x5a, 0x11, 0xfc, 0x08, 0x69, 0xc6, 0x9c, 0x1e, 0xb8, 0x8f, 0x90, 0x66,
-	0xcc, 0xca, 0x03, 0xe8, 0xa6, 0x72, 0xb5, 0xf5, 0x0a, 0xae, 0x80, 0x5c, 0x39, 0x9f, 0xc3, 0xaf,
-	0x1e, 0x84, 0x9f, 0xee, 0x8f, 0xf8, 0x7f, 0x06, 0xba, 0x33, 0x33, 0x7f, 0xcf, 0xcc, 0x5e, 0x42,
-	0x8f, 0xad, 0x58, 0xaa, 0xe4, 0x5d, 0x42, 0x55, 0x36, 0xdf, 0x8e, 0x36, 0x72, 0xf8, 0xad, 0xa5,
-	0xff, 0x3e, 0xdc, 0x8b, 0xf7, 0xd0, 0xab, 0xdf, 0x13, 0x67, 0x9b, 0xbc, 0x81, 0xe8, 0x4a, 0x31,
-	0x6a, 0xd8, 0xe6, 0xa1, 0x21, 0xdb, 0x7f, 0x7b, 0xcd, 0x8e, 0xf7, 0xb0, 0xcb, 0xa3, 0xef, 0xeb,
-	0xbe, 0xf7, 0x73, 0xdd, 0xf7, 0x7e, 0xad, 0xfb, 0xde, 0x97, 0xdf, 0xfd, 0x47, 0x69, 0x0b, 0x1f,
-	0xb0, 0xd7, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x26, 0xa8, 0x14, 0x7a, 0xd2, 0x04, 0x00, 0x00,
+	// 842 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x56, 0xdd, 0x8e, 0xdb, 0x44,
+	0x14, 0xc6, 0xf1, 0x26, 0xeb, 0x9c, 0x24, 0x4e, 0x19, 0x95, 0xc5, 0x2c, 0xea, 0x12, 0xa5, 0x2a,
+	0xac, 0xb8, 0x58, 0xa4, 0x54, 0x20, 0x2e, 0xb8, 0x49, 0xb6, 0xa8, 0x8d, 0x04, 0xbd, 0xf0, 0xb6,
+	0xe2, 0xd2, 0x9a, 0xd8, 0x93, 0x66, 0x24, 0xdb, 0x63, 0x3c, 0x93, 0x56, 0xb9, 0x44, 0x42, 0x3c,
+	0x02, 0xe2, 0x91, 0xb8, 0x03, 0x89, 0x17, 0x40, 0xcb, 0x8b, 0x20, 0x9f, 0x19, 0xff, 0x25, 0xe9,
+	0x56, 0xbd, 0xcb, 0x7c, 0xdf, 0x39, 0x73, 0xce, 0xf9, 0xbe, 0xf1, 0x4c, 0xc0, 0x5d, 0x6d, 0x25,
+	0x4f, 0x99, 0x94, 0x57, 0x59, 0x2e, 0x94, 0x20, 0x4e, 0xb9, 0x9e, 0xfe, 0xde, 0x01, 0x67, 0x61,
+	0x16, 0xc4, 0x85, 0x0e, 0x8f, 0x3c, 0x6b, 0x62, 0x5d, 0xf6, 0xfd, 0x0e, 0x8f, 0xc8, 0x03, 0x00,
+	0x49, 0x63, 0x91, 0x06, 0x29, 0x4d, 0x98, 0xd7, 0x41, 0xbc, 0x8f, 0xc8, 0x73, 0x9a, 0x30, 0xf2,
+	0x10, 0x46, 0xd9, 0x46, 0xa4, 0x2c, 0x48, 0xb7, 0xc9, 0x8a, 0xe5, 0xd2, 0xb3, 0x27, 0xf6, 0x65,
+	0xdf, 0x1f, 0x22, 0xf8, 0x5c, 0x63, 0xe4, 0x0c, 0x7a, 0x52, 0x51, 0xb5, 0x95, 0xde, 0x09, 0xe6,
+	0x9b, 0x15, 0x79, 0x04, 0x5d, 0xa9, 0xe8, 0x7a, 0xed, 0x75, 0x27, 0xf6, 0xe5, 0x60, 0x36, 0xbe,
+	0xaa, 0x5a, 0xbc, 0x29, 0x60, 0x5f, 0xb3, 0xe4, 0x1c, 0x9c, 0x58, 0x84, 0x54, 0x71, 0x91, 0x7a,
+	0x3d, 0xdc, 0xa0, 0x5a, 0x17, 0xed, 0x85, 0x39, 0xa3, 0x8a, 0x45, 0x01, 0x55, 0xde, 0xa9, 0x6e,
+	0xcf, 0x20, 0x73, 0x55, 0xd0, 0xdb, 0x2c, 0x2a, 0x69, 0x47, 0xd3, 0x06, 0xd1, 0x74, 0xc4, 0x62,
+	0x66, 0xe8, 0xbe, 0xa6, 0x0d, 0x32, 0x57, 0xd3, 0x7f, 0x6c, 0xe8, 0x62, 0x27, 0xc7, 0x54, 0x59,
+	0xf3, 0x5c, 0xaa, 0x96, 0x2a, 0x88, 0xa0, 0x2a, 0x9f, 0x42, 0x3f, 0xa6, 0x25, 0x6b, 0x9b, 0x96,
+	0xa9, 0x21, 0x0f, 0x24, 0x3b, 0x39, 0x22, 0x19, 0x81, 0x93, 0x50, 0x48, 0xe5, 0x75, 0x31, 0x19,
+	0x7f, 0x37, 0x64, 0xec, 0xb5, 0x64, 0x2c, 0x34, 0x10, 0x49, 0xc2, 0x52, 0x15, 0xf0, 0xa8, 0xd2,
+	0x40, 0x23, 0xcb, 0x88, 0x7c, 0x06, 0x83, 0x52, 0xd7, 0x82, 0xd7, 0x22, 0x40, 0x09, 0xe9, 0x80,
+	0x90, 0xc6, 0x2c, 0x8d, 0x68, 0x5e, 0x04, 0x68, 0x19, 0xa0, 0x84, 0x96, 0x51, 0x31, 0x4e, 0x18,
+	0x73, 0xb3, 0x3f, 0xe8, 0x71, 0x34, 0xb0, 0x8c, 0xc8, 0xe7, 0x30, 0x4e, 0x58, 0x1a, 0x48, 0x96,
+	0xbf, 0xe6, 0x21, 0xc3, 0x12, 0x03, 0x0c, 0x19, 0x25, 0x2c, 0xbd, 0x31, 0xe8, 0x32, 0x22, 0x5f,
+	0xc2, 0x87, 0x6f, 0xc4, 0x7e, 0xe4, 0x10, 0x23, 0xc7, 0x48, 0x34, 0x62, 0xdb, 0xae, 0x8e, 0xee,
+	0x76, 0xd5, 0xbd, 0xdb, 0xd5, 0xf1, 0xbe, 0xab, 0xbf, 0xd8, 0x30, 0xf8, 0xb1, 0x2e, 0x77, 0xe0,
+	0xed, 0x27, 0xe0, 0x6c, 0x28, 0xcf, 0x83, 0x70, 0xab, 0xd0, 0x59, 0xc7, 0x3f, 0x2d, 0xd6, 0xd7,
+	0x5b, 0x55, 0x08, 0xb1, 0x62, 0x34, 0x8f, 0x90, 0xb3, 0x91, 0x73, 0x10, 0x28, 0xc8, 0x87, 0x30,
+	0xd2, 0x79, 0x22, 0x16, 0x39, 0x4f, 0x5f, 0xe1, 0x61, 0x77, 0xfc, 0x21, 0x26, 0x1b, 0x8c, 0x5c,
+	0xc2, 0x3d, 0x99, 0xb1, 0x90, 0xd3, 0x38, 0xa8, 0x8a, 0x74, 0x31, 0xce, 0x35, 0xf8, 0x33, 0x53,
+	0xeb, 0x11, 0xb8, 0xa6, 0x56, 0xb9, 0x5f, 0x0f, 0xe3, 0x46, 0xba, 0x60, 0xb9, 0xe1, 0x03, 0x00,
+	0x1d, 0xa6, 0x72, 0x9e, 0xa0, 0xf9, 0x8e, 0xaf, 0x9b, 0x7c, 0x91, 0xf3, 0x04, 0xcd, 0x47, 0x5a,
+	0x6e, 0xe8, 0x6b, 0x86, 0xe6, 0x3b, 0xbe, 0xce, 0xb8, 0x29, 0x10, 0x3c, 0xc9, 0x34, 0x64, 0x86,
+	0xef, 0xeb, 0xfc, 0x02, 0xd1, 0xf4, 0x04, 0x86, 0x2b, 0xb1, 0xab, 0x7b, 0x05, 0xb3, 0x81, 0xd8,
+	0x95, 0x7d, 0x9e, 0x41, 0x4f, 0xa8, 0x4d, 0x71, 0x8e, 0xb5, 0xed, 0x66, 0xd5, 0x3e, 0x34, 0xc3,
+	0xf6, 0xa1, 0x99, 0xfe, 0x65, 0xc1, 0xe8, 0xa7, 0xa6, 0xe9, 0xef, 0xe3, 0xc2, 0x81, 0xd0, 0xf6,
+	0x11, 0xa1, 0xbf, 0x80, 0x31, 0xdb, 0xb1, 0x55, 0x2e, 0xde, 0x04, 0x34, 0x0f, 0x37, 0xb5, 0x1f,
+	0xae, 0x81, 0xe7, 0x1a, 0x7d, 0x0f, 0x47, 0x5a, 0x13, 0xf5, 0xf6, 0x26, 0xfa, 0xcd, 0x02, 0xd7,
+	0x0c, 0xf3, 0x62, 0x97, 0xb1, 0x27, 0x6c, 0x4d, 0xbe, 0x81, 0x41, 0xe3, 0xbc, 0xe3, 0x6c, 0x83,
+	0xd9, 0x47, 0xf5, 0x25, 0xd7, 0x38, 0x84, 0x3e, 0xd4, 0x5a, 0x90, 0xef, 0x60, 0xd4, 0xfa, 0x52,
+	0x70, 0xfe, 0xc1, 0xec, 0xe3, 0x3a, 0xb3, 0x25, 0x9d, 0x3f, 0x6c, 0x7e, 0x3e, 0xd3, 0x53, 0xe8,
+	0x7e, 0x9f, 0x64, 0x6a, 0x37, 0xbd, 0x0f, 0x9d, 0x65, 0xb4, 0xaf, 0xeb, 0xf4, 0x19, 0x9c, 0x3d,
+	0x65, 0x6a, 0x1e, 0xc7, 0xe5, 0x8d, 0xef, 0x33, 0x99, 0x89, 0x54, 0x32, 0x72, 0x05, 0xd5, 0x93,
+	0xe0, 0x59, 0x78, 0x21, 0x93, 0xba, 0x62, 0x15, 0x5d, 0x3f, 0x1b, 0x0b, 0xdc, 0xe9, 0x07, 0x2e,
+	0x55, 0xbd, 0xd5, 0xcf, 0x5b, 0x26, 0x15, 0xb9, 0x0f, 0xdd, 0x98, 0x27, 0x5c, 0x61, 0x59, 0xdb,
+	0xd7, 0x8b, 0xe2, 0x4a, 0xcb, 0xe8, 0x2b, 0x3d, 0x8d, 0xed, 0xe3, 0xef, 0xd9, 0xaf, 0x36, 0x8c,
+	0xcb, 0xec, 0x72, 0xfc, 0x6f, 0xc1, 0xbd, 0xc6, 0x4f, 0xbd, 0x7a, 0x93, 0x8e, 0xf4, 0x71, 0x7e,
+	0x04, 0x23, 0x5f, 0x83, 0xfb, 0x12, 0x6f, 0x81, 0x3b, 0x33, 0x1b, 0xcf, 0x0c, 0x0a, 0x45, 0xbe,
+	0x02, 0xf7, 0x09, 0xde, 0x0e, 0x55, 0xda, 0xb0, 0x0e, 0x59, 0x46, 0x87, 0x09, 0x8f, 0x61, 0xfc,
+	0x94, 0xa9, 0xc5, 0x6e, 0x19, 0xbd, 0x25, 0xe3, 0x58, 0x73, 0xd7, 0xe0, 0xb6, 0x85, 0x27, 0xfb,
+	0xfb, 0x9e, 0x4f, 0x6a, 0xe0, 0x2d, 0x1e, 0xbd, 0xc4, 0xca, 0x4d, 0xcd, 0x49, 0x3b, 0xe9, 0x88,
+	0x1d, 0xef, 0xde, 0x76, 0x71, 0xef, 0xcf, 0xdb, 0x0b, 0xeb, 0xef, 0xdb, 0x0b, 0xeb, 0xdf, 0xdb,
+	0x0b, 0xeb, 0x8f, 0xff, 0x2e, 0x3e, 0x58, 0xf5, 0xf0, 0x4f, 0xc2, 0xe3, 0xff, 0x03, 0x00, 0x00,
+	0xff, 0xff, 0xbc, 0x92, 0x12, 0xf9, 0x36, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -516,6 +845,11 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type BusinessServiceClient interface {
 	CreateBusiness(ctx context.Context, in *Business, opts ...grpc.CallOption) (*Business, error)
+	UpdateBusiness(ctx context.Context, in *Business, opts ...grpc.CallOption) (*Empty, error)
+	DeleteBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Empty, error)
+	GetByIdBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Business, error)
+	GetAllBusiness(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllBusinessResponse, error)
+	GetListBusiness(ctx context.Context, in *GetListBusinessRequest, opts ...grpc.CallOption) (*GetAllBusinessResponse, error)
 }
 
 type businessServiceClient struct {
@@ -535,9 +869,59 @@ func (c *businessServiceClient) CreateBusiness(ctx context.Context, in *Business
 	return out, nil
 }
 
+func (c *businessServiceClient) UpdateBusiness(ctx context.Context, in *Business, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/UpdateBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) DeleteBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/DeleteBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) GetByIdBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Business, error) {
+	out := new(Business)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/GetByIdBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) GetAllBusiness(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllBusinessResponse, error) {
+	out := new(GetAllBusinessResponse)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/GetAllBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) GetListBusiness(ctx context.Context, in *GetListBusinessRequest, opts ...grpc.CallOption) (*GetAllBusinessResponse, error) {
+	out := new(GetAllBusinessResponse)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/GetListBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BusinessServiceServer is the server API for BusinessService service.
 type BusinessServiceServer interface {
 	CreateBusiness(context.Context, *Business) (*Business, error)
+	UpdateBusiness(context.Context, *Business) (*Empty, error)
+	DeleteBusiness(context.Context, *Id) (*Empty, error)
+	GetByIdBusiness(context.Context, *Id) (*Business, error)
+	GetAllBusiness(context.Context, *Empty) (*GetAllBusinessResponse, error)
+	GetListBusiness(context.Context, *GetListBusinessRequest) (*GetAllBusinessResponse, error)
 }
 
 // UnimplementedBusinessServiceServer can be embedded to have forward compatible implementations.
@@ -546,6 +930,21 @@ type UnimplementedBusinessServiceServer struct {
 
 func (*UnimplementedBusinessServiceServer) CreateBusiness(ctx context.Context, req *Business) (*Business, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) UpdateBusiness(ctx context.Context, req *Business) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) DeleteBusiness(ctx context.Context, req *Id) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) GetByIdBusiness(ctx context.Context, req *Id) (*Business, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByIdBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) GetAllBusiness(ctx context.Context, req *Empty) (*GetAllBusinessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) GetListBusiness(ctx context.Context, req *GetListBusinessRequest) (*GetAllBusinessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetListBusiness not implemented")
 }
 
 func RegisterBusinessServiceServer(s *grpc.Server, srv BusinessServiceServer) {
@@ -570,6 +969,96 @@ func _BusinessService_CreateBusiness_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BusinessService_UpdateBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Business)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).UpdateBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/UpdateBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).UpdateBusiness(ctx, req.(*Business))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_DeleteBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).DeleteBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/DeleteBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).DeleteBusiness(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_GetByIdBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).GetByIdBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/GetByIdBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).GetByIdBusiness(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_GetAllBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).GetAllBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/GetAllBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).GetAllBusiness(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_GetListBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListBusinessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).GetListBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/GetListBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).GetListBusiness(ctx, req.(*GetListBusinessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _BusinessService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "business.BusinessService",
 	HandlerType: (*BusinessServiceServer)(nil),
@@ -577,6 +1066,26 @@ var _BusinessService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateBusiness",
 			Handler:    _BusinessService_CreateBusiness_Handler,
+		},
+		{
+			MethodName: "UpdateBusiness",
+			Handler:    _BusinessService_UpdateBusiness_Handler,
+		},
+		{
+			MethodName: "DeleteBusiness",
+			Handler:    _BusinessService_DeleteBusiness_Handler,
+		},
+		{
+			MethodName: "GetByIdBusiness",
+			Handler:    _BusinessService_GetByIdBusiness_Handler,
+		},
+		{
+			MethodName: "GetAllBusiness",
+			Handler:    _BusinessService_GetAllBusiness_Handler,
+		},
+		{
+			MethodName: "GetListBusiness",
+			Handler:    _BusinessService_GetListBusiness_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -648,6 +1157,24 @@ func (m *Business) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Location)))
 		i += copy(dAtA[i:], m.Location)
+	}
+	if len(m.CreatedAt) > 0 {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.CreatedAt)))
+		i += copy(dAtA[i:], m.CreatedAt)
+	}
+	if len(m.UpdatedAt) > 0 {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.UpdatedAt)))
+		i += copy(dAtA[i:], m.UpdatedAt)
+	}
+	if len(m.DeletedAt) > 0 {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.DeletedAt)))
+		i += copy(dAtA[i:], m.DeletedAt)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -739,23 +1266,35 @@ func (m *Staff) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.ClientId)))
 		i += copy(dAtA[i:], m.ClientId)
 	}
-	if len(m.Gender) > 0 {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Gender)))
-		i += copy(dAtA[i:], m.Gender)
-	}
 	if len(m.MenServicesId) > 0 {
-		dAtA[i] = 0x62
+		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.MenServicesId)))
 		i += copy(dAtA[i:], m.MenServicesId)
 	}
 	if len(m.WomenServicesId) > 0 {
-		dAtA[i] = 0x6a
+		dAtA[i] = 0x62
 		i++
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.WomenServicesId)))
 		i += copy(dAtA[i:], m.WomenServicesId)
+	}
+	if len(m.CreatedAt) > 0 {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.CreatedAt)))
+		i += copy(dAtA[i:], m.CreatedAt)
+	}
+	if len(m.UpdatedAt) > 0 {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.UpdatedAt)))
+		i += copy(dAtA[i:], m.UpdatedAt)
+	}
+	if len(m.DeletedAt) > 0 {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.DeletedAt)))
+		i += copy(dAtA[i:], m.DeletedAt)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -784,59 +1323,107 @@ func (m *MenServices) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Id)))
 		i += copy(dAtA[i:], m.Id)
 	}
-	if len(m.HairCut) > 0 {
-		dAtA[i] = 0x12
+	if m.HairCut {
+		dAtA[i] = 0x10
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.HairCut)))
-		i += copy(dAtA[i:], m.HairCut)
+		if m.HairCut {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.BeardCut) > 0 {
-		dAtA[i] = 0x1a
+	if m.BeardCut {
+		dAtA[i] = 0x18
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.BeardCut)))
-		i += copy(dAtA[i:], m.BeardCut)
+		if m.BeardCut {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.HairColoring) > 0 {
-		dAtA[i] = 0x22
+	if m.HairColoring {
+		dAtA[i] = 0x20
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.HairColoring)))
-		i += copy(dAtA[i:], m.HairColoring)
+		if m.HairColoring {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.SpecialHairCut) > 0 {
-		dAtA[i] = 0x2a
+	if m.SpecialHairCut {
+		dAtA[i] = 0x28
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.SpecialHairCut)))
-		i += copy(dAtA[i:], m.SpecialHairCut)
+		if m.SpecialHairCut {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.BeardColoring) > 0 {
-		dAtA[i] = 0x32
+	if m.BeardColoring {
+		dAtA[i] = 0x30
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.BeardColoring)))
-		i += copy(dAtA[i:], m.BeardColoring)
+		if m.BeardColoring {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.BeardTrim) > 0 {
-		dAtA[i] = 0x3a
+	if m.BeardTrim {
+		dAtA[i] = 0x38
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.BeardTrim)))
-		i += copy(dAtA[i:], m.BeardTrim)
+		if m.BeardTrim {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.BeardShave) > 0 {
-		dAtA[i] = 0x42
+	if m.BeardShave {
+		dAtA[i] = 0x40
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.BeardShave)))
-		i += copy(dAtA[i:], m.BeardShave)
+		if m.BeardShave {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.FaceShave) > 0 {
-		dAtA[i] = 0x4a
+	if m.FaceShave {
+		dAtA[i] = 0x48
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.FaceShave)))
-		i += copy(dAtA[i:], m.FaceShave)
+		if m.FaceShave {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
-	if len(m.BoyHairCut) > 0 {
-		dAtA[i] = 0x52
+	if m.BoyHairCut {
+		dAtA[i] = 0x50
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.BoyHairCut)))
-		i += copy(dAtA[i:], m.BoyHairCut)
+		if m.BoyHairCut {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if len(m.Others) > 0 {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Others)))
+		i += copy(dAtA[i:], m.Others)
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x62
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -865,29 +1452,204 @@ func (m *WomenServices) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Id)))
 		i += copy(dAtA[i:], m.Id)
 	}
-	if len(m.HairCut) > 0 {
+	if m.HairCut {
+		dAtA[i] = 0x10
+		i++
+		if m.HairCut {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.HairColoring {
+		dAtA[i] = 0x18
+		i++
+		if m.HairColoring {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.EyebrowArching {
+		dAtA[i] = 0x20
+		i++
+		if m.EyebrowArching {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.SpecialHairCut {
+		dAtA[i] = 0x28
+		i++
+		if m.SpecialHairCut {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if len(m.ClientId) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.ClientId)))
+		i += copy(dAtA[i:], m.ClientId)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *ServiceTypeDef) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ServiceTypeDef) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.MenService != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(m.MenService.Size()))
+		n1, err1 := m.MenService.MarshalTo(dAtA[i:])
+		if err1 != nil {
+			return 0, err1
+		}
+		i += n1
+	}
+	if m.WomenService != nil {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.HairCut)))
-		i += copy(dAtA[i:], m.HairCut)
+		i = encodeVarintBusiness(dAtA, i, uint64(m.WomenService.Size()))
+		n2, err2 := m.WomenService.MarshalTo(dAtA[i:])
+		if err2 != nil {
+			return 0, err2
+		}
+		i += n2
 	}
-	if len(m.HairColoring) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.HairColoring)))
-		i += copy(dAtA[i:], m.HairColoring)
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.EyebrowArching) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.EyebrowArching)))
-		i += copy(dAtA[i:], m.EyebrowArching)
+	return i, nil
+}
+
+func (m *Empty) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
 	}
-	if len(m.SpecialHairCut) > 0 {
-		dAtA[i] = 0x2a
+	return dAtA[:n], nil
+}
+
+func (m *Empty) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Id) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Id) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintBusiness(dAtA, i, uint64(len(m.SpecialHairCut)))
-		i += copy(dAtA[i:], m.SpecialHairCut)
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Id)))
+		i += copy(dAtA[i:], m.Id)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *GetAllBusinessResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetAllBusinessResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Business) > 0 {
+		for _, msg := range m.Business {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintBusiness(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *GetListBusinessRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetListBusinessRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Limit != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(m.Limit))
+	}
+	if m.Page != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(m.Page))
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -935,6 +1697,18 @@ func (m *Business) Size() (n int) {
 		}
 	}
 	l = len(m.Location)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.CreatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.UpdatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.DeletedAt)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
@@ -992,15 +1766,23 @@ func (m *Staff) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
-	l = len(m.Gender)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
 	l = len(m.MenServicesId)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
 	l = len(m.WomenServicesId)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.CreatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.UpdatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.DeletedAt)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
@@ -1020,39 +1802,38 @@ func (m *MenServices) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
-	l = len(m.HairCut)
+	if m.HairCut {
+		n += 2
+	}
+	if m.BeardCut {
+		n += 2
+	}
+	if m.HairColoring {
+		n += 2
+	}
+	if m.SpecialHairCut {
+		n += 2
+	}
+	if m.BeardColoring {
+		n += 2
+	}
+	if m.BeardTrim {
+		n += 2
+	}
+	if m.BeardShave {
+		n += 2
+	}
+	if m.FaceShave {
+		n += 2
+	}
+	if m.BoyHairCut {
+		n += 2
+	}
+	l = len(m.Others)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
-	l = len(m.BeardCut)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.HairColoring)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.SpecialHairCut)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.BeardColoring)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.BeardTrim)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.BeardShave)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.FaceShave)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
-	}
-	l = len(m.BoyHairCut)
+	l = len(m.ClientId)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
@@ -1072,21 +1853,105 @@ func (m *WomenServices) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
-	l = len(m.HairCut)
+	if m.HairCut {
+		n += 2
+	}
+	if m.HairColoring {
+		n += 2
+	}
+	if m.EyebrowArching {
+		n += 2
+	}
+	if m.SpecialHairCut {
+		n += 2
+	}
+	l = len(m.ClientId)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
-	l = len(m.HairColoring)
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ServiceTypeDef) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MenService != nil {
+		l = m.MenService.Size()
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	if m.WomenService != nil {
+		l = m.WomenService.Size()
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Empty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Id) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
-	l = len(m.EyebrowArching)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
-	l = len(m.SpecialHairCut)
-	if l > 0 {
-		n += 1 + l + sovBusiness(uint64(l))
+	return n
+}
+
+func (m *GetAllBusinessResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Business) > 0 {
+		for _, e := range m.Business {
+			l = e.Size()
+			n += 1 + l + sovBusiness(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *GetListBusinessRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Limit != 0 {
+		n += 1 + sovBusiness(uint64(m.Limit))
+	}
+	if m.Page != 0 {
+		n += 1 + sovBusiness(uint64(m.Page))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -1322,6 +2187,102 @@ func (m *Business) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Location = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CreatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeletedAt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1699,38 +2660,6 @@ func (m *Staff) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Gender", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowBusiness
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Gender = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MenServicesId", wireType)
 			}
 			var stringLen uint64
@@ -1761,7 +2690,7 @@ func (m *Staff) Unmarshal(dAtA []byte) error {
 			}
 			m.MenServicesId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 13:
+		case 12:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field WomenServicesId", wireType)
 			}
@@ -1792,6 +2721,102 @@ func (m *Staff) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.WomenServicesId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CreatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeletedAt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1880,10 +2905,10 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HairCut", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -1893,29 +2918,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.HairCut = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.HairCut = bool(v != 0)
 		case 3:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BeardCut", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -1925,29 +2938,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BeardCut = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.BeardCut = bool(v != 0)
 		case 4:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HairColoring", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -1957,29 +2958,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.HairColoring = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.HairColoring = bool(v != 0)
 		case 5:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SpecialHairCut", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -1989,29 +2978,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SpecialHairCut = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.SpecialHairCut = bool(v != 0)
 		case 6:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BeardColoring", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2021,29 +2998,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BeardColoring = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.BeardColoring = bool(v != 0)
 		case 7:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BeardTrim", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2053,29 +3018,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BeardTrim = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.BeardTrim = bool(v != 0)
 		case 8:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BeardShave", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2085,29 +3038,17 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BeardShave = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.BeardShave = bool(v != 0)
 		case 9:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field FaceShave", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2117,28 +3058,36 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FaceShave = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.FaceShave = bool(v != 0)
 		case 10:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BoyHairCut", wireType)
 			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.BoyHairCut = bool(v != 0)
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Others", wireType)
+			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
@@ -2165,7 +3114,39 @@ func (m *MenServices) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BoyHairCut = string(dAtA[iNdEx:postIndex])
+			m.Others = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2254,10 +3235,10 @@ func (m *WomenServices) Unmarshal(dAtA []byte) error {
 			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HairCut", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2267,29 +3248,17 @@ func (m *WomenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.HairCut = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.HairCut = bool(v != 0)
 		case 3:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HairColoring", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2299,29 +3268,17 @@ func (m *WomenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.HairColoring = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.HairColoring = bool(v != 0)
 		case 4:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field EyebrowArching", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowBusiness
@@ -2331,28 +3288,36 @@ func (m *WomenServices) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthBusiness
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EyebrowArching = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
+			m.EyebrowArching = bool(v != 0)
 		case 5:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SpecialHairCut", wireType)
 			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.SpecialHairCut = bool(v != 0)
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
+			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
@@ -2379,8 +3344,454 @@ func (m *WomenServices) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SpecialHairCut = string(dAtA[iNdEx:postIndex])
+			m.ClientId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ServiceTypeDef) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ServiceTypeDef: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ServiceTypeDef: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MenService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MenService == nil {
+				m.MenService = &MenServices{}
+			}
+			if err := m.MenService.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WomenService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.WomenService == nil {
+				m.WomenService = &WomenServices{}
+			}
+			if err := m.WomenService.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Empty) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Empty: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Empty: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Id) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Id: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Id: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetAllBusinessResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetAllBusinessResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetAllBusinessResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Business", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Business = append(m.Business, &Business{})
+			if err := m.Business[len(m.Business)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetListBusinessRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetListBusinessRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetListBusinessRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
+			}
+			m.Limit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Limit |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Page |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipBusiness(dAtA[iNdEx:])

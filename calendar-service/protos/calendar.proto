@@ -13,4 +13,6 @@ message Calendar {
     string day = 4;
     string month = 5;
     string year = 6;
+    string business_id = 7;
+    string bus_staff_id = 8;
 }

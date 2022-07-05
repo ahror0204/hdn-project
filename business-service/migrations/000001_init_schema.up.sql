@@ -4,7 +4,10 @@ CREATE TABLE IF NOT EXISTS business (
     phone_numbers []TEXT,
     status VARCHAR(255),
     staff []TEXT,
-    location TEXT
+    location TEXT, 
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS men_services (
@@ -17,7 +20,8 @@ CREATE TABLE IF NOT EXISTS men_services (
     beard_trim BOOLEAN NOT NULL,
     beard_shave BOOLEAN NOT NULL,
     face_shave BOOLEAN NOT NULL,
-    boy_hair_cut BOOLEAN NOT NULL
+    boy_hair_cut BOOLEAN NOT NULL,
+    client_id uuid
 );
 
 CREATE TABLE IF NOT EXISTS women_services (
@@ -25,7 +29,8 @@ CREATE TABLE IF NOT EXISTS women_services (
     hair_cut BOOLEAN NOT NULL,
     hair_coloring BOOLEAN NOT NULL,
     special_hair_cut BOOLEAN NOT NULL,
-    eyebrow_arching BOOLEAN NOT NULL
+    eyebrow_arching BOOLEAN NOT NULL,
+    client_id uuid
 );
 
 CREATE TABLE IF NOT EXISTS staff (
@@ -41,6 +46,9 @@ CREATE TABLE IF NOT EXISTS staff (
     client_id uuid NOT NULL,
     men_service_id uuid,
     women_service_id uuid,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
     FOREIGN KEY (business_id) REFERENCES businesss (id) ON DELETE CASCADE,
     FOREIGN KEY (men_service_id) REFERENCES men_services (id) ON DELETE CASCADE,
     FOREIGN KEY (women_service_id) REFERENCES women_services (id) ON DELETE CASCADE

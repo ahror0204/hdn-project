@@ -33,6 +33,9 @@ type Business struct {
 	Status               string   `protobuf:"bytes,4,opt,name=status,proto3" json:"status"`
 	Staff                []*Staff `protobuf:"bytes,5,rep,name=staff,proto3" json:"staff"`
 	Location             string   `protobuf:"bytes,6,opt,name=location,proto3" json:"location"`
+	CreatedAt            string   `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt            string   `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	DeletedAt            string   `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -113,6 +116,27 @@ func (m *Business) GetLocation() string {
 	return ""
 }
 
+func (m *Business) GetCreatedAt() string {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return ""
+}
+
+func (m *Business) GetUpdatedAt() string {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return ""
+}
+
+func (m *Business) GetDeletedAt() string {
+	if m != nil {
+		return m.DeletedAt
+	}
+	return ""
+}
+
 type Staff struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
 	FirstName            string   `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name"`
@@ -126,6 +150,9 @@ type Staff struct {
 	ClientId             string   `protobuf:"bytes,10,opt,name=client_id,json=clientId,proto3" json:"client_id"`
 	MenServicesId        string   `protobuf:"bytes,11,opt,name=men_services_id,json=menServicesId,proto3" json:"men_services_id"`
 	WomenServicesId      string   `protobuf:"bytes,12,opt,name=women_services_id,json=womenServicesId,proto3" json:"women_services_id"`
+	CreatedAt            string   `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at"`
+	UpdatedAt            string   `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at"`
+	DeletedAt            string   `protobuf:"bytes,15,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -244,6 +271,27 @@ func (m *Staff) GetMenServicesId() string {
 func (m *Staff) GetWomenServicesId() string {
 	if m != nil {
 		return m.WomenServicesId
+	}
+	return ""
+}
+
+func (m *Staff) GetCreatedAt() string {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return ""
+}
+
+func (m *Staff) GetUpdatedAt() string {
+	if m != nil {
+		return m.UpdatedAt
+	}
+	return ""
+}
+
+func (m *Staff) GetDeletedAt() string {
+	if m != nil {
+		return m.DeletedAt
 	}
 	return ""
 }
@@ -525,60 +573,263 @@ func (m *ServiceTypeDef) GetWomenService() *WomenServices {
 	return nil
 }
 
+type Empty struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Empty) Reset()         { *m = Empty{} }
+func (m *Empty) String() string { return proto.CompactTextString(m) }
+func (*Empty) ProtoMessage()    {}
+func (*Empty) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{5}
+}
+func (m *Empty) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Empty) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Empty.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Empty) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Empty.Merge(m, src)
+}
+func (m *Empty) XXX_Size() int {
+	return m.Size()
+}
+func (m *Empty) XXX_DiscardUnknown() {
+	xxx_messageInfo_Empty.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Empty proto.InternalMessageInfo
+
+type Id struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Id) Reset()         { *m = Id{} }
+func (m *Id) String() string { return proto.CompactTextString(m) }
+func (*Id) ProtoMessage()    {}
+func (*Id) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{6}
+}
+func (m *Id) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Id) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Id.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Id) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Id.Merge(m, src)
+}
+func (m *Id) XXX_Size() int {
+	return m.Size()
+}
+func (m *Id) XXX_DiscardUnknown() {
+	xxx_messageInfo_Id.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Id proto.InternalMessageInfo
+
+func (m *Id) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type GetAllBusinessResponse struct {
+	Business             []*Business `protobuf:"bytes,1,rep,name=business,proto3" json:"business"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *GetAllBusinessResponse) Reset()         { *m = GetAllBusinessResponse{} }
+func (m *GetAllBusinessResponse) String() string { return proto.CompactTextString(m) }
+func (*GetAllBusinessResponse) ProtoMessage()    {}
+func (*GetAllBusinessResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{7}
+}
+func (m *GetAllBusinessResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetAllBusinessResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetAllBusinessResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetAllBusinessResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAllBusinessResponse.Merge(m, src)
+}
+func (m *GetAllBusinessResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetAllBusinessResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAllBusinessResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAllBusinessResponse proto.InternalMessageInfo
+
+func (m *GetAllBusinessResponse) GetBusiness() []*Business {
+	if m != nil {
+		return m.Business
+	}
+	return nil
+}
+
+type GetListBusinessRequest struct {
+	Limit                int64    `protobuf:"varint,1,opt,name=limit,proto3" json:"limit"`
+	Page                 int64    `protobuf:"varint,2,opt,name=page,proto3" json:"page"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetListBusinessRequest) Reset()         { *m = GetListBusinessRequest{} }
+func (m *GetListBusinessRequest) String() string { return proto.CompactTextString(m) }
+func (*GetListBusinessRequest) ProtoMessage()    {}
+func (*GetListBusinessRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fb4ce4f7d40c421f, []int{8}
+}
+func (m *GetListBusinessRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetListBusinessRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetListBusinessRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetListBusinessRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetListBusinessRequest.Merge(m, src)
+}
+func (m *GetListBusinessRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetListBusinessRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetListBusinessRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetListBusinessRequest proto.InternalMessageInfo
+
+func (m *GetListBusinessRequest) GetLimit() int64 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+func (m *GetListBusinessRequest) GetPage() int64 {
+	if m != nil {
+		return m.Page
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*Business)(nil), "business.Business")
 	proto.RegisterType((*Staff)(nil), "business.Staff")
 	proto.RegisterType((*MenServices)(nil), "business.MenServices")
 	proto.RegisterType((*WomenServices)(nil), "business.WomenServices")
 	proto.RegisterType((*ServiceTypeDef)(nil), "business.ServiceTypeDef")
+	proto.RegisterType((*Empty)(nil), "business.Empty")
+	proto.RegisterType((*Id)(nil), "business.Id")
+	proto.RegisterType((*GetAllBusinessResponse)(nil), "business.GetAllBusinessResponse")
+	proto.RegisterType((*GetListBusinessRequest)(nil), "business.GetListBusinessRequest")
 }
 
 func init() { proto.RegisterFile("business.proto", fileDescriptor_fb4ce4f7d40c421f) }
 
 var fileDescriptor_fb4ce4f7d40c421f = []byte{
-	// 660 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0xc1, 0x6e, 0xd3, 0x4c,
-	0x10, 0xfe, 0x1d, 0x37, 0xae, 0x33, 0x8e, 0x9d, 0xfe, 0x2b, 0x51, 0x4c, 0x51, 0x43, 0x94, 0xaa,
-	0x10, 0x71, 0xe8, 0x21, 0x48, 0x88, 0x03, 0x17, 0x5a, 0x0e, 0xe4, 0x40, 0x0f, 0x6e, 0x25, 0x8e,
-	0xd6, 0xc6, 0xde, 0x10, 0x4b, 0xb6, 0x37, 0xf2, 0x6e, 0x5a, 0xe5, 0xc8, 0x85, 0x33, 0x47, 0x5e,
-	0x85, 0x37, 0xe0, 0x06, 0x8f, 0x80, 0xca, 0x3b, 0x70, 0x46, 0x9e, 0x5d, 0xc7, 0x71, 0x1b, 0x0e,
-	0xbd, 0x79, 0xbe, 0xef, 0x9b, 0xf1, 0x7c, 0x33, 0xa3, 0x05, 0x6f, 0xba, 0x14, 0x49, 0xce, 0x84,
-	0x38, 0x59, 0x14, 0x5c, 0x72, 0x62, 0x57, 0xf1, 0xf0, 0x9b, 0x01, 0xf6, 0xa9, 0x0e, 0x88, 0x07,
-	0xad, 0x24, 0xf6, 0x8d, 0x81, 0x31, 0xea, 0x04, 0xad, 0x24, 0x26, 0x87, 0x00, 0x82, 0xa6, 0x3c,
-	0x0f, 0x73, 0x9a, 0x31, 0xbf, 0x85, 0x78, 0x07, 0x91, 0x73, 0x9a, 0x31, 0x72, 0x04, 0xee, 0x62,
-	0xce, 0x73, 0x16, 0xe6, 0xcb, 0x6c, 0xca, 0x0a, 0xe1, 0x9b, 0x03, 0x73, 0xd4, 0x09, 0xba, 0x08,
-	0x9e, 0x2b, 0x8c, 0xec, 0x83, 0x25, 0x24, 0x95, 0x4b, 0xe1, 0xef, 0x60, 0xbe, 0x8e, 0xc8, 0x31,
-	0xb4, 0x85, 0xa4, 0xb3, 0x99, 0xdf, 0x1e, 0x98, 0x23, 0x67, 0xdc, 0x3b, 0x59, 0xb7, 0x78, 0x51,
-	0xc2, 0x81, 0x62, 0xc9, 0x01, 0xd8, 0x29, 0x8f, 0xa8, 0x4c, 0x78, 0xee, 0x5b, 0x58, 0x60, 0x1d,
-	0x0f, 0xff, 0xb4, 0xa0, 0x8d, 0xe2, 0x6d, 0x8d, 0xcf, 0x92, 0x42, 0xc8, 0x46, 0xe3, 0x88, 0x60,
-	0xe3, 0x8f, 0xa1, 0x93, 0xd2, 0x8a, 0x35, 0x75, 0x55, 0xaa, 0xc9, 0x3b, 0xae, 0x76, 0xb6, 0xb8,
-	0x22, 0xb0, 0x13, 0x71, 0x21, 0xfd, 0x36, 0x26, 0xe3, 0xf7, 0x86, 0x53, 0xab, 0xe1, 0xf4, 0x10,
-	0x20, 0xe2, 0x59, 0xc6, 0x72, 0x19, 0x26, 0xb1, 0xbf, 0xab, 0x9a, 0xd1, 0xc8, 0x24, 0x26, 0x4f,
-	0xc0, 0xa9, 0xac, 0x97, 0xbc, 0x8d, 0x3c, 0x54, 0x90, 0x12, 0x44, 0x34, 0x65, 0x79, 0x4c, 0x8b,
-	0x52, 0xd0, 0x51, 0x82, 0x0a, 0x9a, 0xc4, 0xa5, 0x9d, 0x28, 0x4d, 0x74, 0x7d, 0x50, 0x76, 0x14,
-	0x30, 0x89, 0xc9, 0x53, 0xe8, 0x65, 0x2c, 0x0f, 0x05, 0x2b, 0xae, 0x92, 0x88, 0xe1, 0x2f, 0x1c,
-	0x94, 0xb8, 0x19, 0xcb, 0x2f, 0x34, 0x3a, 0x89, 0xc9, 0x73, 0xf8, 0xff, 0x9a, 0xdf, 0x56, 0x76,
-	0x51, 0xd9, 0x43, 0xa2, 0xd6, 0x0e, 0x3f, 0x99, 0xe0, 0xbc, 0xaf, 0x91, 0x3b, 0xe3, 0x7f, 0x04,
-	0xf6, 0x9c, 0x26, 0x45, 0x18, 0x2d, 0x25, 0x0e, 0xdf, 0x0e, 0x76, 0xcb, 0xf8, 0x6c, 0x29, 0xcb,
-	0x5e, 0xa7, 0x8c, 0x16, 0x31, 0x72, 0x26, 0x72, 0x36, 0x02, 0x25, 0x79, 0x04, 0xae, 0xca, 0xe3,
-	0x29, 0x2f, 0x92, 0xfc, 0x23, 0x9e, 0x8c, 0x1d, 0x74, 0x31, 0x59, 0x63, 0x64, 0x04, 0x7b, 0x62,
-	0xc1, 0xa2, 0x84, 0xa6, 0xe1, 0xfa, 0x27, 0x6d, 0xd4, 0x79, 0x1a, 0x7f, 0xa7, 0xff, 0x75, 0x0c,
-	0x9e, 0xfe, 0x57, 0x55, 0xcf, 0x42, 0x9d, 0xab, 0x7e, 0x58, 0x15, 0x3c, 0x04, 0x50, 0x32, 0x59,
-	0x24, 0x19, 0xee, 0xc7, 0x0e, 0x54, 0x93, 0x97, 0x45, 0x92, 0xe1, 0x7e, 0x90, 0x16, 0x73, 0x7a,
-	0xc5, 0x70, 0x3f, 0x76, 0xa0, 0x32, 0x2e, 0x4a, 0x04, 0x8f, 0x8d, 0x46, 0x4c, 0xf3, 0x1d, 0x95,
-	0x5f, 0x22, 0x8a, 0x1e, 0x40, 0x77, 0xca, 0x57, 0x75, 0xaf, 0xa0, 0x0b, 0xf0, 0x55, 0xd5, 0xe7,
-	0x3e, 0x58, 0x5c, 0xce, 0xcb, 0x53, 0x53, 0x9b, 0xd1, 0x51, 0x73, 0xaf, 0xdd, 0xe6, 0x5e, 0x87,
-	0x3f, 0x0c, 0x70, 0x3f, 0x6c, 0xee, 0xe5, 0x3e, 0x5b, 0xb8, 0x33, 0x68, 0x73, 0xcb, 0xa0, 0x9f,
-	0x41, 0x8f, 0xad, 0xd8, 0xb4, 0xe0, 0xd7, 0x21, 0x2d, 0xa2, 0x79, 0xbd, 0x0f, 0x4f, 0xc3, 0x6f,
-	0x14, 0x7a, 0x8f, 0x8d, 0x34, 0x1c, 0x59, 0xb7, 0x1c, 0x7d, 0x36, 0xc0, 0xd3, 0x66, 0x2e, 0x57,
-	0x0b, 0xf6, 0x96, 0xcd, 0xc8, 0x4b, 0x70, 0x36, 0x4e, 0x12, 0xbd, 0x39, 0xe3, 0x07, 0xf5, 0x53,
-	0xb1, 0x71, 0x84, 0x01, 0xd4, 0xb3, 0x20, 0xaf, 0xc1, 0x6d, 0x1c, 0x33, 0xfa, 0x77, 0xc6, 0x0f,
-	0xeb, 0xcc, 0xc6, 0xe8, 0x82, 0xee, 0xe6, 0x85, 0x8f, 0xbf, 0x18, 0xd0, 0xab, 0xde, 0xc4, 0xaa,
-	0xe2, 0x2b, 0xf0, 0xce, 0x0a, 0x46, 0x25, 0x5b, 0x3f, 0x96, 0xa4, 0x2e, 0x56, 0x61, 0x07, 0x5b,
-	0x30, 0x72, 0x06, 0xae, 0xca, 0xac, 0x4a, 0xf9, 0x1b, 0x4f, 0x5d, 0xc3, 0xee, 0xc1, 0x3f, 0x99,
-	0xd3, 0xbd, 0xef, 0x37, 0x7d, 0xe3, 0xe7, 0x4d, 0xdf, 0xf8, 0x75, 0xd3, 0x37, 0xbe, 0xfe, 0xee,
-	0xff, 0x37, 0xb5, 0xf0, 0x25, 0x7f, 0xf1, 0x37, 0x00, 0x00, 0xff, 0xff, 0xcf, 0x3b, 0x2e, 0x2e,
-	0xdb, 0x05, 0x00, 0x00,
+	// 842 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x56, 0xdd, 0x8e, 0xdb, 0x44,
+	0x14, 0xc6, 0xf1, 0x26, 0xeb, 0x9c, 0x24, 0x4e, 0x19, 0x95, 0xc5, 0x2c, 0xea, 0x12, 0xa5, 0x2a,
+	0xac, 0xb8, 0x58, 0xa4, 0x54, 0x20, 0x2e, 0xb8, 0x49, 0xb6, 0xa8, 0x8d, 0x04, 0xbd, 0xf0, 0xb6,
+	0xe2, 0xd2, 0x9a, 0xd8, 0x93, 0x66, 0x24, 0xdb, 0x63, 0x3c, 0x93, 0x56, 0xb9, 0x44, 0x42, 0x3c,
+	0x02, 0xe2, 0x91, 0xb8, 0x03, 0x89, 0x17, 0x40, 0xcb, 0x8b, 0x20, 0x9f, 0x19, 0xff, 0x25, 0xe9,
+	0x56, 0xbd, 0xcb, 0x7c, 0xdf, 0x39, 0x73, 0xce, 0xf9, 0xbe, 0xf1, 0x4c, 0xc0, 0x5d, 0x6d, 0x25,
+	0x4f, 0x99, 0x94, 0x57, 0x59, 0x2e, 0x94, 0x20, 0x4e, 0xb9, 0x9e, 0xfe, 0xde, 0x01, 0x67, 0x61,
+	0x16, 0xc4, 0x85, 0x0e, 0x8f, 0x3c, 0x6b, 0x62, 0x5d, 0xf6, 0xfd, 0x0e, 0x8f, 0xc8, 0x03, 0x00,
+	0x49, 0x63, 0x91, 0x06, 0x29, 0x4d, 0x98, 0xd7, 0x41, 0xbc, 0x8f, 0xc8, 0x73, 0x9a, 0x30, 0xf2,
+	0x10, 0x46, 0xd9, 0x46, 0xa4, 0x2c, 0x48, 0xb7, 0xc9, 0x8a, 0xe5, 0xd2, 0xb3, 0x27, 0xf6, 0x65,
+	0xdf, 0x1f, 0x22, 0xf8, 0x5c, 0x63, 0xe4, 0x0c, 0x7a, 0x52, 0x51, 0xb5, 0x95, 0xde, 0x09, 0xe6,
+	0x9b, 0x15, 0x79, 0x04, 0x5d, 0xa9, 0xe8, 0x7a, 0xed, 0x75, 0x27, 0xf6, 0xe5, 0x60, 0x36, 0xbe,
+	0xaa, 0x5a, 0xbc, 0x29, 0x60, 0x5f, 0xb3, 0xe4, 0x1c, 0x9c, 0x58, 0x84, 0x54, 0x71, 0x91, 0x7a,
+	0x3d, 0xdc, 0xa0, 0x5a, 0x17, 0xed, 0x85, 0x39, 0xa3, 0x8a, 0x45, 0x01, 0x55, 0xde, 0xa9, 0x6e,
+	0xcf, 0x20, 0x73, 0x55, 0xd0, 0xdb, 0x2c, 0x2a, 0x69, 0x47, 0xd3, 0x06, 0xd1, 0x74, 0xc4, 0x62,
+	0x66, 0xe8, 0xbe, 0xa6, 0x0d, 0x32, 0x57, 0xd3, 0x7f, 0x6c, 0xe8, 0x62, 0x27, 0xc7, 0x54, 0x59,
+	0xf3, 0x5c, 0xaa, 0x96, 0x2a, 0x88, 0xa0, 0x2a, 0x9f, 0x42, 0x3f, 0xa6, 0x25, 0x6b, 0x9b, 0x96,
+	0xa9, 0x21, 0x0f, 0x24, 0x3b, 0x39, 0x22, 0x19, 0x81, 0x93, 0x50, 0x48, 0xe5, 0x75, 0x31, 0x19,
+	0x7f, 0x37, 0x64, 0xec, 0xb5, 0x64, 0x2c, 0x34, 0x10, 0x49, 0xc2, 0x52, 0x15, 0xf0, 0xa8, 0xd2,
+	0x40, 0x23, 0xcb, 0x88, 0x7c, 0x06, 0x83, 0x52, 0xd7, 0x82, 0xd7, 0x22, 0x40, 0x09, 0xe9, 0x80,
+	0x90, 0xc6, 0x2c, 0x8d, 0x68, 0x5e, 0x04, 0x68, 0x19, 0xa0, 0x84, 0x96, 0x51, 0x31, 0x4e, 0x18,
+	0x73, 0xb3, 0x3f, 0xe8, 0x71, 0x34, 0xb0, 0x8c, 0xc8, 0xe7, 0x30, 0x4e, 0x58, 0x1a, 0x48, 0x96,
+	0xbf, 0xe6, 0x21, 0xc3, 0x12, 0x03, 0x0c, 0x19, 0x25, 0x2c, 0xbd, 0x31, 0xe8, 0x32, 0x22, 0x5f,
+	0xc2, 0x87, 0x6f, 0xc4, 0x7e, 0xe4, 0x10, 0x23, 0xc7, 0x48, 0x34, 0x62, 0xdb, 0xae, 0x8e, 0xee,
+	0x76, 0xd5, 0xbd, 0xdb, 0xd5, 0xf1, 0xbe, 0xab, 0xbf, 0xd8, 0x30, 0xf8, 0xb1, 0x2e, 0x77, 0xe0,
+	0xed, 0x27, 0xe0, 0x6c, 0x28, 0xcf, 0x83, 0x70, 0xab, 0xd0, 0x59, 0xc7, 0x3f, 0x2d, 0xd6, 0xd7,
+	0x5b, 0x55, 0x08, 0xb1, 0x62, 0x34, 0x8f, 0x90, 0xb3, 0x91, 0x73, 0x10, 0x28, 0xc8, 0x87, 0x30,
+	0xd2, 0x79, 0x22, 0x16, 0x39, 0x4f, 0x5f, 0xe1, 0x61, 0x77, 0xfc, 0x21, 0x26, 0x1b, 0x8c, 0x5c,
+	0xc2, 0x3d, 0x99, 0xb1, 0x90, 0xd3, 0x38, 0xa8, 0x8a, 0x74, 0x31, 0xce, 0x35, 0xf8, 0x33, 0x53,
+	0xeb, 0x11, 0xb8, 0xa6, 0x56, 0xb9, 0x5f, 0x0f, 0xe3, 0x46, 0xba, 0x60, 0xb9, 0xe1, 0x03, 0x00,
+	0x1d, 0xa6, 0x72, 0x9e, 0xa0, 0xf9, 0x8e, 0xaf, 0x9b, 0x7c, 0x91, 0xf3, 0x04, 0xcd, 0x47, 0x5a,
+	0x6e, 0xe8, 0x6b, 0x86, 0xe6, 0x3b, 0xbe, 0xce, 0xb8, 0x29, 0x10, 0x3c, 0xc9, 0x34, 0x64, 0x86,
+	0xef, 0xeb, 0xfc, 0x02, 0xd1, 0xf4, 0x04, 0x86, 0x2b, 0xb1, 0xab, 0x7b, 0x05, 0xb3, 0x81, 0xd8,
+	0x95, 0x7d, 0x9e, 0x41, 0x4f, 0xa8, 0x4d, 0x71, 0x8e, 0xb5, 0xed, 0x66, 0xd5, 0x3e, 0x34, 0xc3,
+	0xf6, 0xa1, 0x99, 0xfe, 0x65, 0xc1, 0xe8, 0xa7, 0xa6, 0xe9, 0xef, 0xe3, 0xc2, 0x81, 0xd0, 0xf6,
+	0x11, 0xa1, 0xbf, 0x80, 0x31, 0xdb, 0xb1, 0x55, 0x2e, 0xde, 0x04, 0x34, 0x0f, 0x37, 0xb5, 0x1f,
+	0xae, 0x81, 0xe7, 0x1a, 0x7d, 0x0f, 0x47, 0x5a, 0x13, 0xf5, 0xf6, 0x26, 0xfa, 0xcd, 0x02, 0xd7,
+	0x0c, 0xf3, 0x62, 0x97, 0xb1, 0x27, 0x6c, 0x4d, 0xbe, 0x81, 0x41, 0xe3, 0xbc, 0xe3, 0x6c, 0x83,
+	0xd9, 0x47, 0xf5, 0x25, 0xd7, 0x38, 0x84, 0x3e, 0xd4, 0x5a, 0x90, 0xef, 0x60, 0xd4, 0xfa, 0x52,
+	0x70, 0xfe, 0xc1, 0xec, 0xe3, 0x3a, 0xb3, 0x25, 0x9d, 0x3f, 0x6c, 0x7e, 0x3e, 0xd3, 0x53, 0xe8,
+	0x7e, 0x9f, 0x64, 0x6a, 0x37, 0xbd, 0x0f, 0x9d, 0x65, 0xb4, 0xaf, 0xeb, 0xf4, 0x19, 0x9c, 0x3d,
+	0x65, 0x6a, 0x1e, 0xc7, 0xe5, 0x8d, 0xef, 0x33, 0x99, 0x89, 0x54, 0x32, 0x72, 0x05, 0xd5, 0x93,
+	0xe0, 0x59, 0x78, 0x21, 0x93, 0xba, 0x62, 0x15, 0x5d, 0x3f, 0x1b, 0x0b, 0xdc, 0xe9, 0x07, 0x2e,
+	0x55, 0xbd, 0xd5, 0xcf, 0x5b, 0x26, 0x15, 0xb9, 0x0f, 0xdd, 0x98, 0x27, 0x5c, 0x61, 0x59, 0xdb,
+	0xd7, 0x8b, 0xe2, 0x4a, 0xcb, 0xe8, 0x2b, 0x3d, 0x8d, 0xed, 0xe3, 0xef, 0xd9, 0xaf, 0x36, 0x8c,
+	0xcb, 0xec, 0x72, 0xfc, 0x6f, 0xc1, 0xbd, 0xc6, 0x4f, 0xbd, 0x7a, 0x93, 0x8e, 0xf4, 0x71, 0x7e,
+	0x04, 0x23, 0x5f, 0x83, 0xfb, 0x12, 0x6f, 0x81, 0x3b, 0x33, 0x1b, 0xcf, 0x0c, 0x0a, 0x45, 0xbe,
+	0x02, 0xf7, 0x09, 0xde, 0x0e, 0x55, 0xda, 0xb0, 0x0e, 0x59, 0x46, 0x87, 0x09, 0x8f, 0x61, 0xfc,
+	0x94, 0xa9, 0xc5, 0x6e, 0x19, 0xbd, 0x25, 0xe3, 0x58, 0x73, 0xd7, 0xe0, 0xb6, 0x85, 0x27, 0xfb,
+	0xfb, 0x9e, 0x4f, 0x6a, 0xe0, 0x2d, 0x1e, 0xbd, 0xc4, 0xca, 0x4d, 0xcd, 0x49, 0x3b, 0xe9, 0x88,
+	0x1d, 0xef, 0xde, 0x76, 0x71, 0xef, 0xcf, 0xdb, 0x0b, 0xeb, 0xef, 0xdb, 0x0b, 0xeb, 0xdf, 0xdb,
+	0x0b, 0xeb, 0x8f, 0xff, 0x2e, 0x3e, 0x58, 0xf5, 0xf0, 0x4f, 0xc2, 0xe3, 0xff, 0x03, 0x00, 0x00,
+	0xff, 0xff, 0xbc, 0x92, 0x12, 0xf9, 0x36, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -594,7 +845,11 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type BusinessServiceClient interface {
 	CreateBusiness(ctx context.Context, in *Business, opts ...grpc.CallOption) (*Business, error)
-	CreateService(ctx context.Context, in *ServiceTypeDef, opts ...grpc.CallOption) (*ServiceTypeDef, error)
+	UpdateBusiness(ctx context.Context, in *Business, opts ...grpc.CallOption) (*Empty, error)
+	DeleteBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Empty, error)
+	GetByIdBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Business, error)
+	GetAllBusiness(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllBusinessResponse, error)
+	GetListBusiness(ctx context.Context, in *GetListBusinessRequest, opts ...grpc.CallOption) (*GetAllBusinessResponse, error)
 }
 
 type businessServiceClient struct {
@@ -614,9 +869,45 @@ func (c *businessServiceClient) CreateBusiness(ctx context.Context, in *Business
 	return out, nil
 }
 
-func (c *businessServiceClient) CreateService(ctx context.Context, in *ServiceTypeDef, opts ...grpc.CallOption) (*ServiceTypeDef, error) {
-	out := new(ServiceTypeDef)
-	err := c.cc.Invoke(ctx, "/business.BusinessService/CreateService", in, out, opts...)
+func (c *businessServiceClient) UpdateBusiness(ctx context.Context, in *Business, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/UpdateBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) DeleteBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/DeleteBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) GetByIdBusiness(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Business, error) {
+	out := new(Business)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/GetByIdBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) GetAllBusiness(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllBusinessResponse, error) {
+	out := new(GetAllBusinessResponse)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/GetAllBusiness", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessServiceClient) GetListBusiness(ctx context.Context, in *GetListBusinessRequest, opts ...grpc.CallOption) (*GetAllBusinessResponse, error) {
+	out := new(GetAllBusinessResponse)
+	err := c.cc.Invoke(ctx, "/business.BusinessService/GetListBusiness", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -626,7 +917,11 @@ func (c *businessServiceClient) CreateService(ctx context.Context, in *ServiceTy
 // BusinessServiceServer is the server API for BusinessService service.
 type BusinessServiceServer interface {
 	CreateBusiness(context.Context, *Business) (*Business, error)
-	CreateService(context.Context, *ServiceTypeDef) (*ServiceTypeDef, error)
+	UpdateBusiness(context.Context, *Business) (*Empty, error)
+	DeleteBusiness(context.Context, *Id) (*Empty, error)
+	GetByIdBusiness(context.Context, *Id) (*Business, error)
+	GetAllBusiness(context.Context, *Empty) (*GetAllBusinessResponse, error)
+	GetListBusiness(context.Context, *GetListBusinessRequest) (*GetAllBusinessResponse, error)
 }
 
 // UnimplementedBusinessServiceServer can be embedded to have forward compatible implementations.
@@ -636,8 +931,20 @@ type UnimplementedBusinessServiceServer struct {
 func (*UnimplementedBusinessServiceServer) CreateBusiness(ctx context.Context, req *Business) (*Business, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBusiness not implemented")
 }
-func (*UnimplementedBusinessServiceServer) CreateService(ctx context.Context, req *ServiceTypeDef) (*ServiceTypeDef, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateService not implemented")
+func (*UnimplementedBusinessServiceServer) UpdateBusiness(ctx context.Context, req *Business) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) DeleteBusiness(ctx context.Context, req *Id) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) GetByIdBusiness(ctx context.Context, req *Id) (*Business, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByIdBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) GetAllBusiness(ctx context.Context, req *Empty) (*GetAllBusinessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllBusiness not implemented")
+}
+func (*UnimplementedBusinessServiceServer) GetListBusiness(ctx context.Context, req *GetListBusinessRequest) (*GetAllBusinessResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetListBusiness not implemented")
 }
 
 func RegisterBusinessServiceServer(s *grpc.Server, srv BusinessServiceServer) {
@@ -662,20 +969,92 @@ func _BusinessService_CreateBusiness_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BusinessService_CreateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ServiceTypeDef)
+func _BusinessService_UpdateBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Business)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BusinessServiceServer).CreateService(ctx, in)
+		return srv.(BusinessServiceServer).UpdateBusiness(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/business.BusinessService/CreateService",
+		FullMethod: "/business.BusinessService/UpdateBusiness",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BusinessServiceServer).CreateService(ctx, req.(*ServiceTypeDef))
+		return srv.(BusinessServiceServer).UpdateBusiness(ctx, req.(*Business))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_DeleteBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).DeleteBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/DeleteBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).DeleteBusiness(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_GetByIdBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).GetByIdBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/GetByIdBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).GetByIdBusiness(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_GetAllBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).GetAllBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/GetAllBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).GetAllBusiness(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessService_GetListBusiness_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListBusinessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessServiceServer).GetListBusiness(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/business.BusinessService/GetListBusiness",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessServiceServer).GetListBusiness(ctx, req.(*GetListBusinessRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -689,8 +1068,24 @@ var _BusinessService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _BusinessService_CreateBusiness_Handler,
 		},
 		{
-			MethodName: "CreateService",
-			Handler:    _BusinessService_CreateService_Handler,
+			MethodName: "UpdateBusiness",
+			Handler:    _BusinessService_UpdateBusiness_Handler,
+		},
+		{
+			MethodName: "DeleteBusiness",
+			Handler:    _BusinessService_DeleteBusiness_Handler,
+		},
+		{
+			MethodName: "GetByIdBusiness",
+			Handler:    _BusinessService_GetByIdBusiness_Handler,
+		},
+		{
+			MethodName: "GetAllBusiness",
+			Handler:    _BusinessService_GetAllBusiness_Handler,
+		},
+		{
+			MethodName: "GetListBusiness",
+			Handler:    _BusinessService_GetListBusiness_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -762,6 +1157,24 @@ func (m *Business) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Location)))
 		i += copy(dAtA[i:], m.Location)
+	}
+	if len(m.CreatedAt) > 0 {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.CreatedAt)))
+		i += copy(dAtA[i:], m.CreatedAt)
+	}
+	if len(m.UpdatedAt) > 0 {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.UpdatedAt)))
+		i += copy(dAtA[i:], m.UpdatedAt)
+	}
+	if len(m.DeletedAt) > 0 {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.DeletedAt)))
+		i += copy(dAtA[i:], m.DeletedAt)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -864,6 +1277,24 @@ func (m *Staff) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintBusiness(dAtA, i, uint64(len(m.WomenServicesId)))
 		i += copy(dAtA[i:], m.WomenServicesId)
+	}
+	if len(m.CreatedAt) > 0 {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.CreatedAt)))
+		i += copy(dAtA[i:], m.CreatedAt)
+	}
+	if len(m.UpdatedAt) > 0 {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.UpdatedAt)))
+		i += copy(dAtA[i:], m.UpdatedAt)
+	}
+	if len(m.DeletedAt) > 0 {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.DeletedAt)))
+		i += copy(dAtA[i:], m.DeletedAt)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -1114,6 +1545,118 @@ func (m *ServiceTypeDef) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Empty) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Empty) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Id) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Id) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Id) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(len(m.Id)))
+		i += copy(dAtA[i:], m.Id)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *GetAllBusinessResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetAllBusinessResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Business) > 0 {
+		for _, msg := range m.Business {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintBusiness(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *GetListBusinessRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetListBusinessRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Limit != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(m.Limit))
+	}
+	if m.Page != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintBusiness(dAtA, i, uint64(m.Page))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func encodeVarintBusiness(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -1154,6 +1697,18 @@ func (m *Business) Size() (n int) {
 		}
 	}
 	l = len(m.Location)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.CreatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.UpdatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.DeletedAt)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
@@ -1216,6 +1771,18 @@ func (m *Staff) Size() (n int) {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
 	l = len(m.WomenServicesId)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.CreatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.UpdatedAt)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	l = len(m.DeletedAt)
 	if l > 0 {
 		n += 1 + l + sovBusiness(uint64(l))
 	}
@@ -1321,6 +1888,70 @@ func (m *ServiceTypeDef) Size() (n int) {
 	if m.WomenService != nil {
 		l = m.WomenService.Size()
 		n += 1 + l + sovBusiness(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Empty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Id) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovBusiness(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *GetAllBusinessResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Business) > 0 {
+		for _, e := range m.Business {
+			l = e.Size()
+			n += 1 + l + sovBusiness(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *GetListBusinessRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Limit != 0 {
+		n += 1 + sovBusiness(uint64(m.Limit))
+	}
+	if m.Page != 0 {
+		n += 1 + sovBusiness(uint64(m.Page))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -1556,6 +2187,102 @@ func (m *Business) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Location = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CreatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeletedAt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1994,6 +2721,102 @@ func (m *Staff) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.WomenServicesId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CreatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedAt = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeletedAt", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeletedAt = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2649,6 +3472,326 @@ func (m *ServiceTypeDef) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Empty) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Empty: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Empty: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Id) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Id: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Id: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetAllBusinessResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetAllBusinessResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetAllBusinessResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Business", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Business = append(m.Business, &Business{})
+			if err := m.Business[len(m.Business)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBusiness(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthBusiness
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetListBusinessRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBusiness
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetListBusinessRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetListBusinessRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
+			}
+			m.Limit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Limit |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBusiness
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Page |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipBusiness(dAtA[iNdEx:])

@@ -4,10 +4,13 @@ package business;
 
 service BusinessService {
     rpc CreateBusiness (Business) returns (Business);
-    rpc CreateService (ServiceTypeDef) returns (ServiceTypeDef);
-    
+    rpc UpdateBusiness (Business) returns (Empty);
+    rpc DeleteBusiness (Id) returns (Empty);
+    rpc GetByIdBusiness (Id) returns (Business);
+    rpc GetAllBusiness (Empty) returns (GetAllBusinessResponse);
+    rpc GetListBusiness (GetListBusinessRequest) returns (GetAllBusinessResponse);
+    // rpc CreateService (ServiceTypeDef) returns (ServiceTypeDef);
 }
-
 
 
 message Business {
@@ -17,6 +20,9 @@ message Business {
     string status = 4;
     repeated Staff staff = 5;
     string location = 6;
+    string created_at = 7;
+    string updated_at = 8;
+    string deleted_at =9;
 }
 
 message Staff {
@@ -32,6 +38,9 @@ message Staff {
     string client_id = 10;
     string men_services_id = 11;
     string women_services_id = 12;
+    string created_at = 13;
+    string updated_at = 14;
+    string deleted_at = 15;
 }
 
 message MenServices {
@@ -63,3 +72,18 @@ message ServiceTypeDef{
     WomenServices women_service = 2;
 }
 
+message Empty {
+}
+
+message Id {
+    string id = 1;
+}
+
+message GetAllBusinessResponse {
+    repeated Business business= 1;
+}
+
+message GetListBusinessRequest {
+    int64 limit = 1;
+    int64 page = 2;
+}

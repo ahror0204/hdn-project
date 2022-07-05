@@ -32,16 +32,66 @@ func (s *BusinessService) CreateBusiness(ctx context.Context, req *pb.Business) 
 		s.logger.Error("failed while creating business", l.Error(err))
 		return nil, status.Error(codes.Internal, "failed while creating business")
 	}
-
 	return business, nil
 }
 
-func (s *BusinessService) DefServiceType (ctx context.Context, req *pb.ServiceTypeRequest) (*pb.ServiceTypeResponse, error) {
-	
-	service, err := s.storage.Business().DefServiceType(req.Gender, req.ClientId)
+func (s *BusinessService) UpdateBusiness(ctx context.Context, req *pb.Business) (*pb.Empty, error) {
+
+	_, err := s.storage.Business().UpdateBusiness(req)
 	if err != nil {
-		s.logger.Error("failed while defining service type", l.Error(err))
-		return nil, status.Error(codes.Internal, "failed while defining service type")
+		s.logger.Error("failed while updating business", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while updating business")
 	}
-	return service, nil
+	return nil, nil
 }
+
+func (s *BusinessService) DeleteBusiness(ctx context.Context, req *pb.Id) (*pb.Empty, error) {
+	_, err := s.storage.Business().DeleteBusiness(req)
+	if err != nil {
+		s.logger.Error("failed while deleting business", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while deleting business")
+	}
+	return nil, nil
+}
+
+func (s *BusinessService) GetByIdBusiness(ctx context.Context, req *pb.Id) (*pb.Business, error) {
+	byIdBusiness, err := s.storage.Business().GetByIdBusiness(req)
+	if err != nil {
+		s.logger.Error("failed while getting business by id", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while getting business by id")
+	}
+
+	return byIdBusiness, nil
+}
+
+func (s *BusinessService) GetAllBusiness(ctx context.Context, req *pb.Empty) (*pb.GetAllBusinessResponse, error) {
+	allBusinesses, err := s.storage.Business().GetAllBusiness(req)
+	if err != nil {
+		s.logger.Error("failed while getting all business", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while getting all business")
+	}
+	return allBusinesses, nil
+}
+
+func (s *BusinessService) GetListBusiness(ctx context.Context, req *pb.GetListBusinessRequest) (*pb.GetAllBusinessResponse, error) {
+	listBusinesses, err := s.storage.Business().GetListBusiness(req.Limit, req.Page)
+	if err != nil {
+		s.logger.Error("failed while getting list of business", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while getting list of business")
+	}
+	return listBusinesses, nil
+}
+
+
+
+
+
+// func (s *BusinessService) CreateService (ctx context.Context, req *pb.ServiceTypeDef) (*pb.ServiceTypeDef, error) {
+	
+// 	service, err := s.storage.Business().CreateService(req)
+// 	if err != nil {
+// 		s.logger.Error("failed while defining service type", l.Error(err))
+// 		return nil, status.Error(codes.Internal, "failed while defining service type")
+// 	}
+// 	return service, nil
+// }

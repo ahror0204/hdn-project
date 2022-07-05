@@ -94,7 +94,7 @@ const (
 	GRPCLB
 )
 
-// Address represents a server the client connects to.
+// Address represents a server the User connects to.
 //
 // Experimental
 //
@@ -158,19 +158,19 @@ type BuildOptions struct {
 	// DisableServiceConfig indicates whether a resolver implementation should
 	// fetch service config data.
 	DisableServiceConfig bool
-	// DialCreds is the transport credentials used by the ClientConn for
+	// DialCreds is the transport credentials used by the UserConn for
 	// communicating with the target gRPC service (set via
 	// WithTransportCredentials). In cases where a name resolution service
 	// requires the same credentials, the resolver may use this field. In most
 	// cases though, it is not appropriate, and this field may be ignored.
 	DialCreds credentials.TransportCredentials
-	// CredsBundle is the credentials bundle used by the ClientConn for
+	// CredsBundle is the credentials bundle used by the UserConn for
 	// communicating with the target gRPC service (set via
 	// WithCredentialsBundle). In cases where a name resolution service
 	// requires the same credentials, the resolver may use this field. In most
 	// cases though, it is not appropriate, and this field may be ignored.
 	CredsBundle credentials.Bundle
-	// Dialer is the custom dialer used by the ClientConn for dialling the
+	// Dialer is the custom dialer used by the UserConn for dialling the
 	// target gRPC service (set via WithDialer). In cases where a name
 	// resolution service requires the same dialer, the resolver may use this
 	// field. In most cases though, it is not appropriate, and this field may
@@ -178,7 +178,7 @@ type BuildOptions struct {
 	Dialer func(context.Context, string) (net.Conn, error)
 }
 
-// State contains the current Resolver state relevant to the ClientConn.
+// State contains the current Resolver state relevant to the UserConn.
 type State struct {
 	// Addresses is the latest set of resolved addresses for the target.
 	Addresses []Address
@@ -193,27 +193,27 @@ type State struct {
 	Attributes *attributes.Attributes
 }
 
-// ClientConn contains the callbacks for resolver to notify any updates
-// to the gRPC ClientConn.
+// UserConn contains the callbacks for resolver to notify any updates
+// to the gRPC UserConn.
 //
 // This interface is to be implemented by gRPC. Users should not need a
 // brand new implementation of this interface. For the situations like
 // testing, the new implementation should embed this interface. This allows
 // gRPC to add new methods to this interface.
-type ClientConn interface {
-	// UpdateState updates the state of the ClientConn appropriately.
+type UserConn interface {
+	// UpdateState updates the state of the UserConn appropriately.
 	UpdateState(State) error
-	// ReportError notifies the ClientConn that the Resolver encountered an
-	// error.  The ClientConn will notify the load balancer and begin calling
+	// ReportError notifies the UserConn that the Resolver encountered an
+	// error.  The UserConn will notify the load balancer and begin calling
 	// ResolveNow on the Resolver with exponential backoff.
 	ReportError(error)
-	// NewAddress is called by resolver to notify ClientConn a new list
+	// NewAddress is called by resolver to notify UserConn a new list
 	// of resolved addresses.
 	// The address list should be the complete list of resolved addresses.
 	//
 	// Deprecated: Use UpdateState instead.
 	NewAddress(addresses []Address)
-	// NewServiceConfig is called by resolver to notify ClientConn a new
+	// NewServiceConfig is called by resolver to notify UserConn a new
 	// service config. The service config should be provided as a json string.
 	//
 	// Deprecated: Use UpdateState instead.
@@ -263,7 +263,7 @@ type Builder interface {
 	//
 	// gRPC dial calls Build synchronously, and fails if the returned error is
 	// not nil.
-	Build(target Target, cc ClientConn, opts BuildOptions) (Resolver, error)
+	Build(target Target, cc UserConn, opts BuildOptions) (Resolver, error)
 	// Scheme returns the scheme supported by this resolver.
 	// Scheme is defined at https://github.com/grpc/grpc/blob/master/doc/naming.md.
 	Scheme() string

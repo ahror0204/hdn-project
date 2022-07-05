@@ -34,16 +34,16 @@ func RequestInfoFromContext(ctx context.Context) interface{} {
 	return ctx.Value(requestInfoKey{})
 }
 
-// clientHandshakeInfoKey is a struct used as the key to store
-// ClientHandshakeInfo in a context.
-type clientHandshakeInfoKey struct{}
+// UserHandshakeInfoKey is a struct used as the key to store
+// UserHandshakeInfo in a context.
+type UserHandshakeInfoKey struct{}
 
-// ClientHandshakeInfoFromContext extracts the ClientHandshakeInfo from ctx.
-func ClientHandshakeInfoFromContext(ctx context.Context) interface{} {
-	return ctx.Value(clientHandshakeInfoKey{})
+// UserHandshakeInfoFromContext extracts the UserHandshakeInfo from ctx.
+func UserHandshakeInfoFromContext(ctx context.Context) interface{} {
+	return ctx.Value(UserHandshakeInfoKey{})
 }
 
-// NewClientHandshakeInfoContext creates a context with chi.
-func NewClientHandshakeInfoContext(ctx context.Context, chi interface{}) context.Context {
-	return context.WithValue(ctx, clientHandshakeInfoKey{}, chi)
+// NewUserHandshakeInfoContext creates a context with chi.
+func NewUserHandshakeInfoContext(ctx context.Context, chi interface{}) context.Context {
+	return context.WithValue(ctx, UserHandshakeInfoKey{}, chi)
 }

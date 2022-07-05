@@ -177,7 +177,7 @@ func Write(fd int, p []byte) (n int, err error) {
 	return
 }
 
-// For testing: clients can set this flag to force
+// For testing: Users can set this flag to force
 // creation of IPv6 sockets to return EAFNOSUPPORT.
 var SocketDisableIPv6 bool
 

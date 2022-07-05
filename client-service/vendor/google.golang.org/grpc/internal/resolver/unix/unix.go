@@ -33,7 +33,7 @@ type builder struct {
 	scheme string
 }
 
-func (b *builder) Build(target resolver.Target, cc resolver.ClientConn, _ resolver.BuildOptions) (resolver.Resolver, error) {
+func (b *builder) Build(target resolver.Target, cc resolver.UserConn, _ resolver.BuildOptions) (resolver.Resolver, error) {
 	if target.Authority != "" {
 		return nil, fmt.Errorf("invalid (non-empty) authority: %v", target.Authority)
 	}

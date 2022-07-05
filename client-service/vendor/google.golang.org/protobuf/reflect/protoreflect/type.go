@@ -642,8 +642,8 @@ type MethodDescriptor interface {
 	Input() MessageDescriptor
 	// Output is the output message descriptor.
 	Output() MessageDescriptor
-	// IsStreamingClient reports whether the client streams multiple messages.
-	IsStreamingClient() bool
+	// IsStreamingUser reports whether the User streams multiple messages.
+	IsStreamingUser() bool
 	// IsStreamingServer reports whether the server streams multiple messages.
 	IsStreamingServer() bool
 

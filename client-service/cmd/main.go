@@ -5,18 +5,18 @@ import (
 
 	"google.golang.org/grpc/reflection"
 
-	"github.com/hdn-project/client-service/config"
-	pb "github.com/hdn-project/client-service/genproto"
-	"github.com/hdn-project/client-service/pkg/db"
-	"github.com/hdn-project/client-service/pkg/logger"
-	"github.com/hdn-project/client-service/service"
+	"github.com/hdn-project/User-service/config"
+	pb "github.com/hdn-project/User-service/genproto"
+	"github.com/hdn-project/User-service/pkg/db"
+	"github.com/hdn-project/User-service/pkg/logger"
+	"github.com/hdn-project/User-service/service"
 	"google.golang.org/grpc"
 )
 
 func main() {
 	cfg := config.Load()
 
-	log := logger.New(cfg.LogLevel, "client-service")
+	log := logger.New(cfg.LogLevel, "User-service")
 	defer logger.Cleanup(log)
 
 	log.Info("main: sqlxConfig",
@@ -29,7 +29,7 @@ func main() {
 		log.Fatal("sqlx connection to postgres error", logger.Error(err))
 	}
 
-	ClientService := service.NewClientService(connDB, log)
+	UserService := service.NewUserService(connDB, log)
 
 	lis, err := net.Listen("tcp", cfg.RPCPort)
 	if err != nil {
@@ -37,7 +37,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterClientServiceServer(s, ClientService)
+	pb.RegisterUserServiceServer(s, UserService)
 	log.Info("main: server running",
 		logger.String("port", cfg.RPCPort))
 

@@ -17,8 +17,8 @@
  */
 
 // Package credentials implements various credentials supported by gRPC library,
-// which encapsulate all the state needed by a client to authenticate with a
-// server and make various assertions, e.g., about the client's identity, role,
+// which encapsulate all the state needed by a User to authenticate with a
+// server and make various assertions, e.g., about the User's identity, role,
 // or whether it is authorized to make a particular call.
 package credentials // import "google.golang.org/grpc/credentials"
 
@@ -127,8 +127,8 @@ var ErrConnDispatched = errors.New("credentials: rawConn is dispatched out of gR
 // TransportCredentials defines the common interface for all the live gRPC wire
 // protocols and supported transport security protocols (e.g., TLS, SSL).
 type TransportCredentials interface {
-	// ClientHandshake does the authentication handshake specified by the
-	// corresponding authentication protocol on rawConn for clients. It returns
+	// UserHandshake does the authentication handshake specified by the
+	// corresponding authentication protocol on rawConn for Users. It returns
 	// the authenticated connection and the corresponding auth information
 	// about the connection.  The auth information should embed CommonAuthInfo
 	// to return additional information about the credentials. Implementations
@@ -137,7 +137,7 @@ type TransportCredentials interface {
 	// (io.EOF, context.DeadlineExceeded or err.Temporary() == true).  If the
 	// returned error is a wrapper error, implementations should make sure that
 	// the error implements Temporary() to have the correct retry behaviors.
-	// Additionally, ClientHandshakeInfo data will be available via the context
+	// Additionally, UserHandshakeInfo data will be available via the context
 	// passed to this call.
 	//
 	// The second argument to this method is the `:authority` header value used
@@ -146,7 +146,7 @@ type TransportCredentials interface {
 	// authentication handshake.
 	//
 	// If the returned net.Conn is closed, it MUST close the net.Conn provided.
-	ClientHandshake(context.Context, string, net.Conn) (net.Conn, AuthInfo, error)
+	UserHandshake(context.Context, string, net.Conn) (net.Conn, AuthInfo, error)
 	// ServerHandshake does the authentication handshake for servers. It returns
 	// the authenticated connection and the corresponding auth information about
 	// the connection. The auth information should embed CommonAuthInfo to return additional information
@@ -160,7 +160,7 @@ type TransportCredentials interface {
 	Clone() TransportCredentials
 	// OverrideServerName specifies the value used for the following:
 	// - verifying the hostname on the returned certificates
-	// - as SNI in the client's handshake to support virtual hosting
+	// - as SNI in the User's handshake to support virtual hosting
 	// - as the value for `:authority` header at stream creation time
 	//
 	// Deprecated: use grpc.WithAuthority instead. Will be supported
@@ -203,7 +203,7 @@ type Bundle interface {
 type RequestInfo struct {
 	// The method passed to Invoke or NewStream for this RPC. (For proto methods, this has the format "/some.Service/Method")
 	Method string
-	// AuthInfo contains the information from a security handshake (TransportCredentials.ClientHandshake, TransportCredentials.ServerHandshake)
+	// AuthInfo contains the information from a security handshake (TransportCredentials.UserHandshake, TransportCredentials.ServerHandshake)
 	AuthInfo AuthInfo
 }
 
@@ -215,24 +215,24 @@ func RequestInfoFromContext(ctx context.Context) (ri RequestInfo, ok bool) {
 	return ri, ok
 }
 
-// ClientHandshakeInfo holds data to be passed to ClientHandshake. This makes
+// UserHandshakeInfo holds data to be passed to UserHandshake. This makes
 // it possible to pass arbitrary data to the handshaker from gRPC, resolver,
 // balancer etc. Individual credential implementations control the actual
 // format of the data that they are willing to receive.
 //
 // This API is experimental.
-type ClientHandshakeInfo struct {
+type UserHandshakeInfo struct {
 	// Attributes contains the attributes for the address. It could be provided
 	// by the gRPC, resolver, balancer etc.
 	Attributes *attributes.Attributes
 }
 
-// ClientHandshakeInfoFromContext returns the ClientHandshakeInfo struct stored
+// UserHandshakeInfoFromContext returns the UserHandshakeInfo struct stored
 // in ctx.
 //
 // This API is experimental.
-func ClientHandshakeInfoFromContext(ctx context.Context) ClientHandshakeInfo {
-	chi, _ := icredentials.ClientHandshakeInfoFromContext(ctx).(ClientHandshakeInfo)
+func UserHandshakeInfoFromContext(ctx context.Context) UserHandshakeInfo {
+	chi, _ := icredentials.UserHandshakeInfoFromContext(ctx).(UserHandshakeInfo)
 	return chi
 }
 

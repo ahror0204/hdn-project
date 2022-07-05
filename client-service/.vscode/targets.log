@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Jul  2 09:30:16 2022
+# Make data base, printed on Tue Jul  5 13:35:54 2022
 
 # Variables
 
@@ -29,7 +27,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ab73a592-b426-436a-b456-2bc4c93aabb5.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-2200873f-4a24-4702-a557-d5ddd06037d4.sock
 # environment
 LC_NAME = en_US.UTF-8
 # environment
@@ -57,13 +55,13 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 .VARIABLES := 
 # environment
-PWD = /home/baxrom/go/src/github.com/hdn-project/client-service
+PWD = /home/baxrom/go/src/github.com/hdn-project/User-service
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 # environment
-OLDPWD = /home/baxrom/go/src/github.com
+OLDPWD = /home/baxrom
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
@@ -75,17 +73,17 @@ VSCODE_CODE_CACHE_PATH = /home/baxrom/.config/Code/CachedData/30d9c6cd9483b2cc58
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.RTNAO1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.6PDAP1
 # default
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
 # environment
-GNOME_TERMINAL_SERVICE = :1.111
+GNOME_TERMINAL_SERVICE = :1.130
 # makefile
 MAKEFLAGS = pqrR
 # makefile
-CURDIR := /home/baxrom/go/src/github.com/hdn-project/client-service
+CURDIR := /home/baxrom/go/src/github.com/hdn-project/User-service
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -117,15 +115,13 @@ SNAP_REEXEC =
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 2765
+VSCODE_PID = 5963
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
-# environment
-SESSION_MANAGER = local/baxrom:@/tmp/.ICE-unix/1673,unix/baxrom:/tmp/.ICE-unix/1673
+SESSION_MANAGER = local/baxrom:@/tmp/.ICE-unix/1614,unix/baxrom:/tmp/.ICE-unix/1614
 # automatic
 *F = $(notdir $*)
 # environment
@@ -151,7 +147,7 @@ GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
 SHLVL = 1
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/06ba5ddf_cb9d_4a07_b3b9_8d87ead0de30
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/4a74b296_c96e_46eb_a3c2_40cf8dc8e67c
 # environment
 MAKELEVEL := 0
 # makefile (from 'Makefile', line 3)
@@ -175,7 +171,7 @@ LC_TIME = en_US.UTF-8
 # environment
 SNAP = /snap/code/99
 # environment
-INVOCATION_ID = 1a9a3ed0152c4568ad69bd604cbabd25
+INVOCATION_ID = fd1226f714f2413791cbb98e7570bc1b
 # environment
 SNAP_REVISION = 99
 # environment
@@ -209,13 +205,11 @@ LOGNAME = baxrom
 # makefile (from 'Makefile', line 1)
 CURRENT_DIR = $(shell pwd)
 # environment
-GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
-# environment
 SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := build
 # environment
-SYSTEMD_EXEC_PID = 2908
+SYSTEMD_EXEC_PID = 4594
 # environment
 DISPLAY = :0
 # environment
@@ -231,11 +225,9 @@ SNAP_DATA = /var/snap/code/99
 # environment
 SNAP_CONTEXT = Oeh3A3OxPZY380uqOPI14nOZD8DtEfPAd16hs05uY5Mbt83oA_82
 # environment
-MANAGERPID = 1516
+MANAGERPID = 1459
 # environment
 LC_MEASUREMENT = en_US.UTF-8
-# environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 2716
 # environment
 LC_PAPER = en_US.UTF-8
 # environment
@@ -245,7 +237,7 @@ COLORTERM = truecolor
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/baxrom/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
-JOURNAL_STREAM = 8:36696
+JOURNAL_STREAM = 8:51601
 # environment
 GOMODCACHE = /home/baxrom/go/pkg/mod
 # environment
@@ -278,7 +270,6 @@ GOPROXY = https://proxy.golang.org,direct
 <F = $(notdir $<)
 # environment
 SNAP_VERSION = 30d9c6cd
- 
 # default
 SUFFIXES := 
 # environment
@@ -301,8 +292,11 @@ GDMSESSION = ubuntu
 LC_IDENTIFICATION = en_US.UTF-8
 # environment
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 # variable set hash-table stats:
-# Load=144/1024=14%, Rehash=0, Collisions=14/174=8%
+# Load=141/1024=14%, Rehash=0, Collisions=14/171=8%
 
 # Pattern-specific Variable Values
 
@@ -380,14 +374,14 @@ migrate-down:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 17):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clientdb?sslmode=disable down
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable down
 
 migrate-up:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clientdb?sslmode=disable up
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable up
 
 # files hash-table stats:
 # Load=11/1024=1%, Rehash=0, Collisions=0/21=0%
@@ -403,6 +397,6 @@ migrate-up:
 # strcache performance: lookups = 40 / hit rate = 27%
 # hash-table stats:
 # Load=29/8192=0%, Rehash=0, Collisions=0/40=0%
-# Finished Make data base on Sat Jul  2 09:30:16 2022
+# Finished Make data base on Tue Jul  5 13:35:54 2022
 
  

@@ -115,7 +115,7 @@ func NewBuilder() resolver.Builder {
 type dnsBuilder struct{}
 
 // Build creates and starts a DNS resolver that watches the name resolution of the target.
-func (b *dnsBuilder) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
+func (b *dnsBuilder) Build(target resolver.Target, cc resolver.UserConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
 	host, port, err := parseTarget(target.Endpoint, defaultPort)
 	if err != nil {
 		return nil, err
@@ -179,7 +179,7 @@ type dnsResolver struct {
 	resolver netResolver
 	ctx      context.Context
 	cancel   context.CancelFunc
-	cc       resolver.ClientConn
+	cc       resolver.UserConn
 	// rn channel is used by ResolveNow() to force an immediate resolution of the target.
 	rn chan struct{}
 	// wg is used to enforce Close() to return after the watcher() goroutine has finished.
@@ -212,7 +212,7 @@ func (d *dnsResolver) watcher() {
 	for {
 		state, err := d.lookup()
 		if err != nil {
-			// Report error to the underlying grpc.ClientConn.
+			// Report error to the underlying grpc.UserConn.
 			d.cc.ReportError(err)
 		} else {
 			err = d.cc.UpdateState(*state)
@@ -231,7 +231,7 @@ func (d *dnsResolver) watcher() {
 			case <-d.rn:
 			}
 		} else {
-			// Poll on an error found in DNS Resolver or an error received from ClientConn.
+			// Poll on an error found in DNS Resolver or an error received from UserConn.
 			timer = newTimer(backoff.DefaultExponential.Backoff(backoffIndex))
 			backoffIndex++
 		}
@@ -403,10 +403,10 @@ func parseTarget(target, defaultPort string) (host, port string, err error) {
 }
 
 type rawChoice struct {
-	ClientLanguage *[]string        `json:"clientLanguage,omitempty"`
-	Percentage     *int             `json:"percentage,omitempty"`
-	ClientHostName *[]string        `json:"clientHostName,omitempty"`
-	ServiceConfig  *json.RawMessage `json:"serviceConfig,omitempty"`
+	UserLanguage  *[]string        `json:"UserLanguage,omitempty"`
+	Percentage    *int             `json:"percentage,omitempty"`
+	UserHostName  *[]string        `json:"UserHostName,omitempty"`
+	ServiceConfig *json.RawMessage `json:"serviceConfig,omitempty"`
 }
 
 func containsString(a *[]string, b string) bool {
@@ -440,14 +440,14 @@ func canaryingSC(js string) string {
 	}
 	cliHostname, err := os.Hostname()
 	if err != nil {
-		logger.Warningf("dns: error getting client hostname: %v", err)
+		logger.Warningf("dns: error getting User hostname: %v", err)
 		return ""
 	}
 	var sc string
 	for _, c := range rcs {
-		if !containsString(c.ClientLanguage, golang) ||
+		if !containsString(c.UserLanguage, golang) ||
 			!chosenByPercentage(c.Percentage) ||
-			!containsString(c.ClientHostName, cliHostname) ||
+			!containsString(c.UserHostName, cliHostname) ||
 			c.ServiceConfig == nil {
 			continue
 		}

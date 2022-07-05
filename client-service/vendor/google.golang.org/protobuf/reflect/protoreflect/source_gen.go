@@ -312,7 +312,7 @@ func (p *SourcePath) appendMethodDescriptorProto(b []byte) []byte {
 	case 4:
 		b = p.appendSingularField(b, "options", (*SourcePath).appendMethodOptions)
 	case 5:
-		b = p.appendSingularField(b, "client_streaming", nil)
+		b = p.appendSingularField(b, "User_streaming", nil)
 	case 6:
 		b = p.appendSingularField(b, "server_streaming", nil)
 	}

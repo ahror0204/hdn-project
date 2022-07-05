@@ -52,10 +52,10 @@ type dummyEntry struct {
 
 func (d *dummyEntry) addChild(id int64, e entry) {
 	// Note: It is possible for a normal program to reach here under race condition.
-	// For example, there could be a race between ClientConn.Close() info being propagated
-	// to addrConn and http2Client. ClientConn.Close() cancel the context and result
-	// in http2Client to error. The error info is then caught by transport monitor
-	// and before addrConn.tearDown() is called in side ClientConn.Close(). Therefore,
+	// For example, there could be a race between UserConn.Close() info being propagated
+	// to addrConn and http2User. UserConn.Close() cancel the context and result
+	// in http2User to error. The error info is then caught by transport monitor
+	// and before addrConn.tearDown() is called in side UserConn.Close(). Therefore,
 	// the addrConn will create a new transport. And when registering the new transport in
 	// channelz, its parent addrConn could have already been torn down and deleted
 	// from channelz tracking, and thus reach the code here.
@@ -435,11 +435,11 @@ type SocketInternalMetric struct {
 	// The number of streams that have been started.
 	StreamsStarted int64
 	// The number of streams that have ended successfully:
-	// On client side, receiving frame with eos bit set.
+	// On User side, receiving frame with eos bit set.
 	// On server side, sending frame with eos bit set.
 	StreamsSucceeded int64
 	// The number of streams that have ended unsuccessfully:
-	// On client side, termination without receiving frame with eos bit set.
+	// On User side, termination without receiving frame with eos bit set.
 	// On server side, termination without sending frame with eos bit set.
 	StreamsFailed int64
 	// The number of messages successfully sent on this socket.
@@ -452,7 +452,7 @@ type SocketInternalMetric struct {
 	// servers.
 	LastLocalStreamCreatedTimestamp time.Time
 	// The last time a stream was created by the remote endpoint.  Usually unset
-	// for clients.
+	// for Users.
 	LastRemoteStreamCreatedTimestamp time.Time
 	// The last time a message was sent by this endpoint.
 	LastMessageSentTimestamp time.Time

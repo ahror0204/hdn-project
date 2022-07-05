@@ -1,29 +1,29 @@
 package storage
 
 import (
-	"github.com/hdn-project/client-service/storage/postgres"
-	"github.com/hdn-project/client-service/storage/repo"
+	"github.com/hdn-project/User-service/storage/postgres"
+	"github.com/hdn-project/User-service/storage/repo"
 	"github.com/jmoiron/sqlx"
 )
 
 //IStorage ...
 type IStorage interface {
-    Client() repo.ClientStorageI
+	User() repo.UserStorageI
 }
 
 type storagePg struct {
-    db         *sqlx.DB
-    clientRepo   repo.ClientStorageI
+	db       *sqlx.DB
+	UserRepo repo.UserStorageI
 }
 
 //NewStoragePg ...
 func NewStoragePg(db *sqlx.DB) *storagePg {
-    return &storagePg{
-        db:         db,
-        clientRepo:   postgres.NewClientRepo(db),
-    }
+	return &storagePg{
+		db:       db,
+		UserRepo: postgres.NewUserRepo(db),
+	}
 }
 
-func (s storagePg) Client() repo.ClientStorageI {
-    return s.clientRepo
+func (s storagePg) User() repo.UserStorageI {
+	return s.UserRepo
 }

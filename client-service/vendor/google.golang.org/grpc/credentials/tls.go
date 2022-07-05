@@ -70,7 +70,7 @@ func (c tlsCreds) Info() ProtocolInfo {
 	}
 }
 
-func (c *tlsCreds) ClientHandshake(ctx context.Context, authority string, rawConn net.Conn) (_ net.Conn, _ AuthInfo, err error) {
+func (c *tlsCreds) UserHandshake(ctx context.Context, authority string, rawConn net.Conn) (_ net.Conn, _ AuthInfo, err error) {
 	// use local cfg to avoid clobbering ServerName if using multiple endpoints
 	cfg := credinternal.CloneTLSConfig(c.config)
 	if cfg.ServerName == "" {
@@ -81,7 +81,7 @@ func (c *tlsCreds) ClientHandshake(ctx context.Context, authority string, rawCon
 		}
 		cfg.ServerName = serverName
 	}
-	conn := tls.Client(rawConn, cfg)
+	conn := tls.User(rawConn, cfg)
 	errChannel := make(chan error, 1)
 	go func() {
 		errChannel <- conn.Handshake()
@@ -145,27 +145,27 @@ func NewTLS(c *tls.Config) TransportCredentials {
 	return tc
 }
 
-// NewClientTLSFromCert constructs TLS credentials from the provided root
+// NewUserTLSFromCert constructs TLS credentials from the provided root
 // certificate authority certificate(s) to validate server connections. If
-// certificates to establish the identity of the client need to be included in
+// certificates to establish the identity of the User need to be included in
 // the credentials (eg: for mTLS), use NewTLS instead, where a complete
 // tls.Config can be specified.
 // serverNameOverride is for testing only. If set to a non empty string,
 // it will override the virtual host name of authority (e.g. :authority header
 // field) in requests.
-func NewClientTLSFromCert(cp *x509.CertPool, serverNameOverride string) TransportCredentials {
+func NewUserTLSFromCert(cp *x509.CertPool, serverNameOverride string) TransportCredentials {
 	return NewTLS(&tls.Config{ServerName: serverNameOverride, RootCAs: cp})
 }
 
-// NewClientTLSFromFile constructs TLS credentials from the provided root
+// NewUserTLSFromFile constructs TLS credentials from the provided root
 // certificate authority certificate file(s) to validate server connections. If
-// certificates to establish the identity of the client need to be included in
+// certificates to establish the identity of the User need to be included in
 // the credentials (eg: for mTLS), use NewTLS instead, where a complete
 // tls.Config can be specified.
 // serverNameOverride is for testing only. If set to a non empty string,
 // it will override the virtual host name of authority (e.g. :authority header
 // field) in requests.
-func NewClientTLSFromFile(certFile, serverNameOverride string) (TransportCredentials, error) {
+func NewUserTLSFromFile(certFile, serverNameOverride string) (TransportCredentials, error) {
 	b, err := ioutil.ReadFile(certFile)
 	if err != nil {
 		return nil, err

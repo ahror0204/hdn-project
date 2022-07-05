@@ -27,7 +27,7 @@ import (
 var logger = grpclog.Component("core")
 
 // State indicates the state of connectivity.
-// It can be the state of a ClientConn or SubConn.
+// It can be the state of a UserConn or SubConn.
 type State int
 
 func (s State) String() string {
@@ -49,15 +49,15 @@ func (s State) String() string {
 }
 
 const (
-	// Idle indicates the ClientConn is idle.
+	// Idle indicates the UserConn is idle.
 	Idle State = iota
-	// Connecting indicates the ClientConn is connecting.
+	// Connecting indicates the UserConn is connecting.
 	Connecting
-	// Ready indicates the ClientConn is ready for work.
+	// Ready indicates the UserConn is ready for work.
 	Ready
-	// TransientFailure indicates the ClientConn has seen a failure but expects to recover.
+	// TransientFailure indicates the UserConn has seen a failure but expects to recover.
 	TransientFailure
-	// Shutdown indicates the ClientConn has started shutting down.
+	// Shutdown indicates the UserConn has started shutting down.
 	Shutdown
 )
 

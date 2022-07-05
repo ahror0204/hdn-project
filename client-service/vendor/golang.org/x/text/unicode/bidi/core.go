@@ -12,7 +12,7 @@ import "log"
 // described in Unicode Bidirectional Algorithm (UAX #9).
 //
 // Input:
-// There are two levels of input to the algorithm, since clients may prefer to
+// There are two levels of input to the algorithm, since Users may prefer to
 // supply some information from out-of-band sources rather than relying on the
 // default behavior.
 //

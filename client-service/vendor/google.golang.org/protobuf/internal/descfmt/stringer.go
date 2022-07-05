@@ -113,7 +113,7 @@ var descriptorAccessors = map[reflect.Type][]string{
 	reflect.TypeOf((*pref.EnumDescriptor)(nil)).Elem():      {"Values", "ReservedNames", "ReservedRanges"},
 	reflect.TypeOf((*pref.EnumValueDescriptor)(nil)).Elem(): {"Number"},
 	reflect.TypeOf((*pref.ServiceDescriptor)(nil)).Elem():   {"Methods"},
-	reflect.TypeOf((*pref.MethodDescriptor)(nil)).Elem():    {"Input", "Output", "IsStreamingClient", "IsStreamingServer"},
+	reflect.TypeOf((*pref.MethodDescriptor)(nil)).Elem():    {"Input", "Output", "IsStreamingUser", "IsStreamingServer"},
 }
 
 func FormatDesc(s fmt.State, r rune, t pref.Descriptor) {

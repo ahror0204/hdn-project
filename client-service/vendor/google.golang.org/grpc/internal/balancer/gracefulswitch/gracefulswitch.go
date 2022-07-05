@@ -34,7 +34,7 @@ var errBalancerClosed = errors.New("gracefulSwitchBalancer is closed")
 var _ balancer.Balancer = (*Balancer)(nil)
 
 // NewBalancer returns a graceful switch Balancer.
-func NewBalancer(cc balancer.ClientConn, opts balancer.BuildOptions) *Balancer {
+func NewBalancer(cc balancer.UserConn, opts balancer.BuildOptions) *Balancer {
 	return &Balancer{
 		cc:    cc,
 		bOpts: opts,
@@ -45,7 +45,7 @@ func NewBalancer(cc balancer.ClientConn, opts balancer.BuildOptions) *Balancer {
 // a new balancer. It implements the balancer.Balancer interface.
 type Balancer struct {
 	bOpts balancer.BuildOptions
-	cc    balancer.ClientConn
+	cc    balancer.UserConn
 
 	// mu protects the following fields and all fields within balancerCurrent
 	// and balancerPending. mu does not need to be held when calling into the
@@ -69,7 +69,7 @@ type Balancer struct {
 	currentMu sync.Mutex
 }
 
-// swap swaps out the current lb with the pending lb and updates the ClientConn.
+// swap swaps out the current lb with the pending lb and updates the UserConn.
 // The caller must hold gsb.mu.
 func (gsb *Balancer) swap() {
 	gsb.cc.UpdateState(gsb.balancerPending.lastState)
@@ -151,8 +151,8 @@ func (gsb *Balancer) latestBalancer() *balancerWrapper {
 	return gsb.balancerCurrent
 }
 
-// UpdateClientConnState forwards the update to the latest balancer created.
-func (gsb *Balancer) UpdateClientConnState(state balancer.ClientConnState) error {
+// UpdateUserConnState forwards the update to the latest balancer created.
+func (gsb *Balancer) UpdateUserConnState(state balancer.UserConnState) error {
 	// The resolver data is only relevant to the most recent LB Policy.
 	balToUpdate := gsb.latestBalancer()
 	if balToUpdate == nil {
@@ -161,7 +161,7 @@ func (gsb *Balancer) UpdateClientConnState(state balancer.ClientConnState) error
 	// Perform this call without gsb.mu to prevent deadlocks if the child calls
 	// back into the channel. The latest balancer can never be closed during a
 	// call from the channel, even without gsb.mu held.
-	return balToUpdate.UpdateClientConnState(state)
+	return balToUpdate.UpdateUserConnState(state)
 }
 
 // ResolverError forwards the error to the latest balancer created.
@@ -238,10 +238,10 @@ func (gsb *Balancer) Close() {
 // balancerWrapper wraps a balancer.Balancer, and overrides some Balancer
 // methods to help cleanup SubConns created by the wrapped balancer.
 //
-// It implements the balancer.ClientConn interface and is passed down in that
+// It implements the balancer.UserConn interface and is passed down in that
 // capacity to the wrapped balancer. It maintains a set of subConns created by
 // the wrapped balancer and calls from the latter to create/update/remove
-// SubConns update this set before being forwarded to the parent ClientConn.
+// SubConns update this set before being forwarded to the parent UserConn.
 // State updates from the wrapped balancer can result in invocation of the
 // graceful switch logic.
 type balancerWrapper struct {
@@ -299,15 +299,15 @@ func (bw *balancerWrapper) UpdateState(state balancer.State) {
 	if bw == bw.gsb.balancerCurrent {
 		// In the case that the current balancer exits READY, and there is a pending
 		// balancer, you can forward the pending balancer's cached State up to
-		// ClientConn and swap the pending into the current. This is because there
+		// UserConn and swap the pending into the current. This is because there
 		// is no reason to gracefully switch from and keep using the old policy as
-		// the ClientConn is not connected to any backends.
+		// the UserConn is not connected to any backends.
 		if state.ConnectivityState != connectivity.Ready && bw.gsb.balancerPending != nil {
 			bw.gsb.swap()
 			return
 		}
 		// Even if there is a pending balancer waiting to be gracefully switched to,
-		// continue to forward current balancer updates to the Client Conn. Ignoring
+		// continue to forward current balancer updates to the User Conn. Ignoring
 		// state + picker from the current would cause undefined behavior/cause the
 		// system to behave incorrectly from the current LB policies perspective.
 		// Also, the current LB is still being used by grpc to choose SubConns per
@@ -319,7 +319,7 @@ func (bw *balancerWrapper) UpdateState(state balancer.State) {
 	// If the current balancer is currently in a state other than READY, the new
 	// policy can be swapped into place immediately. This is because there is no
 	// reason to gracefully switch from and keep using the old policy as the
-	// ClientConn is not connected to any backends.
+	// UserConn is not connected to any backends.
 	if state.ConnectivityState != connectivity.Connecting || bw.gsb.balancerCurrent.lastState.ConnectivityState != connectivity.Ready {
 		bw.gsb.swap()
 	}

@@ -1,23 +1,23 @@
-package grpcClient
+package grpcUser
 
 import (
-	"github.com/hdn-project/client-service/config"
+	"github.com/hdn-project/User-service/config"
 )
 
-//GrpcClientI ...
-type GrpcClientI interface {
+//GrpcUserI ...
+type GrpcUserI interface {
 }
 
-//GrpcClient ...
-type GrpcClient struct {
-    cfg         config.Config
-    connections map[string]interface{}
+//GrpcUser ...
+type GrpcUser struct {
+	cfg         config.Config
+	connections map[string]interface{}
 }
 
 //New ...
-func New(cfg config.Config) (*GrpcClient, error) {
-    return &GrpcClient{
-        cfg: cfg,
-        connections: map[string]interface{}{},
-    }, nil
+func New(cfg config.Config) (*GrpcUser, error) {
+	return &GrpcUser{
+		cfg:         cfg,
+		connections: map[string]interface{}{},
+	}, nil
 }

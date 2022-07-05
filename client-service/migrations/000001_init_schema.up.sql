@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS clients(
+CREATE TABLE IF NOT EXISTS Users(
     id uuid PRIMARY KEY NOT NULL,
     calendar_id uuid,
     first_name VARCHAR(255),

@@ -89,7 +89,7 @@ type http2Server struct {
 	kep keepalive.EnforcementPolicy
 	// The time instance last ping was received.
 	lastPingAt time.Time
-	// Number of times the client has violated keepalive ping policy so far.
+	// Number of times the User has violated keepalive ping policy so far.
 	pingStrikes uint8
 	// Flag to signify that number of ping strikes should be reset to 0.
 	// This is set whenever data or header frames are sent.
@@ -134,7 +134,7 @@ type http2Server struct {
 //
 // It returns a non-nil transport and a nil error on success. On failure, it
 // returns a nil transport and a non-nil error. For a special case where the
-// underlying conn gets closed before the client preface could be read, it
+// underlying conn gets closed before the User preface could be read, it
 // returns a nil transport and a nil error.
 func NewServerTransport(conn net.Conn, config *ServerConfig) (_ ServerTransport, err error) {
 	var authInfo credentials.AuthInfo
@@ -160,7 +160,7 @@ func NewServerTransport(conn net.Conn, config *ServerConfig) (_ ServerTransport,
 		maxHeaderListSize = *config.MaxHeaderListSize
 	}
 	framer := newFramer(conn, writeBufSize, readBufSize, maxHeaderListSize)
-	// Send initial settings as connection preface to client.
+	// Send initial settings as connection preface to User.
 	isettings := []http2.Setting{{
 		ID:  http2.SettingMaxFrameSize,
 		Val: http2MaxFrameLen,
@@ -294,8 +294,8 @@ func NewServerTransport(conn net.Conn, config *ServerConfig) (_ ServerTransport,
 		}
 	}()
 
-	// Check the validity of client preface.
-	preface := make([]byte, len(clientPreface))
+	// Check the validity of User preface.
+	preface := make([]byte, len(UserPreface))
 	if _, err := io.ReadFull(t.conn, preface); err != nil {
 		// In deployments where a gRPC server runs behind a cloud load balancer
 		// which performs regular TCP level health checks, the connection is
@@ -305,10 +305,10 @@ func NewServerTransport(conn net.Conn, config *ServerConfig) (_ ServerTransport,
 		if err == io.EOF {
 			return nil, io.EOF
 		}
-		return nil, connectionErrorf(false, err, "transport: http2Server.HandleStreams failed to receive the preface from client: %v", err)
+		return nil, connectionErrorf(false, err, "transport: http2Server.HandleStreams failed to receive the preface from User: %v", err)
 	}
-	if !bytes.Equal(preface, clientPreface) {
-		return nil, connectionErrorf(false, nil, "transport: http2Server.HandleStreams received bogus greeting from client: %q", preface)
+	if !bytes.Equal(preface, UserPreface) {
+		return nil, connectionErrorf(false, nil, "transport: http2Server.HandleStreams received bogus greeting from User: %q", preface)
 	}
 
 	frame, err := t.framer.fr.ReadFrame()
@@ -321,7 +321,7 @@ func NewServerTransport(conn net.Conn, config *ServerConfig) (_ ServerTransport,
 	atomic.StoreInt64(&t.lastRead, time.Now().UnixNano())
 	sf, ok := frame.(*http2.SettingsFrame)
 	if !ok {
-		return nil, connectionErrorf(false, nil, "transport: http2Server.HandleStreams saw invalid preface type %T from client", frame)
+		return nil, connectionErrorf(false, nil, "transport: http2Server.HandleStreams saw invalid preface type %T from User", frame)
 	}
 	t.handleSettings(sf)
 
@@ -437,7 +437,7 @@ func (t *http2Server) operateHeaders(frame *http2.MetaHeadersFrame, handle func(
 	// request must be rejected with an HTTP status code 400 as required by Host
 	// validation in RFC 7230 §5.4, gRPC status code INTERNAL, or RST_STREAM
 	// with HTTP/2 error code PROTOCOL_ERROR." - A41. Since this is a HTTP/2
-	// error, this takes precedence over a client not speaking gRPC.
+	// error, this takes precedence over a User not speaking gRPC.
 	if len(mdata[":authority"]) > 1 || len(mdata["host"]) > 1 {
 		errMsg := fmt.Sprintf("num values of :authority: %v, num values of host: %v, both must only have 1 value as per HTTP/2 spec", len(mdata[":authority"]), len(mdata["host"]))
 		if logger.V(logLevel) {
@@ -660,7 +660,7 @@ func (t *http2Server) HandleStreams(handle func(*Stream), traceCtx func(context.
 		case *http2.WindowUpdateFrame:
 			t.handleWindowUpdate(frame)
 		case *http2.GoAwayFrame:
-			// TODO: Handle GoAway from the client appropriately.
+			// TODO: Handle GoAway from the User appropriately.
 		default:
 			if logger.V(logLevel) {
 				logger.Errorf("transport: http2Server.HandleStreams found unhandled frame type %v.", frame)
@@ -791,7 +791,7 @@ func (t *http2Server) handleData(f *http2.DataFrame) {
 		}
 	}
 	if f.StreamEnded() {
-		// Received the end of stream from the client.
+		// Received the end of stream from the User.
 		s.compareAndSwapState(streamActive, streamReadDone)
 		s.write(recvMsg{err: io.EOF})
 	}
@@ -891,7 +891,7 @@ func (t *http2Server) handlePing(f *http2.PingFrame) {
 	if t.pingStrikes > maxPingStrikes {
 		// Send goaway and close the connection.
 		if logger.V(logLevel) {
-			logger.Errorf("transport: Got too many pings from the client, closing the connection.")
+			logger.Errorf("transport: Got too many pings from the User, closing the connection.")
 		}
 		t.controlBuf.put(&goAway{code: http2.ErrCodeEnhanceYourCalm, debugData: []byte("too_many_pings"), closeConn: true})
 	}
@@ -907,7 +907,7 @@ func (t *http2Server) handleWindowUpdate(f *http2.WindowUpdateFrame) {
 func appendHeaderFieldsFromMD(headerFields []hpack.HeaderField, md metadata.MD) []hpack.HeaderField {
 	for k, vv := range md {
 		if isReservedHeader(k) {
-			// Clients don't tolerate reading restricted headers after some non restricted ones were sent.
+			// Users don't tolerate reading restricted headers after some non restricted ones were sent.
 			continue
 		}
 		for _, v := range vv {
@@ -926,7 +926,7 @@ func (t *http2Server) checkForHeaderListSize(it interface{}) bool {
 	for _, f := range hdrFrame.hf {
 		if sz += int64(f.Size()); sz > int64(*t.maxSendHeaderListSize) {
 			if logger.V(logLevel) {
-				logger.Errorf("header list size to send violates the maximum size (%d bytes) set by client", *t.maxSendHeaderListSize)
+				logger.Errorf("header list size to send violates the maximum size (%d bytes) set by User", *t.maxSendHeaderListSize)
 			}
 			return false
 		}
@@ -943,7 +943,7 @@ func (t *http2Server) streamContextErr(s *Stream) error {
 	return ContextErr(s.ctx.Err())
 }
 
-// WriteHeader sends the header metadata md back to the client.
+// WriteHeader sends the header metadata md back to the User.
 func (t *http2Server) WriteHeader(s *Stream, md metadata.MD) error {
 	if s.updateHeaderSent() {
 		return ErrIllegalHeaderWrite
@@ -1008,7 +1008,7 @@ func (t *http2Server) writeHeaderLocked(s *Stream) error {
 	return nil
 }
 
-// WriteStatus sends stream status to the client and terminates the stream.
+// WriteStatus sends stream status to the User and terminates the stream.
 // There is no further I/O operations being able to perform on this stream.
 // TODO(zhaoq): Now it indicates the end of entire stream. Revisit if early
 // OK is adopted.
@@ -1061,7 +1061,7 @@ func (t *http2Server) WriteStatus(s *Stream, st *status.Status) error {
 		t.closeStream(s, true, http2.ErrCodeInternal, false)
 		return ErrHeaderListSizeLimitViolation
 	}
-	// Send a RST_STREAM after the trailers if the client has not already half-closed.
+	// Send a RST_STREAM after the trailers if the User has not already half-closed.
 	rst := s.getState() == streamActive
 	t.finishStream(s, rst, http2.ErrCodeNo, trailingHeader, true)
 	if t.stats != nil {
@@ -1343,7 +1343,7 @@ func (t *http2Server) outgoingGoAwayHandler(g *goAway) (bool, error) {
 	// For a graceful close, send out a GoAway with stream ID of MaxUInt32,
 	// Follow that with a ping and wait for the ack to come back or a timer
 	// to expire. During this time accept new streams since they might have
-	// originated before the GoAway reaches the client.
+	// originated before the GoAway reaches the User.
 	// After getting the ack or timer expiration send out another GoAway this
 	// time with an ID of the max stream server intends to process.
 	if err := t.framer.fr.WriteGoAway(math.MaxUint32, http2.ErrCodeNo, []byte{}); err != nil {

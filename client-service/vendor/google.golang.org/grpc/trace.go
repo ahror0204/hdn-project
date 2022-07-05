@@ -52,10 +52,10 @@ type traceInfo struct {
 
 // firstLine is the first line of an RPC trace.
 // It may be mutated after construction; remoteAddr specifically may change
-// during client-side use.
+// during User-side use.
 type firstLine struct {
 	mu         sync.Mutex
-	client     bool // whether this is a client (outgoing) RPC
+	User       bool // whether this is a User (outgoing) RPC
 	remoteAddr net.Addr
 	deadline   time.Duration // may be zero
 }
@@ -72,7 +72,7 @@ func (f *firstLine) String() string {
 
 	var line bytes.Buffer
 	io.WriteString(&line, "RPC: ")
-	if f.client {
+	if f.User {
 		io.WriteString(&line, "to")
 	} else {
 		io.WriteString(&line, "from")

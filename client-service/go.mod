@@ -1,4 +1,4 @@
-module github.com/hdn-project/client-service
+module github.com/hdn-project/User-service
 
 go 1.16
 

@@ -2,7 +2,7 @@
 
 set -eu
 
-client_configure() {
+User_configure() {
 	sudo chmod 600 $PQSSLCERTTEST_PATH/postgresql.key
 }
 
@@ -64,7 +64,7 @@ postgresql_uninstall() {
 		libpq-dev
 		libpq5
 		postgresql
-		postgresql-client-common
+		postgresql-User-common
 		postgresql-common
 	packages
 	sudo rm -rf /var/lib/postgresql

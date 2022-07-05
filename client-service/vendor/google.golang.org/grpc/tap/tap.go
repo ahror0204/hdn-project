@@ -39,7 +39,7 @@ type Info struct {
 
 // ServerInHandle defines the function which runs before a new stream is
 // created on the server side. If it returns a non-nil error, the stream will
-// not be created and an error will be returned to the client.  If the error
+// not be created and an error will be returned to the User.  If the error
 // returned is a status error, that status code and message will be used,
 // otherwise PermissionDenied will be the code and err.Error() will be the
 // message.

@@ -24,22 +24,22 @@ import (
 	"time"
 )
 
-// ClientParameters is used to set keepalive parameters on the client-side.
-// These configure how the client will actively probe to notice when a
+// UserParameters is used to set keepalive parameters on the User-side.
+// These configure how the User will actively probe to notice when a
 // connection is broken and send pings so intermediaries will be aware of the
 // liveness of the connection. Make sure these parameters are set in
 // coordination with the keepalive policy on the server, as incompatible
 // settings can result in closing of connection.
-type ClientParameters struct {
-	// After a duration of this time if the client doesn't see any activity it
+type UserParameters struct {
+	// After a duration of this time if the User doesn't see any activity it
 	// pings the server to see if the transport is still alive.
 	// If set below 10s, a minimum value of 10s will be used instead.
 	Time time.Duration // The current default value is infinity.
-	// After having pinged for keepalive check, the client waits for a duration
+	// After having pinged for keepalive check, the User waits for a duration
 	// of Timeout and if no activity is seen even after that the connection is
 	// closed.
 	Timeout time.Duration // The current default value is 20 seconds.
-	// If true, client sends keepalive pings even with no active RPCs. If false,
+	// If true, User sends keepalive pings even with no active RPCs. If false,
 	// when there are no active RPCs, Time and Timeout will be ignored and no
 	// keepalive pings will be sent.
 	PermitWithoutStream bool // false by default.
@@ -62,7 +62,7 @@ type ServerParameters struct {
 	// which the connection will be forcibly closed.
 	MaxConnectionAgeGrace time.Duration // The current default value is infinity.
 	// After a duration of this time if the server doesn't see any activity it
-	// pings the client to see if the transport is still alive.
+	// pings the User to see if the transport is still alive.
 	// If set below 1s, a minimum value of 1s will be used instead.
 	Time time.Duration // The current default value is 2 hours.
 	// After having pinged for keepalive check, the server waits for a duration
@@ -72,14 +72,14 @@ type ServerParameters struct {
 }
 
 // EnforcementPolicy is used to set keepalive enforcement policy on the
-// server-side. Server will close connection with a client that violates this
+// server-side. Server will close connection with a User that violates this
 // policy.
 type EnforcementPolicy struct {
-	// MinTime is the minimum amount of time a client should wait before sending
+	// MinTime is the minimum amount of time a User should wait before sending
 	// a keepalive ping.
 	MinTime time.Duration // The current default value is 5 minutes.
 	// If true, server allows keepalive pings even when there are no active
-	// streams(RPCs). If false, and client sends ping when there are no active
+	// streams(RPCs). If false, and User sends ping when there are no active
 	// streams, server will send GOAWAY and close the connection.
 	PermitWithoutStream bool // false by default.
 }

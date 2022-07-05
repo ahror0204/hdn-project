@@ -22,7 +22,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Package scram implements a SCRAM-{SHA-1,etc} client per RFC5802.
+// Package scram implements a SCRAM-{SHA-1,etc} User per RFC5802.
 //
 // http://tools.ietf.org/html/rfc5802
 //
@@ -39,22 +39,22 @@ import (
 	"strings"
 )
 
-// Client implements a SCRAM-* client (SCRAM-SHA-1, SCRAM-SHA-256, etc).
+// User implements a SCRAM-* User (SCRAM-SHA-1, SCRAM-SHA-256, etc).
 //
-// A Client may be used within a SASL conversation with logic resembling:
+// A User may be used within a SASL conversation with logic resembling:
 //
 //    var in []byte
-//    var client = scram.NewClient(sha1.New, user, pass)
-//    for client.Step(in) {
-//            out := client.Out()
+//    var User = scram.NewUser(sha1.New, user, pass)
+//    for User.Step(in) {
+//            out := User.Out()
 //            // send out to server
 //            in := serverOut
 //    }
-//    if client.Err() != nil {
+//    if User.Err() != nil {
 //            // auth failed
 //    }
 //
-type Client struct {
+type User struct {
 	newHash func() hash.Hash
 
 	user string
@@ -63,20 +63,20 @@ type Client struct {
 	out  bytes.Buffer
 	err  error
 
-	clientNonce []byte
+	UserNonce   []byte
 	serverNonce []byte
 	saltedPass  []byte
 	authMsg     bytes.Buffer
 }
 
-// NewClient returns a new SCRAM-* client with the provided hash algorithm.
+// NewUser returns a new SCRAM-* User with the provided hash algorithm.
 //
 // For SCRAM-SHA-256, for example, use:
 //
-//    client := scram.NewClient(sha256.New, user, pass)
+//    User := scram.NewUser(sha256.New, user, pass)
 //
-func NewClient(newHash func() hash.Hash, user, pass string) *Client {
-	c := &Client{
+func NewUser(newHash func() hash.Hash, user, pass string) *User {
+	c := &User{
 		newHash: newHash,
 		user:    user,
 		pass:    pass,
@@ -87,7 +87,7 @@ func NewClient(newHash func() hash.Hash, user, pass string) *Client {
 }
 
 // Out returns the data to be sent to the server in the current step.
-func (c *Client) Out() []byte {
+func (c *User) Out() []byte {
 	if c.out.Len() == 0 {
 		return nil
 	}
@@ -95,23 +95,23 @@ func (c *Client) Out() []byte {
 }
 
 // Err returns the error that ocurred, or nil if there were no errors.
-func (c *Client) Err() error {
+func (c *User) Err() error {
 	return c.err
 }
 
-// SetNonce sets the client nonce to the provided value.
+// SetNonce sets the User nonce to the provided value.
 // If not set, the nonce is generated automatically out of crypto/rand on the first step.
-func (c *Client) SetNonce(nonce []byte) {
-	c.clientNonce = nonce
+func (c *User) SetNonce(nonce []byte) {
+	c.UserNonce = nonce
 }
 
 var escaper = strings.NewReplacer("=", "=3D", ",", "=2C")
 
 // Step processes the incoming data from the server and makes the
-// next round of data for the server available via Client.Out.
+// next round of data for the server available via User.Out.
 // Step returns false if there are no errors and more data is
 // still expected.
-func (c *Client) Step(in []byte) bool {
+func (c *User) Step(in []byte) bool {
 	c.out.Reset()
 	if c.step > 2 || c.err != nil {
 		return false
@@ -128,20 +128,20 @@ func (c *Client) Step(in []byte) bool {
 	return c.step > 2 || c.err != nil
 }
 
-func (c *Client) step1(in []byte) error {
-	if len(c.clientNonce) == 0 {
+func (c *User) step1(in []byte) error {
+	if len(c.UserNonce) == 0 {
 		const nonceLen = 16
 		buf := make([]byte, nonceLen+b64.EncodedLen(nonceLen))
 		if _, err := rand.Read(buf[:nonceLen]); err != nil {
 			return fmt.Errorf("cannot read random SCRAM-SHA-256 nonce from operating system: %v", err)
 		}
-		c.clientNonce = buf[nonceLen:]
-		b64.Encode(c.clientNonce, buf[:nonceLen])
+		c.UserNonce = buf[nonceLen:]
+		b64.Encode(c.UserNonce, buf[:nonceLen])
 	}
 	c.authMsg.WriteString("n=")
 	escaper.WriteString(&c.authMsg, c.user)
 	c.authMsg.WriteString(",r=")
-	c.authMsg.Write(c.clientNonce)
+	c.authMsg.Write(c.UserNonce)
 
 	c.out.WriteString("n,,")
 	c.out.Write(c.authMsg.Bytes())
@@ -150,7 +150,7 @@ func (c *Client) step1(in []byte) error {
 
 var b64 = base64.StdEncoding
 
-func (c *Client) step2(in []byte) error {
+func (c *User) step2(in []byte) error {
 	c.authMsg.WriteByte(',')
 	c.authMsg.Write(in)
 
@@ -169,8 +169,8 @@ func (c *Client) step2(in []byte) error {
 	}
 
 	c.serverNonce = fields[0][2:]
-	if !bytes.HasPrefix(c.serverNonce, c.clientNonce) {
-		return fmt.Errorf("server SCRAM-SHA-256 nonce is not prefixed by client nonce: got %q, want %q+\"...\"", c.serverNonce, c.clientNonce)
+	if !bytes.HasPrefix(c.serverNonce, c.UserNonce) {
+		return fmt.Errorf("server SCRAM-SHA-256 nonce is not prefixed by User nonce: got %q, want %q+\"...\"", c.serverNonce, c.UserNonce)
 	}
 
 	salt := make([]byte, b64.DecodedLen(len(fields[1][2:])))
@@ -191,11 +191,11 @@ func (c *Client) step2(in []byte) error {
 	c.out.WriteString("c=biws,r=")
 	c.out.Write(c.serverNonce)
 	c.out.WriteString(",p=")
-	c.out.Write(c.clientProof())
+	c.out.Write(c.UserProof())
 	return nil
 }
 
-func (c *Client) step3(in []byte) error {
+func (c *User) step3(in []byte) error {
 	var isv, ise bool
 	var fields = bytes.Split(in, []byte(","))
 	if len(fields) == 1 {
@@ -213,7 +213,7 @@ func (c *Client) step3(in []byte) error {
 	return nil
 }
 
-func (c *Client) saltPassword(salt []byte, iterCount int) {
+func (c *User) saltPassword(salt []byte, iterCount int) {
 	mac := hmac.New(c.newHash, []byte(c.pass))
 	mac.Write(salt)
 	mac.Write([]byte{0, 0, 0, 1})
@@ -231,25 +231,25 @@ func (c *Client) saltPassword(salt []byte, iterCount int) {
 	c.saltedPass = hi
 }
 
-func (c *Client) clientProof() []byte {
+func (c *User) UserProof() []byte {
 	mac := hmac.New(c.newHash, c.saltedPass)
-	mac.Write([]byte("Client Key"))
-	clientKey := mac.Sum(nil)
+	mac.Write([]byte("User Key"))
+	UserKey := mac.Sum(nil)
 	hash := c.newHash()
-	hash.Write(clientKey)
+	hash.Write(UserKey)
 	storedKey := hash.Sum(nil)
 	mac = hmac.New(c.newHash, storedKey)
 	mac.Write(c.authMsg.Bytes())
-	clientProof := mac.Sum(nil)
-	for i, b := range clientKey {
-		clientProof[i] ^= b
+	UserProof := mac.Sum(nil)
+	for i, b := range UserKey {
+		UserProof[i] ^= b
 	}
-	clientProof64 := make([]byte, b64.EncodedLen(len(clientProof)))
-	b64.Encode(clientProof64, clientProof)
-	return clientProof64
+	UserProof64 := make([]byte, b64.EncodedLen(len(UserProof)))
+	b64.Encode(UserProof64, UserProof)
+	return UserProof64
 }
 
-func (c *Client) serverSignature() []byte {
+func (c *User) serverSignature() []byte {
 	mac := hmac.New(c.newHash, c.saltedPass)
 	mac.Write([]byte("Server Key"))
 	serverKey := mac.Sum(nil)

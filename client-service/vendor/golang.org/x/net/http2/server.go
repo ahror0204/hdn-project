@@ -60,10 +60,10 @@ const (
 )
 
 var (
-	errClientDisconnected = errors.New("client disconnected")
-	errClosedBody         = errors.New("body closed by handler")
-	errHandlerComplete    = errors.New("http2: request body closed due to handler exiting")
-	errStreamClosed       = errors.New("http2: stream closed")
+	errUserDisconnected = errors.New("User disconnected")
+	errClosedBody       = errors.New("body closed by handler")
+	errHandlerComplete  = errors.New("http2: request body closed due to handler exiting")
+	errStreamClosed     = errors.New("http2: stream closed")
 )
 
 var responseWriterStatePool = sync.Pool{
@@ -91,7 +91,7 @@ type Server struct {
 	MaxHandlers int
 
 	// MaxConcurrentStreams optionally specifies the number of
-	// concurrent streams that each client may have open at a
+	// concurrent streams that each User may have open at a
 	// time. This is unrelated to the number of http.Handler goroutines
 	// which may be active globally, which is MaxHandlers.
 	// If zero, MaxConcurrentStreams defaults to at least 100, per
@@ -108,7 +108,7 @@ type Server struct {
 	// cipher suites prohibited by the HTTP/2 spec.
 	PermitProhibitedCipherSuites bool
 
-	// IdleTimeout specifies how long until idle clients should be
+	// IdleTimeout specifies how long until idle Users should be
 	// closed with a GOAWAY frame. PING frames are not considered
 	// activity for the purposes of IdleTimeout.
 	IdleTimeout time.Duration
@@ -248,7 +248,7 @@ func ConfigureServer(s *http.Server, conf *Server) error {
 			if isBadCipher(cs) {
 				sawBad = true
 			} else if sawBad {
-				return fmt.Errorf("http2: TLSConfig.CipherSuites index %d contains an HTTP/2-approved cipher suite (%#04x), but it comes after unapproved cipher suites. With this configuration, clients that don't support previous, approved cipher suites may be given an unapproved one and reject the connection.", i, cs)
+				return fmt.Errorf("http2: TLSConfig.CipherSuites index %d contains an HTTP/2-approved cipher suite (%#04x), but it comes after unapproved cipher suites. With this configuration, Users that don't support previous, approved cipher suites may be given an unapproved one and reject the connection.", i, cs)
 			}
 		}
 		if !haveRequired {
@@ -261,7 +261,7 @@ func ConfigureServer(s *http.Server, conf *Server) error {
 	// on the user's server. We enforce TLS 1.2 later once
 	// we accept a connection. Ideally this should be done
 	// during next-proto selection, but using TLS <1.2 with
-	// HTTP/2 is still the client's bug.
+	// HTTP/2 is still the User's bug.
 
 	s.TLSConfig.PreferServerCipherSuites = true
 
@@ -353,7 +353,7 @@ func (o *ServeConnOpts) handler() http.Handler {
 // ServeConn starts speaking HTTP/2 assuming that c has not had any
 // reads or writes. It writes its initial settings frame and expects
 // to be able to read the preface and settings frame from the
-// client. If c has a ConnectionState method like a *tls.Conn, the
+// User. If c has a ConnectionState method like a *tls.Conn, the
 // ConnectionState is used to verify the TLS ciphersuite and to set
 // the Request.TLS field in Handlers.
 //
@@ -380,7 +380,7 @@ func (s *Server) ServeConn(c net.Conn, opts *ServeConnOpts) {
 		wroteFrameCh:                make(chan frameWriteResult, 1), // buffered; one send in writeFrameAsync
 		bodyReadCh:                  make(chan bodyReadMsg),         // buffering doesn't matter either way
 		doneServing:                 make(chan struct{}),
-		clientMaxStreams:            math.MaxUint32, // Section 6.5.2: "Initially, there is no limit to this value"
+		UserMaxStreams:              math.MaxUint32, // Section 6.5.2: "Initially, there is no limit to this value"
 		advMaxStreams:               s.maxConcurrentStreams(),
 		initialStreamSendWindowSize: initialWindowSize,
 		maxFrameSize:                initialMaxFrameSize,
@@ -439,7 +439,7 @@ func (s *Server) ServeConn(c net.Conn, opts *ServeConnOpts) {
 		}
 
 		if sc.tlsState.ServerName == "" {
-			// Client must use SNI, but we don't enforce that anymore,
+			// User must use SNI, but we don't enforce that anymore,
 			// since it was causing problems when connecting to bare IP
 			// addresses during development.
 			//
@@ -517,11 +517,11 @@ type serverConn struct {
 	needToSendSettingsAck       bool
 	unackedSettings             int    // how many SETTINGS have we sent without ACKs?
 	queuedControlFrames         int    // control frames in the writeSched queue
-	clientMaxStreams            uint32 // SETTINGS_MAX_CONCURRENT_STREAMS from client (our PUSH_PROMISE limit)
-	advMaxStreams               uint32 // our SETTINGS_MAX_CONCURRENT_STREAMS advertised the client
-	curClientStreams            uint32 // number of open streams initiated by the client
+	UserMaxStreams              uint32 // SETTINGS_MAX_CONCURRENT_STREAMS from User (our PUSH_PROMISE limit)
+	advMaxStreams               uint32 // our SETTINGS_MAX_CONCURRENT_STREAMS advertised the User
+	curUserStreams              uint32 // number of open streams initiated by the User
 	curPushedStreams            uint32 // number of open streams initiated by server push
-	maxClientStreamID           uint32 // max ever seen from client (odd), or 0 if there have been no client requests
+	maxUserStreamID             uint32 // max ever seen from User (odd), or 0 if there have been no User requests
 	maxPushPromiseID            uint32 // ID of the last push promise (even), or 0 if there have been no pushes
 	streams                     map[uint32]*stream
 	initialStreamSendWindowSize int32
@@ -561,7 +561,7 @@ func (sc *serverConn) maxHeaderListSize() uint32 {
 
 func (sc *serverConn) curOpenStreams() uint32 {
 	sc.serveG.check()
-	return sc.curClientStreams + sc.curPushedStreams
+	return sc.curUserStreams + sc.curPushedStreams
 }
 
 // stream represents a stream. This is the minimal metadata needed by
@@ -583,8 +583,8 @@ type stream struct {
 	// owned by serverConn's serve loop:
 	bodyBytes        int64 // body bytes seen so far
 	declBodyBytes    int64 // or -1 if undeclared
-	flow             flow  // limits writing from Handler to client
-	inflow           flow  // what the client is allowed to POST/etc to us
+	flow             flow  // limits writing from Handler to User
+	inflow           flow  // what the User is allowed to POST/etc to us
 	state            streamState
 	resetQueued      bool        // RST_STREAM queued for write; set by sc.resetStream
 	gotTrailerHeader bool        // HEADER frame for trailers was seen
@@ -611,11 +611,11 @@ func (sc *serverConn) state(streamID uint32) (streamState, *stream) {
 	// "The first use of a new stream identifier implicitly closes all
 	// streams in the "idle" state that might have been initiated by
 	// that peer with a lower-valued stream identifier. For example, if
-	// a client sends a HEADERS frame on stream 7 without ever sending a
+	// a User sends a HEADERS frame on stream 7 without ever sending a
 	// frame on stream 5, then stream 5 transitions to the "closed"
 	// state when the first frame for stream 7 is sent or received."
 	if streamID%2 == 1 {
-		if streamID <= sc.maxClientStreamID {
+		if streamID <= sc.maxUserStreamID {
 			return stateClosed, nil
 		}
 	} else {
@@ -778,7 +778,7 @@ func (sc *serverConn) writeFrameAsync(wr FrameWriteRequest) {
 func (sc *serverConn) closeAllStreamsOnConnClose() {
 	sc.serveG.check()
 	for _, st := range sc.streams {
-		sc.closeStream(st, errClientDisconnected)
+		sc.closeStream(st, errUserDisconnected)
 	}
 }
 
@@ -833,7 +833,7 @@ func (sc *serverConn) serve() {
 	}
 
 	if err := sc.readPreface(); err != nil {
-		sc.condlogf(err, "http2: server: error reading preface from client %v: %v", sc.conn.RemoteAddr(), err)
+		sc.condlogf(err, "http2: server: error reading preface from User %v: %v", sc.conn.RemoteAddr(), err)
 		return
 	}
 	// Now that we've got the preface, get us out of the
@@ -952,19 +952,19 @@ func (sc *serverConn) sendServeMsg(msg interface{}) {
 	}
 }
 
-var errPrefaceTimeout = errors.New("timeout waiting for client preface")
+var errPrefaceTimeout = errors.New("timeout waiting for User preface")
 
-// readPreface reads the ClientPreface greeting from the peer or
+// readPreface reads the UserPreface greeting from the peer or
 // returns errPrefaceTimeout on timeout, or an error if the greeting
 // is invalid.
 func (sc *serverConn) readPreface() error {
 	errc := make(chan error, 1)
 	go func() {
-		// Read the client preface
-		buf := make([]byte, len(ClientPreface))
+		// Read the User preface
+		buf := make([]byte, len(UserPreface))
 		if _, err := io.ReadFull(sc.conn, buf); err != nil {
 			errc <- err
-		} else if !bytes.Equal(buf, clientPreface) {
+		} else if !bytes.Equal(buf, UserPreface) {
 			errc <- fmt.Errorf("bogus greeting %q", buf)
 		} else {
 			errc <- nil
@@ -978,7 +978,7 @@ func (sc *serverConn) readPreface() error {
 	case err := <-errc:
 		if err == nil {
 			if VerboseLogs {
-				sc.vlogf("http2: server: client %v said hello", sc.conn.RemoteAddr())
+				sc.vlogf("http2: server: User %v said hello", sc.conn.RemoteAddr())
 			}
 		}
 		return err
@@ -1012,7 +1012,7 @@ func (sc *serverConn) writeDataFromHandler(stream *stream, data []byte, endStrea
 	case err = <-ch:
 		frameWriteDone = true
 	case <-sc.doneServing:
-		return errClientDisconnected
+		return errUserDisconnected
 	case <-stream.cw:
 		// If both ch and stream.cw were ready (as might
 		// happen on the final Write after an http.Handler
@@ -1049,8 +1049,8 @@ func (sc *serverConn) writeFrameFromHandler(wr FrameWriteRequest) error {
 		return nil
 	case <-sc.doneServing:
 		// Serve loop is gone.
-		// Client has closed their connection to the server.
-		return errClientDisconnected
+		// User has closed their connection to the server.
+		return errUserDisconnected
 	}
 }
 
@@ -1075,7 +1075,7 @@ func (sc *serverConn) writeFrame(wr FrameWriteRequest) {
 	//
 	// The serverConn might close an open stream while the stream's handler
 	// is still running. For example, the server might close a stream when it
-	// receives bad data from the client. If this happens, the handler might
+	// receives bad data from the User. If this happens, the handler might
 	// attempt to write a frame after the stream has been closed (since the
 	// handler hasn't yet been notified of the close). In this case, we simply
 	// ignore the frame. The handler will notice that the stream is closed when
@@ -1084,7 +1084,7 @@ func (sc *serverConn) writeFrame(wr FrameWriteRequest) {
 	// As an exception to this rule, we allow sending RST_STREAM after close.
 	// This allows us to immediately reject new streams without tracking any
 	// state for those streams (except for the queued RST_STREAM frame). This
-	// may result in duplicate RST_STREAMs in some cases, but the client should
+	// may result in duplicate RST_STREAMs in some cases, but the User should
 	// ignore those.
 	if wr.StreamID() != 0 {
 		_, isReset := wr.write.(StreamError)
@@ -1204,7 +1204,7 @@ func (sc *serverConn) wroteFrame(res frameWriteResult) {
 			// stateClosed after the RST_STREAM frame is
 			// written.
 			st.state = stateHalfClosedLocal
-			// Section 8.1: a server MAY request that the client abort
+			// Section 8.1: a server MAY request that the User abort
 			// transmission of a request without error by sending a
 			// RST_STREAM with an error code of NO_ERROR after sending
 			// a complete response.
@@ -1251,7 +1251,7 @@ func (sc *serverConn) scheduleFrameWrite() {
 			sc.needToSendGoAway = false
 			sc.startFrameWrite(FrameWriteRequest{
 				write: &writeGoAway{
-					maxStreamID: sc.maxClientStreamID,
+					maxStreamID: sc.maxUserStreamID,
 					code:        sc.goAwayCode,
 				},
 			})
@@ -1282,7 +1282,7 @@ func (sc *serverConn) scheduleFrameWrite() {
 }
 
 // startGracefulShutdown gracefully shuts down a connection. This
-// sends GOAWAY with ErrCodeNo to tell the client we're gracefully
+// sends GOAWAY with ErrCodeNo to tell the User we're gracefully
 // shutting down. The connection isn't closed until all current
 // streams are done.
 //
@@ -1299,9 +1299,9 @@ func (sc *serverConn) startGracefulShutdown() {
 // If we close the connection immediately after sending GOAWAY, there may
 // be unsent data in our kernel receive buffer, which will cause the kernel
 // to send a TCP RST on close() instead of a FIN. This RST will abort the
-// connection immediately, whether or not the client had received the GOAWAY.
+// connection immediately, whether or not the User had received the GOAWAY.
 //
-// Ideally we should delay for at least 1 RTT + epsilon so the client has
+// Ideally we should delay for at least 1 RTT + epsilon so the User has
 // a chance to read the GOAWAY and stop sending messages. Measuring RTT
 // is hard, so we approximate with 1 second. See golang.org/issue/18701.
 //
@@ -1350,8 +1350,8 @@ func (sc *serverConn) processFrameFromReader(res readFrameResult) bool {
 			sc.goAway(ErrCodeFrameSize)
 			return true // goAway will close the loop
 		}
-		clientGone := err == io.EOF || err == io.ErrUnexpectedEOF || isClosedConnError(err)
-		if clientGone {
+		UserGone := err == io.EOF || err == io.ErrUnexpectedEOF || isClosedConnError(err)
+		if UserGone {
 			// TODO: could we also get into this state if
 			// the peer does a half close
 			// (e.g. CloseWrite) because they're done
@@ -1386,9 +1386,9 @@ func (sc *serverConn) processFrameFromReader(res readFrameResult) bool {
 		return true // goAway will handle shutdown
 	default:
 		if res.err != nil {
-			sc.vlogf("http2: server closing client connection; error reading frame from client %s: %v", sc.conn.RemoteAddr(), err)
+			sc.vlogf("http2: server closing User connection; error reading frame from User %s: %v", sc.conn.RemoteAddr(), err)
 		} else {
-			sc.logf("http2: server closing client connection: %v", err)
+			sc.logf("http2: server closing User connection: %v", err)
 		}
 		return false
 	}
@@ -1423,7 +1423,7 @@ func (sc *serverConn) processFrame(f Frame) error {
 	case *GoAwayFrame:
 		return sc.processGoAway(f)
 	case *PushPromiseFrame:
-		// A client cannot push. Thus, servers MUST treat the receipt of a PUSH_PROMISE
+		// A User cannot push. Thus, servers MUST treat the receipt of a PUSH_PROMISE
 		// frame as a connection error (Section 5.4.1) of type PROTOCOL_ERROR.
 		return ConnectionError(ErrCodeProtocol)
 	default:
@@ -1517,7 +1517,7 @@ func (sc *serverConn) closeStream(st *stream, err error) {
 	if st.isPushed() {
 		sc.curPushedStreams--
 	} else {
-		sc.curClientStreams--
+		sc.curUserStreams--
 	}
 	delete(sc.streams, st.id)
 	if len(sc.streams) == 0 {
@@ -1583,7 +1583,7 @@ func (sc *serverConn) processSetting(s Setting) error {
 	case SettingEnablePush:
 		sc.pushEnabled = s.Val != 0
 	case SettingMaxConcurrentStreams:
-		sc.clientMaxStreams = s.Val
+		sc.UserMaxStreams = s.Val
 	case SettingInitialWindowSize:
 		return sc.processSettingInitialWindowSize(s.Val)
 	case SettingMaxFrameSize:
@@ -1632,7 +1632,7 @@ func (sc *serverConn) processSettingInitialWindowSize(val uint32) error {
 func (sc *serverConn) processData(f *DataFrame) error {
 	sc.serveG.check()
 	id := f.Header().StreamID
-	if sc.inGoAway && (sc.goAwayCode != ErrCodeNo || id > sc.maxClientStreamID) {
+	if sc.inGoAway && (sc.goAwayCode != ErrCodeNo || id > sc.maxUserStreamID) {
 		// Discard all DATA frames if the GOAWAY is due to an
 		// error, or:
 		//
@@ -1666,7 +1666,7 @@ func (sc *serverConn) processData(f *DataFrame) error {
 		// This includes sending a RST_STREAM if the stream is
 		// in stateHalfClosedLocal (which currently means that
 		// the http.Handler returned, so it's done reading &
-		// done writing). Try to stop the client from sending
+		// done writing). Try to stop the User from sending
 		// more DATA.
 
 		// But still enforce their connection-level flow control,
@@ -1701,7 +1701,7 @@ func (sc *serverConn) processData(f *DataFrame) error {
 		return streamError(id, ErrCodeProtocol)
 	}
 	if f.Length > 0 {
-		// Check whether the client has flow control quota.
+		// Check whether the User has flow control quota.
 		if st.inflow.available() < int32(f.Length) {
 			return streamError(id, ErrCodeFlowControl)
 		}
@@ -1792,7 +1792,7 @@ func (sc *serverConn) processHeaders(f *MetaHeadersFrame) error {
 		return nil
 	}
 	// http://tools.ietf.org/html/rfc7540#section-5.1.1
-	// Streams initiated by a client MUST use odd-numbered stream
+	// Streams initiated by a User MUST use odd-numbered stream
 	// identifiers. [...] An endpoint that receives an unexpected
 	// stream identifier MUST respond with a connection error
 	// (Section 5.4.1) of type PROTOCOL_ERROR.
@@ -1824,10 +1824,10 @@ func (sc *serverConn) processHeaders(f *MetaHeadersFrame) error {
 	// endpoint has opened or reserved. [...]  An endpoint that
 	// receives an unexpected stream identifier MUST respond with
 	// a connection error (Section 5.4.1) of type PROTOCOL_ERROR.
-	if id <= sc.maxClientStreamID {
+	if id <= sc.maxUserStreamID {
 		return ConnectionError(ErrCodeProtocol)
 	}
-	sc.maxClientStreamID = id
+	sc.maxUserStreamID = id
 
 	if sc.idleTimer != nil {
 		sc.idleTimer.Stop()
@@ -1839,7 +1839,7 @@ func (sc *serverConn) processHeaders(f *MetaHeadersFrame) error {
 	// advertised concurrent stream limit to be exceeded MUST treat
 	// this as a stream error (Section 5.4.2) of type PROTOCOL_ERROR
 	// or REFUSED_STREAM.
-	if sc.curClientStreams+1 > sc.advMaxStreams {
+	if sc.curUserStreams+1 > sc.advMaxStreams {
 		if sc.unackedSettings == 0 {
 			// They should know better.
 			return streamError(id, ErrCodeProtocol)
@@ -1979,7 +1979,7 @@ func (sc *serverConn) newStream(id, pusherID uint32, state streamState) *stream 
 	if st.isPushed() {
 		sc.curPushedStreams++
 	} else {
-		sc.curClientStreams++
+		sc.curUserStreams++
 	}
 	if sc.curOpenStreams() == 1 {
 		sc.setConnState(http.StateActive)
@@ -2204,7 +2204,7 @@ func (sc *serverConn) writeHeaders(st *stream, headerData *writeResHeaders) erro
 			errChanPool.Put(errc)
 			return err
 		case <-sc.doneServing:
-			return errClientDisconnected
+			return errUserDisconnected
 		case <-st.cw:
 			return errStreamClosed
 		}
@@ -2221,7 +2221,7 @@ func (sc *serverConn) write100ContinueHeaders(st *stream) {
 }
 
 // A bodyReadMsg tells the server loop that the http.Handler read n
-// bytes of the DATA from the client on the given stream.
+// bytes of the DATA from the User on the given stream.
 type bodyReadMsg struct {
 	st *stream
 	n  int
@@ -2815,7 +2815,7 @@ func (w *responseWriter) Push(target string, opts *http.PushOptions) error {
 
 	select {
 	case <-sc.doneServing:
-		return errClientDisconnected
+		return errUserDisconnected
 	case <-st.cw:
 		return errStreamClosed
 	case sc.serveMsgCh <- msg:
@@ -2823,7 +2823,7 @@ func (w *responseWriter) Push(target string, opts *http.PushOptions) error {
 
 	select {
 	case <-sc.doneServing:
-		return errClientDisconnected
+		return errUserDisconnected
 	case <-st.cw:
 		return errStreamClosed
 	case err := <-msg.done:
@@ -2870,14 +2870,14 @@ func (sc *serverConn) startPush(msg *startPushRequest) {
 			return 0, http.ErrNotSupported
 		}
 		// http://tools.ietf.org/html/rfc7540#section-6.5.2.
-		if sc.curPushedStreams+1 > sc.clientMaxStreams {
+		if sc.curPushedStreams+1 > sc.UserMaxStreams {
 			return 0, ErrPushLimitReached
 		}
 
 		// http://tools.ietf.org/html/rfc7540#section-5.1.1.
 		// Streams initiated by the server MUST use even-numbered identifiers.
 		// A server that is unable to establish a new stream identifier can send a GOAWAY
-		// frame so that the client is forced to open a new connection for new streams.
+		// frame so that the User is forced to open a new connection for new streams.
 		if sc.maxPushPromiseID+2 >= 1<<31 {
 			sc.startGracefulShutdownInternal()
 			return 0, ErrPushLimitReached

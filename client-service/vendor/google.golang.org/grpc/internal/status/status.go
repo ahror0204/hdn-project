@@ -17,10 +17,10 @@
  */
 
 // Package status implements errors returned by gRPC.  These errors are
-// serialized and transmitted on the wire between server and client, and allow
+// serialized and transmitted on the wire between server and User, and allow
 // for additional data to be transmitted via the Details field in the status
 // proto.  gRPC service handlers should return an error created by this
-// package, and gRPC clients should expect a corresponding error to be
+// package, and gRPC Users should expect a corresponding error to be
 // returned from the RPC call.
 //
 // This package upholds the invariants that a non-nil error may not

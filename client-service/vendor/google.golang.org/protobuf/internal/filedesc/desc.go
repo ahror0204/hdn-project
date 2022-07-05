@@ -433,7 +433,7 @@ type (
 		Options           func() pref.ProtoMessage
 		Input             pref.MessageDescriptor
 		Output            pref.MessageDescriptor
-		IsStreamingClient bool
+		IsStreamingUser   bool
 		IsStreamingServer bool
 	}
 )
@@ -461,7 +461,7 @@ func (md *Method) Options() pref.ProtoMessage {
 }
 func (md *Method) Input() pref.MessageDescriptor       { return md.L1.Input }
 func (md *Method) Output() pref.MessageDescriptor      { return md.L1.Output }
-func (md *Method) IsStreamingClient() bool             { return md.L1.IsStreamingClient }
+func (md *Method) IsStreamingUser() bool               { return md.L1.IsStreamingUser }
 func (md *Method) IsStreamingServer() bool             { return md.L1.IsStreamingServer }
 func (md *Method) Format(s fmt.State, r rune)          { descfmt.FormatDesc(s, r, md) }
 func (md *Method) ProtoType(pref.MethodDescriptor)     {}

@@ -169,7 +169,7 @@ func (n *priorityNode) walkReadyInOrder(openParent bool, tmp *[]*priorityNode, f
 	}
 
 	// Common case: only one kid or all kids have the same weight.
-	// Some clients don't use weights; other clients (like web browsers)
+	// Some Users don't use weights; other Users (like web browsers)
 	// use mostly-linear priority trees.
 	w := n.kids.weight
 	needSort := false
@@ -344,7 +344,7 @@ func (ws *priorityWriteScheduler) AdjustStream(streamID uint32, priority Priorit
 		return
 	}
 
-	// Ignore if the client tries to make a node its own parent.
+	// Ignore if the User tries to make a node its own parent.
 	if n == parent {
 		return
 	}

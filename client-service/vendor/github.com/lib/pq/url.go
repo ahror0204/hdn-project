@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// ParseURL no longer needs to be used by clients of this library since supplying a URL as a
+// ParseURL no longer needs to be used by Users of this library since supplying a URL as a
 // connection string to sql.Open() is now supported:
 //
 //	sql.Open("postgres", "postgres://bob:secret@1.2.3.4:5432/mydb?sslmode=verify-full")

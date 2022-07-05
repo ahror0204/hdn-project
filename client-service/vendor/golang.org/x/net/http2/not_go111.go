@@ -12,10 +12,10 @@ import (
 	"net/textproto"
 )
 
-func traceHasWroteHeaderField(trace *httptrace.ClientTrace) bool { return false }
+func traceHasWroteHeaderField(trace *httptrace.UserTrace) bool { return false }
 
-func traceWroteHeaderField(trace *httptrace.ClientTrace, k, v string) {}
+func traceWroteHeaderField(trace *httptrace.UserTrace, k, v string) {}
 
-func traceGot1xxResponseFunc(trace *httptrace.ClientTrace) func(int, textproto.MIMEHeader) error {
+func traceGot1xxResponseFunc(trace *httptrace.UserTrace) func(int, textproto.MIMEHeader) error {
 	return nil
 }

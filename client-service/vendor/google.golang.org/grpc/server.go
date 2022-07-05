@@ -451,7 +451,7 @@ func UnknownServiceHandler(streamHandler StreamHandler) ServerOption {
 			StreamName: "unknown_service_handler",
 			Handler:    streamHandler,
 			// We need to assume that the users of the streamHandler will want to use both.
-			ClientStreams: true,
+			UserStreams:   true,
 			ServerStreams: true,
 		}
 	})
@@ -663,8 +663,8 @@ func (s *Server) register(sd *ServiceDesc, ss interface{}) {
 type MethodInfo struct {
 	// Name is the method name only, without the service name or package name.
 	Name string
-	// IsClientStream indicates whether the RPC is a client streaming RPC.
-	IsClientStream bool
+	// IsUserStream indicates whether the RPC is a User streaming RPC.
+	IsUserStream bool
 	// IsServerStream indicates whether the RPC is a server streaming RPC.
 	IsServerStream bool
 }
@@ -685,14 +685,14 @@ func (s *Server) GetServiceInfo() map[string]ServiceInfo {
 		for m := range srv.methods {
 			methods = append(methods, MethodInfo{
 				Name:           m,
-				IsClientStream: false,
+				IsUserStream:   false,
 				IsServerStream: false,
 			})
 		}
 		for m, d := range srv.streams {
 			methods = append(methods, MethodInfo{
 				Name:           m,
-				IsClientStream: d.ClientStreams,
+				IsUserStream:   d.UserStreams,
 				IsServerStream: d.ServerStreams,
 			})
 		}
@@ -989,7 +989,7 @@ func (s *Server) traceInfo(st transport.ServerTransport, stream *transport.Strea
 	trInfo = &traceInfo{
 		tr: tr,
 		firstLine: firstLine{
-			client:     false,
+			User:       false,
 			remoteAddr: st.RemoteAddr(),
 		},
 	}
@@ -1134,7 +1134,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 			beginTime := time.Now()
 			statsBegin = &stats.Begin{
 				BeginTime:      beginTime,
-				IsClientStream: false,
+				IsUserStream:   false,
 				IsServerStream: false,
 			}
 			sh.HandleRPC(stream.Context(), statsBegin)
@@ -1186,7 +1186,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 	if binlog != nil {
 		ctx := stream.Context()
 		md, _ := metadata.FromIncomingContext(ctx)
-		logEntry := &binarylog.ClientHeader{
+		logEntry := &binarylog.UserHeader{
 			Header:     md,
 			MethodName: stream.Method(),
 			PeerAddr:   nil,
@@ -1270,7 +1270,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 			})
 		}
 		if binlog != nil {
-			binlog.Log(&binarylog.ClientMessage{
+			binlog.Log(&binarylog.UserMessage{
 				Message: d,
 			})
 		}
@@ -1424,7 +1424,7 @@ func (s *Server) processStreamingRPC(t transport.ServerTransport, stream *transp
 		beginTime := time.Now()
 		statsBegin = &stats.Begin{
 			BeginTime:      beginTime,
-			IsClientStream: sd.ClientStreams,
+			IsUserStream:   sd.UserStreams,
 			IsServerStream: sd.ServerStreams,
 		}
 		sh.HandleRPC(stream.Context(), statsBegin)
@@ -1480,7 +1480,7 @@ func (s *Server) processStreamingRPC(t transport.ServerTransport, stream *transp
 	ss.binlog = binarylog.GetMethodLogger(stream.Method())
 	if ss.binlog != nil {
 		md, _ := metadata.FromIncomingContext(ctx)
-		logEntry := &binarylog.ClientHeader{
+		logEntry := &binarylog.UserHeader{
 			Header:     md,
 			MethodName: stream.Method(),
 			PeerAddr:   nil,
@@ -1543,7 +1543,7 @@ func (s *Server) processStreamingRPC(t transport.ServerTransport, stream *transp
 	} else {
 		info := &StreamServerInfo{
 			FullMethod:     stream.Method(),
-			IsClientStream: sd.ClientStreams,
+			IsUserStream:   sd.UserStreams,
 			IsServerStream: sd.ServerStreams,
 		}
 		appErr = s.opts.streamInt(server, ss, info, sd.Handler)
@@ -1700,7 +1700,7 @@ func ServerTransportStreamFromContext(ctx context.Context) ServerTransportStream
 // Stop stops the gRPC server. It immediately closes all open
 // connections and listeners.
 // It cancels all active RPCs on the server side and the corresponding
-// pending RPCs on the client side will get notified by connection
+// pending RPCs on the User side will get notified by connection
 // errors.
 func (s *Server) Stop() {
 	s.quit.Fire()
@@ -1801,7 +1801,7 @@ func (s *Server) getCodec(contentSubtype string) baseCodec {
 	return codec
 }
 
-// SetHeader sets the header metadata to be sent from the server to the client.
+// SetHeader sets the header metadata to be sent from the server to the User.
 // The context provided must be the context passed to the server's handler.
 //
 // Streaming RPCs should prefer the SetHeader method of the ServerStream.
@@ -1819,7 +1819,7 @@ func (s *Server) getCodec(contentSubtype string) baseCodec {
 // SetHeader will fail if called after any of the events above.
 //
 // The error returned is compatible with the status package.  However, the
-// status code will often not match the RPC status as seen by the client
+// status code will often not match the RPC status as seen by the User
 // application, and therefore, should not be relied upon for this purpose.
 func SetHeader(ctx context.Context, md metadata.MD) error {
 	if md.Len() == 0 {
@@ -1838,7 +1838,7 @@ func SetHeader(ctx context.Context, md metadata.MD) error {
 // sent.
 //
 // The error returned is compatible with the status package.  However, the
-// status code will often not match the RPC status as seen by the client
+// status code will often not match the RPC status as seen by the User
 // application, and therefore, should not be relied upon for this purpose.
 func SendHeader(ctx context.Context, md metadata.MD) error {
 	stream := ServerTransportStreamFromContext(ctx)
@@ -1855,7 +1855,7 @@ func SendHeader(ctx context.Context, md metadata.MD) error {
 // When called more than once, all the provided metadata will be merged.
 //
 // The error returned is compatible with the status package.  However, the
-// status code will often not match the RPC status as seen by the client
+// status code will often not match the RPC status as seen by the User
 // application, and therefore, should not be relied upon for this purpose.
 func SetTrailer(ctx context.Context, md metadata.MD) error {
 	if md.Len() == 0 {

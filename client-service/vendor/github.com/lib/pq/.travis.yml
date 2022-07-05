@@ -24,7 +24,7 @@ before_install:
   - ./.travis.sh pgdg_repository
   - ./.travis.sh postgresql_install
   - ./.travis.sh postgresql_configure
-  - ./.travis.sh client_configure
+  - ./.travis.sh User_configure
   - go get golang.org/x/tools/cmd/goimports
   - go get golang.org/x/lint/golint
   - GO111MODULE=on go get honnef.co/go/tools/cmd/staticcheck@2019.2.1

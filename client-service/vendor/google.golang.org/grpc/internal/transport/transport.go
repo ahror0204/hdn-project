@@ -142,7 +142,7 @@ func (b *recvBuffer) get() <-chan recvMsg {
 // recvBufferReader implements io.Reader interface to read the data from
 // recvBuffer.
 type recvBufferReader struct {
-	closeStream func(error) // Closes the client transport stream with the given error and nil trailer metadata.
+	closeStream func(error) // Closes the User transport stream with the given error and nil trailer metadata.
 	ctx         context.Context
 	ctxDone     <-chan struct{} // cache of ctx.Done() (for performance).
 	recv        *recvBuffer
@@ -168,7 +168,7 @@ func (r *recvBufferReader) Read(p []byte) (n int, err error) {
 		return copied, nil
 	}
 	if r.closeStream != nil {
-		n, r.err = r.readClient(p)
+		n, r.err = r.readUser(p)
 	} else {
 		n, r.err = r.read(p)
 	}
@@ -184,7 +184,7 @@ func (r *recvBufferReader) read(p []byte) (n int, err error) {
 	}
 }
 
-func (r *recvBufferReader) readClient(p []byte) (n int, err error) {
+func (r *recvBufferReader) readUser(p []byte) (n int, err error) {
 	// If the context is canceled, then closes the stream with nil metadata.
 	// closeStream writes its error parameter to r.recv as a recvMsg.
 	// r.readAdditional acts on that message and returns the necessary error.
@@ -238,12 +238,12 @@ const (
 // Stream represents an RPC in the transport layer.
 type Stream struct {
 	id           uint32
-	st           ServerTransport    // nil for client side Stream
-	ct           *http2Client       // nil for server side Stream
+	st           ServerTransport    // nil for User side Stream
+	ct           *http2User         // nil for server side Stream
 	ctx          context.Context    // the associated context of the stream
-	cancel       context.CancelFunc // always nil for client side Stream
-	done         chan struct{}      // closed at the end of stream to unblock writers. On the client side.
-	doneFunc     func()             // invoked at the end of stream on client side.
+	cancel       context.CancelFunc // always nil for User side Stream
+	done         chan struct{}      // closed at the end of stream to unblock writers. On the User side.
+	doneFunc     func()             // invoked at the end of stream on User side.
 	ctxDone      <-chan struct{}    // same as done chan but for server side. Cache of ctx.Done() (for performance)
 	method       string             // the associated RPC method of the stream
 	recvCompress string
@@ -266,21 +266,21 @@ type Stream struct {
 
 	// hdrMu protects header and trailer metadata on the server-side.
 	hdrMu sync.Mutex
-	// On client side, header keeps the received header metadata.
+	// On User side, header keeps the received header metadata.
 	//
 	// On server side, header keeps the header set by SetHeader(). The complete
 	// header will merged into this after t.WriteHeader() is called.
 	header  metadata.MD
 	trailer metadata.MD // the key-value map of trailer metadata.
 
-	noHeaders bool // set if the client never received headers (set only after the stream is done).
+	noHeaders bool // set if the User never received headers (set only after the stream is done).
 
 	// On the server-side, headerSent is atomically set to 1 when the headers are sent out.
 	headerSent uint32
 
 	state streamState
 
-	// On client-side it is the status error received from the server.
+	// On User-side it is the status error received from the server.
 	// On server-side it is unused.
 	status *status.Status
 
@@ -353,7 +353,7 @@ func (s *Stream) Done() <-chan struct{} {
 
 // Header returns the header metadata of the stream.
 //
-// On client side, it acquires the key-value pairs of header metadata once it is
+// On User side, it acquires the key-value pairs of header metadata once it is
 // available. It blocks until i) the metadata is ready or ii) there is no header
 // metadata or iii) the stream is canceled/expired.
 //
@@ -374,14 +374,14 @@ func (s *Stream) Header() (metadata.MD, error) {
 
 // TrailersOnly blocks until a header or trailers-only frame is received and
 // then returns true if the stream was trailers-only.  If the stream ends
-// before headers are received, returns true, nil.  Client-side only.
+// before headers are received, returns true, nil.  User-side only.
 func (s *Stream) TrailersOnly() bool {
 	s.waitOnHeader()
 	return s.noHeaders
 }
 
 // Trailer returns the cached trailer metedata. Note that if it is not called
-// after the entire stream is done, it could return an empty MD. Client
+// after the entire stream is done, it could return an empty MD. User
 // side only.
 // It can be safely read only after stream has ended that is either read
 // or write have returned io.EOF.
@@ -545,14 +545,14 @@ type ConnectOptions struct {
 	FailOnNonTempDialError bool
 	// PerRPCCredentials stores the PerRPCCredentials required to issue RPCs.
 	PerRPCCredentials []credentials.PerRPCCredentials
-	// TransportCredentials stores the Authenticator required to setup a client
+	// TransportCredentials stores the Authenticator required to setup a User
 	// connection. Only one of TransportCredentials and CredsBundle is non-nil.
 	TransportCredentials credentials.TransportCredentials
 	// CredsBundle is the credentials bundle to be used. Only one of
 	// TransportCredentials and CredsBundle is non-nil.
 	CredsBundle credentials.Bundle
 	// KeepaliveParams stores the keepalive parameters.
-	KeepaliveParams keepalive.ClientParameters
+	KeepaliveParams keepalive.UserParameters
 	// StatsHandler stores the handler for stats.
 	StatsHandler stats.Handler
 	// InitialWindowSize sets the initial window size for a stream.
@@ -563,7 +563,7 @@ type ConnectOptions struct {
 	WriteBufferSize int
 	// ReadBufferSize sets the size of read buffer, which in turn determines how much data can be read at most for one read syscall.
 	ReadBufferSize int
-	// ChannelzParentID sets the addrConn id which initiate the creation of this client transport.
+	// ChannelzParentID sets the addrConn id which initiate the creation of this User transport.
 	ChannelzParentID *channelz.Identifier
 	// MaxHeaderListSize sets the max (uncompressed) size of header list that is prepared to be received.
 	MaxHeaderListSize *uint32
@@ -571,10 +571,10 @@ type ConnectOptions struct {
 	UseProxy bool
 }
 
-// NewClientTransport establishes the transport with the required ConnectOptions
+// NewUserTransport establishes the transport with the required ConnectOptions
 // and returns it to the caller.
-func NewClientTransport(connectCtx, ctx context.Context, addr resolver.Address, opts ConnectOptions, onPrefaceReceipt func(), onGoAway func(GoAwayReason), onClose func()) (ClientTransport, error) {
-	return newHTTP2Client(connectCtx, ctx, addr, opts, onPrefaceReceipt, onGoAway, onClose)
+func NewUserTransport(connectCtx, ctx context.Context, addr resolver.Address, opts ConnectOptions, onPrefaceReceipt func(), onGoAway func(GoAwayReason), onClose func()) (UserTransport, error) {
+	return newHTTP2User(connectCtx, ctx, addr, opts, onPrefaceReceipt, onGoAway, onClose)
 }
 
 // Options provides additional hints and information for message
@@ -613,9 +613,9 @@ type CallHdr struct {
 	DoneFunc func() // called when the stream is finished
 }
 
-// ClientTransport is the common interface for all gRPC client-side transport
+// UserTransport is the common interface for all gRPC User-side transport
 // implementations.
-type ClientTransport interface {
+type UserTransport interface {
 	// Close tears down this transport. Once it returns, the transport
 	// should not be accessed any more. The caller must make sure this
 	// is called only once.
@@ -648,7 +648,7 @@ type ClientTransport interface {
 	// once the transport is initiated.
 	Error() <-chan struct{}
 
-	// GoAway returns a channel that is closed when ClientTransport
+	// GoAway returns a channel that is closed when UserTransport
 	// receives the draining signal from the server (e.g., GOAWAY frame in
 	// HTTP/2).
 	GoAway() <-chan struct{}
@@ -684,7 +684,7 @@ type ServerTransport interface {
 	// Write may not be called on all streams.
 	Write(s *Stream, hdr []byte, data []byte, opts *Options) error
 
-	// WriteStatus sends the status of a stream to the client.  WriteStatus is
+	// WriteStatus sends the status of a stream to the User.  WriteStatus is
 	// the final call made on a stream and always occurs.
 	WriteStatus(s *Stream, st *status.Status) error
 
@@ -696,7 +696,7 @@ type ServerTransport interface {
 	// RemoteAddr returns the remote network address.
 	RemoteAddr() net.Addr
 
-	// Drain notifies the client this ServerTransport stops accepting new RPCs.
+	// Drain notifies the User this ServerTransport stops accepting new RPCs.
 	Drain()
 
 	// IncrMsgSent increments the number of message sent through this transport.
@@ -755,7 +755,7 @@ var (
 	// connection is draining. This could be caused by goaway or balancer
 	// removing the address.
 	errStreamDrain = status.Error(codes.Unavailable, "the connection is draining")
-	// errStreamDone is returned from write at the client side to indiacte application
+	// errStreamDone is returned from write at the User side to indiacte application
 	// layer of an error.
 	errStreamDone = errors.New("the stream is done")
 	// StatusGoAway indicates that the server sent a GOAWAY that included this
@@ -777,15 +777,15 @@ const (
 	GoAwayTooManyPings GoAwayReason = 2
 )
 
-// channelzData is used to store channelz related data for http2Client and http2Server.
-// These fields cannot be embedded in the original structs (e.g. http2Client), since to do atomic
+// channelzData is used to store channelz related data for http2User and http2Server.
+// These fields cannot be embedded in the original structs (e.g. http2User), since to do atomic
 // operation on int64 variable on 32-bit machine, user is responsible to enforce memory alignment.
 // Here, by grouping those int64 fields inside a struct, we are enforcing the alignment.
 type channelzData struct {
 	kpCount int64
 	// The number of streams that have started, including already finished ones.
 	streamsStarted int64
-	// Client side: The number of streams that have ended successfully by receiving
+	// User side: The number of streams that have ended successfully by receiving
 	// EoS bit set frame from server.
 	// Server side: The number of streams that have ended successfully by sending
 	// frame with EoS bit set.

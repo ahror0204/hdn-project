@@ -3,30 +3,30 @@ package service
 import (
 	"context"
 
-	pb "github.com/hdn-project/client-service/genproto"
-	l "github.com/hdn-project/client-service/pkg/logger"
-	"github.com/hdn-project/client-service/storage"
+	pb "github.com/hdn-project/User-service/genproto"
+	l "github.com/hdn-project/User-service/pkg/logger"
+	"github.com/hdn-project/User-service/storage"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-//ClientService ...
-type ClientService struct {
+//UserService ...
+type UserService struct {
 	storage storage.IStorage
 	logger  l.Logger
 }
 
-//NewClientService ...
-func NewClientService(db *sqlx.DB, log l.Logger) *ClientService {
-	return &ClientService{
+//NewUserService ...
+func NewUserService(db *sqlx.DB, log l.Logger) *UserService {
+	return &UserService{
 		storage: storage.NewStoragePg(db),
 		logger:  log,
 	}
 }
 
-func (s *ClientService) CreateUser(ctx context.Context, req *pb.Client) (*pb.Empty, error) {
-	_, err := s.storage.Client().CreateUser(req)
+func (s *UserService) CreateUser(ctx context.Context, req *pb.User) (*pb.Empty, error) {
+	_, err := s.storage.User().CreateUser(req)
 	if err != nil {
 		s.logger.Error("error while creating user", l.Error(err))
 		return nil, status.Error(codes.Internal, "Error while creating user")
@@ -34,30 +34,29 @@ func (s *ClientService) CreateUser(ctx context.Context, req *pb.Client) (*pb.Emp
 	return &pb.Empty{}, nil
 }
 
-func (s *ClientService) GetClientById(ctx context.Context, req *pb.ClientId) (*pb.Client, error) {
-	client, err := s.storage.Client().GetClientById(req.Id)
+func (s *UserService) GetUserById(ctx context.Context, req *pb.UserId) (*pb.User, error) {
+	User, err := s.storage.User().GetUserById(req.Id)
 	if err != nil {
-		s.logger.Error("error while getting client", l.Error(err))
-		return nil, status.Error(codes.Internal, "Error while getting client")
+		s.logger.Error("error while getting User", l.Error(err))
+		return nil, status.Error(codes.Internal, "Error while getting User")
 	}
-	return client, nil
+	return User, nil
 }
 
-func (s *ClientService) DeleteById(ctx context.Context, req *pb.ClientId) (*pb.Empty, error) {
-	_, err := s.storage.Client().DeleteById(req.Id)
+func (s *UserService) DeleteById(ctx context.Context, req *pb.UserId) (*pb.Empty, error) {
+	_, err := s.storage.User().DeleteById(req.Id)
 	if err != nil {
-		s.logger.Error("error while deleting client", l.Error(err))
-		return nil, status.Error(codes.Internal, "Error while deleting client")
-	}
-	return &pb.Empty{}, nil
-}
-
-func (s *ClientService) UpdateClient(ctx context.Context, req *pb.Client) (*pb.Empty, error) {
-	_, err := s.storage.Client().UpdateClient(req)
-	if err != nil {
-		s.logger.Error("error while updating client", l.Error(err))
-		return nil, status.Error(codes.Internal, "Error while updating client")
+		s.logger.Error("error while deleting User", l.Error(err))
+		return nil, status.Error(codes.Internal, "Error while deleting User")
 	}
 	return &pb.Empty{}, nil
 }
 
+func (s *UserService) UpdateUser(ctx context.Context, req *pb.User) (*pb.Empty, error) {
+	_, err := s.storage.User().UpdateUser(req)
+	if err != nil {
+		s.logger.Error("error while updating User", l.Error(err))
+		return nil, status.Error(codes.Internal, "Error while updating User")
+	}
+	return &pb.Empty{}, nil
+}

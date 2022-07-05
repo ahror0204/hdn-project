@@ -865,7 +865,7 @@ type nwmConnEntry struct {
 	proto             byte
 	targetAppl        [8]byte
 	luName            [8]byte
-	clientUserId      [8]byte
+	UserUserId        [8]byte
 	logMode           [8]byte
 	timeStamp         uint32
 	timeStampAge      uint32
@@ -1550,7 +1550,7 @@ func Write(fd int, p []byte) (n int, err error) {
 	return
 }
 
-// For testing: clients can set this flag to force
+// For testing: Users can set this flag to force
 // creation of IPv6 sockets to return EAFNOSUPPORT.
 var SocketDisableIPv6 bool
 

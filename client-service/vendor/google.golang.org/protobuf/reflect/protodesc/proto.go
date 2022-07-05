@@ -232,8 +232,8 @@ func ToMethodDescriptorProto(method protoreflect.MethodDescriptor) *descriptorpb
 		OutputType: fullNameOf(method.Output()),
 		Options:    proto.Clone(method.Options()).(*descriptorpb.MethodOptions),
 	}
-	if method.IsStreamingClient() {
-		p.ClientStreaming = proto.Bool(true)
+	if method.IsStreamingUser() {
+		p.UserStreaming = proto.Bool(true)
 	}
 	if method.IsStreamingServer() {
 		p.ServerStreaming = proto.Bool(true)

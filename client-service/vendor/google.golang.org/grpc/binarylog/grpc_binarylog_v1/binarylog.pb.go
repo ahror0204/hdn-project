@@ -52,29 +52,29 @@ type GrpcLogEntry_EventType int32
 
 const (
 	GrpcLogEntry_EVENT_TYPE_UNKNOWN GrpcLogEntry_EventType = 0
-	// Header sent from client to server
-	GrpcLogEntry_EVENT_TYPE_CLIENT_HEADER GrpcLogEntry_EventType = 1
-	// Header sent from server to client
+	// Header sent from User to server
+	GrpcLogEntry_EVENT_TYPE_User_HEADER GrpcLogEntry_EventType = 1
+	// Header sent from server to User
 	GrpcLogEntry_EVENT_TYPE_SERVER_HEADER GrpcLogEntry_EventType = 2
-	// Message sent from client to server
-	GrpcLogEntry_EVENT_TYPE_CLIENT_MESSAGE GrpcLogEntry_EventType = 3
-	// Message sent from server to client
+	// Message sent from User to server
+	GrpcLogEntry_EVENT_TYPE_User_MESSAGE GrpcLogEntry_EventType = 3
+	// Message sent from server to User
 	GrpcLogEntry_EVENT_TYPE_SERVER_MESSAGE GrpcLogEntry_EventType = 4
-	// A signal that client is done sending
-	GrpcLogEntry_EVENT_TYPE_CLIENT_HALF_CLOSE GrpcLogEntry_EventType = 5
+	// A signal that User is done sending
+	GrpcLogEntry_EVENT_TYPE_User_HALF_CLOSE GrpcLogEntry_EventType = 5
 	// Trailer indicates the end of the RPC.
-	// On client side, this event means a trailer was either received
+	// On User side, this event means a trailer was either received
 	// from the network or the gRPC library locally generated a status
 	// to inform the application about a failure.
 	// On server side, this event means the server application requested
 	// to send a trailer. Note: EVENT_TYPE_CANCEL may still arrive after
 	// this due to races on server side.
 	GrpcLogEntry_EVENT_TYPE_SERVER_TRAILER GrpcLogEntry_EventType = 6
-	// A signal that the RPC is cancelled. On client side, this
-	// indicates the client application requests a cancellation.
+	// A signal that the RPC is cancelled. On User side, this
+	// indicates the User application requests a cancellation.
 	// On server side, this indicates that cancellation was detected.
 	// Note: This marks the end of the RPC. Events may arrive after
-	// this due to races. For example, on client side a trailer
+	// this due to races. For example, on User side a trailer
 	// may arrive even though the application requested to cancel the RPC.
 	GrpcLogEntry_EVENT_TYPE_CANCEL GrpcLogEntry_EventType = 7
 )
@@ -83,21 +83,21 @@ const (
 var (
 	GrpcLogEntry_EventType_name = map[int32]string{
 		0: "EVENT_TYPE_UNKNOWN",
-		1: "EVENT_TYPE_CLIENT_HEADER",
+		1: "EVENT_TYPE_User_HEADER",
 		2: "EVENT_TYPE_SERVER_HEADER",
-		3: "EVENT_TYPE_CLIENT_MESSAGE",
+		3: "EVENT_TYPE_User_MESSAGE",
 		4: "EVENT_TYPE_SERVER_MESSAGE",
-		5: "EVENT_TYPE_CLIENT_HALF_CLOSE",
+		5: "EVENT_TYPE_User_HALF_CLOSE",
 		6: "EVENT_TYPE_SERVER_TRAILER",
 		7: "EVENT_TYPE_CANCEL",
 	}
 	GrpcLogEntry_EventType_value = map[string]int32{
 		"EVENT_TYPE_UNKNOWN":           0,
-		"EVENT_TYPE_CLIENT_HEADER":     1,
+		"EVENT_TYPE_User_HEADER":     1,
 		"EVENT_TYPE_SERVER_HEADER":     2,
-		"EVENT_TYPE_CLIENT_MESSAGE":    3,
+		"EVENT_TYPE_User_MESSAGE":    3,
 		"EVENT_TYPE_SERVER_MESSAGE":    4,
-		"EVENT_TYPE_CLIENT_HALF_CLOSE": 5,
+		"EVENT_TYPE_User_HALF_CLOSE": 5,
 		"EVENT_TYPE_SERVER_TRAILER":    6,
 		"EVENT_TYPE_CANCEL":            7,
 	}
@@ -135,7 +135,7 @@ type GrpcLogEntry_Logger int32
 
 const (
 	GrpcLogEntry_LOGGER_UNKNOWN GrpcLogEntry_Logger = 0
-	GrpcLogEntry_LOGGER_CLIENT  GrpcLogEntry_Logger = 1
+	GrpcLogEntry_LOGGER_User  GrpcLogEntry_Logger = 1
 	GrpcLogEntry_LOGGER_SERVER  GrpcLogEntry_Logger = 2
 )
 
@@ -143,12 +143,12 @@ const (
 var (
 	GrpcLogEntry_Logger_name = map[int32]string{
 		0: "LOGGER_UNKNOWN",
-		1: "LOGGER_CLIENT",
+		1: "LOGGER_User",
 		2: "LOGGER_SERVER",
 	}
 	GrpcLogEntry_Logger_value = map[string]int32{
 		"LOGGER_UNKNOWN": 0,
-		"LOGGER_CLIENT":  1,
+		"LOGGER_User":  1,
 		"LOGGER_SERVER":  2,
 	}
 )
@@ -261,7 +261,7 @@ type GrpcLogEntry struct {
 	// according to the type of the log entry.
 	//
 	// Types that are assignable to Payload:
-	//	*GrpcLogEntry_ClientHeader
+	//	*GrpcLogEntry_UserHeader
 	//	*GrpcLogEntry_ServerHeader
 	//	*GrpcLogEntry_Message
 	//	*GrpcLogEntry_Trailer
@@ -269,10 +269,10 @@ type GrpcLogEntry struct {
 	// true if payload does not represent the full message or metadata.
 	PayloadTruncated bool `protobuf:"varint,10,opt,name=payload_truncated,json=payloadTruncated,proto3" json:"payload_truncated,omitempty"`
 	// Peer address information, will only be recorded on the first
-	// incoming event. On client side, peer is logged on
+	// incoming event. On User side, peer is logged on
 	// EVENT_TYPE_SERVER_HEADER normally or EVENT_TYPE_SERVER_TRAILER in
 	// the case of trailers-only. On server side, peer is always
-	// logged on EVENT_TYPE_CLIENT_HEADER.
+	// logged on EVENT_TYPE_User_HEADER.
 	Peer *Address `protobuf:"bytes,11,opt,name=peer,proto3" json:"peer,omitempty"`
 }
 
@@ -350,9 +350,9 @@ func (m *GrpcLogEntry) GetPayload() isGrpcLogEntry_Payload {
 	return nil
 }
 
-func (x *GrpcLogEntry) GetClientHeader() *ClientHeader {
-	if x, ok := x.GetPayload().(*GrpcLogEntry_ClientHeader); ok {
-		return x.ClientHeader
+func (x *GrpcLogEntry) GetUserHeader() *UserHeader {
+	if x, ok := x.GetPayload().(*GrpcLogEntry_UserHeader); ok {
+		return x.UserHeader
 	}
 	return nil
 }
@@ -396,8 +396,8 @@ type isGrpcLogEntry_Payload interface {
 	isGrpcLogEntry_Payload()
 }
 
-type GrpcLogEntry_ClientHeader struct {
-	ClientHeader *ClientHeader `protobuf:"bytes,6,opt,name=client_header,json=clientHeader,proto3,oneof"`
+type GrpcLogEntry_UserHeader struct {
+	UserHeader *UserHeader `protobuf:"bytes,6,opt,name=User_header,json=UserHeader,proto3,oneof"`
 }
 
 type GrpcLogEntry_ServerHeader struct {
@@ -405,7 +405,7 @@ type GrpcLogEntry_ServerHeader struct {
 }
 
 type GrpcLogEntry_Message struct {
-	// Used by EVENT_TYPE_CLIENT_MESSAGE, EVENT_TYPE_SERVER_MESSAGE
+	// Used by EVENT_TYPE_User_MESSAGE, EVENT_TYPE_SERVER_MESSAGE
 	Message *Message `protobuf:"bytes,8,opt,name=message,proto3,oneof"`
 }
 
@@ -413,7 +413,7 @@ type GrpcLogEntry_Trailer struct {
 	Trailer *Trailer `protobuf:"bytes,9,opt,name=trailer,proto3,oneof"`
 }
 
-func (*GrpcLogEntry_ClientHeader) isGrpcLogEntry_Payload() {}
+func (*GrpcLogEntry_UserHeader) isGrpcLogEntry_Payload() {}
 
 func (*GrpcLogEntry_ServerHeader) isGrpcLogEntry_Payload() {}
 
@@ -421,7 +421,7 @@ func (*GrpcLogEntry_Message) isGrpcLogEntry_Payload() {}
 
 func (*GrpcLogEntry_Trailer) isGrpcLogEntry_Payload() {}
 
-type ClientHeader struct {
+type UserHeader struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -442,8 +442,8 @@ type ClientHeader struct {
 	Timeout *durationpb.Duration `protobuf:"bytes,4,opt,name=timeout,proto3" json:"timeout,omitempty"`
 }
 
-func (x *ClientHeader) Reset() {
-	*x = ClientHeader{}
+func (x *UserHeader) Reset() {
+	*x = UserHeader{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_grpc_binlog_v1_binarylog_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -451,13 +451,13 @@ func (x *ClientHeader) Reset() {
 	}
 }
 
-func (x *ClientHeader) String() string {
+func (x *UserHeader) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ClientHeader) ProtoMessage() {}
+func (*UserHeader) ProtoMessage() {}
 
-func (x *ClientHeader) ProtoReflect() protoreflect.Message {
+func (x *UserHeader) ProtoReflect() protoreflect.Message {
 	mi := &file_grpc_binlog_v1_binarylog_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -469,33 +469,33 @@ func (x *ClientHeader) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ClientHeader.ProtoReflect.Descriptor instead.
-func (*ClientHeader) Descriptor() ([]byte, []int) {
+// Deprecated: Use UserHeader.ProtoReflect.Descriptor instead.
+func (*UserHeader) Descriptor() ([]byte, []int) {
 	return file_grpc_binlog_v1_binarylog_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ClientHeader) GetMetadata() *Metadata {
+func (x *UserHeader) GetMetadata() *Metadata {
 	if x != nil {
 		return x.Metadata
 	}
 	return nil
 }
 
-func (x *ClientHeader) GetMethodName() string {
+func (x *UserHeader) GetMethodName() string {
 	if x != nil {
 		return x.MethodName
 	}
 	return ""
 }
 
-func (x *ClientHeader) GetAuthority() string {
+func (x *UserHeader) GetAuthority() string {
 	if x != nil {
 		return x.Authority
 	}
 	return ""
 }
 
-func (x *ClientHeader) GetTimeout() *durationpb.Duration {
+func (x *UserHeader) GetTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.Timeout
 	}
@@ -627,7 +627,7 @@ func (x *Trailer) GetStatusDetails() []byte {
 	return nil
 }
 
-// Message payload, used by CLIENT_MESSAGE and SERVER_MESSAGE
+// Message payload, used by User_MESSAGE and SERVER_MESSAGE
 type Message struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -686,7 +686,7 @@ func (x *Message) GetData() []byte {
 	return nil
 }
 
-// A list of metadata pairs, used in the payload of client header,
+// A list of metadata pairs, used in the payload of User header,
 // server header, and server trailer.
 // Implementations may omit some entries to honor the header limits
 // of GRPC_BINARY_LOG_CONFIG.
@@ -703,7 +703,7 @@ func (x *Message) GetData() []byte {
 //
 // Implementations must always log grpc-trace-bin if it is present.
 // Practically speaking it will only be visible on server side because
-// grpc-trace-bin is managed by low level client side mechanisms
+// grpc-trace-bin is managed by low level User side mechanisms
 // inaccessible from the application level. On server side, the
 // header is just a normal metadata key.
 // The pair will not count towards the size limit.
@@ -1024,7 +1024,7 @@ var file_grpc_binlog_v1_binarylog_proto_goTypes = []interface{}{
 	(GrpcLogEntry_Logger)(0),      // 1: grpc.binarylog.v1.GrpcLogEntry.Logger
 	(Address_Type)(0),             // 2: grpc.binarylog.v1.Address.Type
 	(*GrpcLogEntry)(nil),          // 3: grpc.binarylog.v1.GrpcLogEntry
-	(*ClientHeader)(nil),          // 4: grpc.binarylog.v1.ClientHeader
+	(*UserHeader)(nil),          // 4: grpc.binarylog.v1.UserHeader
 	(*ServerHeader)(nil),          // 5: grpc.binarylog.v1.ServerHeader
 	(*Trailer)(nil),               // 6: grpc.binarylog.v1.Trailer
 	(*Message)(nil),               // 7: grpc.binarylog.v1.Message
@@ -1038,13 +1038,13 @@ var file_grpc_binlog_v1_binarylog_proto_depIdxs = []int32{
 	11, // 0: grpc.binarylog.v1.GrpcLogEntry.timestamp:type_name -> google.protobuf.Timestamp
 	0,  // 1: grpc.binarylog.v1.GrpcLogEntry.type:type_name -> grpc.binarylog.v1.GrpcLogEntry.EventType
 	1,  // 2: grpc.binarylog.v1.GrpcLogEntry.logger:type_name -> grpc.binarylog.v1.GrpcLogEntry.Logger
-	4,  // 3: grpc.binarylog.v1.GrpcLogEntry.client_header:type_name -> grpc.binarylog.v1.ClientHeader
+	4,  // 3: grpc.binarylog.v1.GrpcLogEntry.User_header:type_name -> grpc.binarylog.v1.UserHeader
 	5,  // 4: grpc.binarylog.v1.GrpcLogEntry.server_header:type_name -> grpc.binarylog.v1.ServerHeader
 	7,  // 5: grpc.binarylog.v1.GrpcLogEntry.message:type_name -> grpc.binarylog.v1.Message
 	6,  // 6: grpc.binarylog.v1.GrpcLogEntry.trailer:type_name -> grpc.binarylog.v1.Trailer
 	10, // 7: grpc.binarylog.v1.GrpcLogEntry.peer:type_name -> grpc.binarylog.v1.Address
-	8,  // 8: grpc.binarylog.v1.ClientHeader.metadata:type_name -> grpc.binarylog.v1.Metadata
-	12, // 9: grpc.binarylog.v1.ClientHeader.timeout:type_name -> google.protobuf.Duration
+	8,  // 8: grpc.binarylog.v1.UserHeader.metadata:type_name -> grpc.binarylog.v1.Metadata
+	12, // 9: grpc.binarylog.v1.UserHeader.timeout:type_name -> google.protobuf.Duration
 	8,  // 10: grpc.binarylog.v1.ServerHeader.metadata:type_name -> grpc.binarylog.v1.Metadata
 	8,  // 11: grpc.binarylog.v1.Trailer.metadata:type_name -> grpc.binarylog.v1.Metadata
 	9,  // 12: grpc.binarylog.v1.Metadata.entry:type_name -> grpc.binarylog.v1.MetadataEntry
@@ -1075,7 +1075,7 @@ func file_grpc_binlog_v1_binarylog_proto_init() {
 			}
 		}
 		file_grpc_binlog_v1_binarylog_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClientHeader); i {
+			switch v := v.(*UserHeader); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1160,7 +1160,7 @@ func file_grpc_binlog_v1_binarylog_proto_init() {
 		}
 	}
 	file_grpc_binlog_v1_binarylog_proto_msgTypes[0].OneofWrappers = []interface{}{
-		(*GrpcLogEntry_ClientHeader)(nil),
+		(*GrpcLogEntry_UserHeader)(nil),
 		(*GrpcLogEntry_ServerHeader)(nil),
 		(*GrpcLogEntry_Message)(nil),
 		(*GrpcLogEntry_Trailer)(nil),

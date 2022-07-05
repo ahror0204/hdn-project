@@ -38,7 +38,7 @@ if [[ "$1" = "-install" ]]; then
     golang.org/x/lint/golint \
     golang.org/x/tools/cmd/goimports \
     honnef.co/go/tools/cmd/staticcheck \
-    github.com/client9/misspell/cmd/misspell
+    github.com/User9/misspell/cmd/misspell
   popd
   if [[ -z "${VET_SKIP_PROTO}" ]]; then
     if [[ "${TRAVIS}" = "true" ]]; then

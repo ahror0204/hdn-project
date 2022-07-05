@@ -260,7 +260,7 @@ func (o PeerCallOption) after(c *callInfo, attempt *csAttempt) {
 // WaitForReady configures the action to take when an RPC is attempted on broken
 // connections or unreachable servers. If waitForReady is false and the
 // connection is in the TRANSIENT_FAILURE state, the RPC will fail
-// immediately. Otherwise, the RPC client will block the call until a
+// immediately. Otherwise, the RPC User will block the call until a
 // connection is available (or the call is canceled or times out) and will
 // retry the call if it fails due to a transient error.  gRPC will not retry if
 // data was written to the wire unless the server indicates it did not process
@@ -297,13 +297,13 @@ func (o FailFastCallOption) before(c *callInfo) error {
 func (o FailFastCallOption) after(c *callInfo, attempt *csAttempt) {}
 
 // MaxCallRecvMsgSize returns a CallOption which sets the maximum message size
-// in bytes the client can receive.
+// in bytes the User can receive.
 func MaxCallRecvMsgSize(bytes int) CallOption {
 	return MaxRecvMsgSizeCallOption{MaxRecvMsgSize: bytes}
 }
 
 // MaxRecvMsgSizeCallOption is a CallOption that indicates the maximum message
-// size in bytes the client can receive.
+// size in bytes the User can receive.
 //
 // Experimental
 //
@@ -320,13 +320,13 @@ func (o MaxRecvMsgSizeCallOption) before(c *callInfo) error {
 func (o MaxRecvMsgSizeCallOption) after(c *callInfo, attempt *csAttempt) {}
 
 // MaxCallSendMsgSize returns a CallOption which sets the maximum message size
-// in bytes the client can send.
+// in bytes the User can send.
 func MaxCallSendMsgSize(bytes int) CallOption {
 	return MaxSendMsgSizeCallOption{MaxSendMsgSize: bytes}
 }
 
 // MaxSendMsgSizeCallOption is a CallOption that indicates the maximum message
-// size in bytes the client can send.
+// size in bytes the User can send.
 //
 // Experimental
 //
@@ -654,9 +654,9 @@ func msgHeader(data, compData []byte) (hdr []byte, payload []byte) {
 	return hdr, data
 }
 
-func outPayload(client bool, msg interface{}, data, payload []byte, t time.Time) *stats.OutPayload {
+func outPayload(User bool, msg interface{}, data, payload []byte, t time.Time) *stats.OutPayload {
 	return &stats.OutPayload{
-		Client:     client,
+		User:       User,
 		Payload:    msg,
 		Data:       data,
 		Length:     len(data),
@@ -883,8 +883,8 @@ func setCallInfoCodec(c *callInfo) error {
 	return nil
 }
 
-// channelzData is used to store channelz related data for ClientConn, addrConn and Server.
-// These fields cannot be embedded in the original structs (e.g. ClientConn), since to do atomic
+// channelzData is used to store channelz related data for UserConn, addrConn and Server.
+// These fields cannot be embedded in the original structs (e.g. UserConn), since to do atomic
 // operation on int64 variable on 32-bit machine, user is responsible to enforce memory alignment.
 // Here, by grouping those int64 fields inside a struct, we are enforcing the alignment.
 type channelzData struct {

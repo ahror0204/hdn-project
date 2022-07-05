@@ -32,21 +32,21 @@ import (
 // RPCStats contains stats information about RPCs.
 type RPCStats interface {
 	isRPCStats()
-	// IsClient returns true if this RPCStats is from client side.
-	IsClient() bool
+	// IsUser returns true if this RPCStats is from User side.
+	IsUser() bool
 }
 
 // Begin contains stats when an RPC attempt begins.
-// FailFast is only valid if this Begin is from client side.
+// FailFast is only valid if this Begin is from User side.
 type Begin struct {
-	// Client is true if this Begin is from client side.
-	Client bool
+	// User is true if this Begin is from User side.
+	User bool
 	// BeginTime is the time when the RPC attempt begins.
 	BeginTime time.Time
 	// FailFast indicates if this RPC is failfast.
 	FailFast bool
-	// IsClientStream indicates whether the RPC is a client streaming RPC.
-	IsClientStream bool
+	// IsUserStream indicates whether the RPC is a User streaming RPC.
+	IsUserStream bool
 	// IsServerStream indicates whether the RPC is a server streaming RPC.
 	IsServerStream bool
 	// IsTransparentRetryAttempt indicates whether this attempt was initiated
@@ -54,15 +54,15 @@ type Begin struct {
 	IsTransparentRetryAttempt bool
 }
 
-// IsClient indicates if the stats information is from client side.
-func (s *Begin) IsClient() bool { return s.Client }
+// IsUser indicates if the stats information is from User side.
+func (s *Begin) IsUser() bool { return s.User }
 
 func (s *Begin) isRPCStats() {}
 
 // InPayload contains the information for an incoming payload.
 type InPayload struct {
-	// Client is true if this InPayload is from client side.
-	Client bool
+	// User is true if this InPayload is from User side.
+	User bool
 	// Payload is the payload with original type.
 	Payload interface{}
 	// Data is the serialized message payload.
@@ -75,15 +75,15 @@ type InPayload struct {
 	RecvTime time.Time
 }
 
-// IsClient indicates if the stats information is from client side.
-func (s *InPayload) IsClient() bool { return s.Client }
+// IsUser indicates if the stats information is from User side.
+func (s *InPayload) IsUser() bool { return s.User }
 
 func (s *InPayload) isRPCStats() {}
 
 // InHeader contains stats when a header is received.
 type InHeader struct {
-	// Client is true if this InHeader is from client side.
-	Client bool
+	// User is true if this InHeader is from User side.
+	User bool
 	// WireLength is the wire length of header.
 	WireLength int
 	// Compression is the compression algorithm used for the RPC.
@@ -91,7 +91,7 @@ type InHeader struct {
 	// Header contains the header metadata received.
 	Header metadata.MD
 
-	// The following fields are valid only if Client is false.
+	// The following fields are valid only if User is false.
 	// FullMethod is the full RPC method string, i.e., /package.service/method.
 	FullMethod string
 	// RemoteAddr is the remote address of the corresponding connection.
@@ -100,31 +100,31 @@ type InHeader struct {
 	LocalAddr net.Addr
 }
 
-// IsClient indicates if the stats information is from client side.
-func (s *InHeader) IsClient() bool { return s.Client }
+// IsUser indicates if the stats information is from User side.
+func (s *InHeader) IsUser() bool { return s.User }
 
 func (s *InHeader) isRPCStats() {}
 
 // InTrailer contains stats when a trailer is received.
 type InTrailer struct {
-	// Client is true if this InTrailer is from client side.
-	Client bool
+	// User is true if this InTrailer is from User side.
+	User bool
 	// WireLength is the wire length of trailer.
 	WireLength int
 	// Trailer contains the trailer metadata received from the server. This
-	// field is only valid if this InTrailer is from the client side.
+	// field is only valid if this InTrailer is from the User side.
 	Trailer metadata.MD
 }
 
-// IsClient indicates if the stats information is from client side.
-func (s *InTrailer) IsClient() bool { return s.Client }
+// IsUser indicates if the stats information is from User side.
+func (s *InTrailer) IsUser() bool { return s.User }
 
 func (s *InTrailer) isRPCStats() {}
 
 // OutPayload contains the information for an outgoing payload.
 type OutPayload struct {
-	// Client is true if this OutPayload is from client side.
-	Client bool
+	// User is true if this OutPayload is from User side.
+	User bool
 	// Payload is the payload with original type.
 	Payload interface{}
 	// Data is the serialized message payload.
@@ -137,21 +137,21 @@ type OutPayload struct {
 	SentTime time.Time
 }
 
-// IsClient indicates if this stats information is from client side.
-func (s *OutPayload) IsClient() bool { return s.Client }
+// IsUser indicates if this stats information is from User side.
+func (s *OutPayload) IsUser() bool { return s.User }
 
 func (s *OutPayload) isRPCStats() {}
 
 // OutHeader contains stats when a header is sent.
 type OutHeader struct {
-	// Client is true if this OutHeader is from client side.
-	Client bool
+	// User is true if this OutHeader is from User side.
+	User bool
 	// Compression is the compression algorithm used for the RPC.
 	Compression string
 	// Header contains the header metadata sent.
 	Header metadata.MD
 
-	// The following fields are valid only if Client is true.
+	// The following fields are valid only if User is true.
 	// FullMethod is the full RPC method string, i.e., /package.service/method.
 	FullMethod string
 	// RemoteAddr is the remote address of the corresponding connection.
@@ -160,40 +160,40 @@ type OutHeader struct {
 	LocalAddr net.Addr
 }
 
-// IsClient indicates if this stats information is from client side.
-func (s *OutHeader) IsClient() bool { return s.Client }
+// IsUser indicates if this stats information is from User side.
+func (s *OutHeader) IsUser() bool { return s.User }
 
 func (s *OutHeader) isRPCStats() {}
 
 // OutTrailer contains stats when a trailer is sent.
 type OutTrailer struct {
-	// Client is true if this OutTrailer is from client side.
-	Client bool
+	// User is true if this OutTrailer is from User side.
+	User bool
 	// WireLength is the wire length of trailer.
 	//
 	// Deprecated: This field is never set. The length is not known when this message is
 	// emitted because the trailer fields are compressed with hpack after that.
 	WireLength int
-	// Trailer contains the trailer metadata sent to the client. This
+	// Trailer contains the trailer metadata sent to the User. This
 	// field is only valid if this OutTrailer is from the server side.
 	Trailer metadata.MD
 }
 
-// IsClient indicates if this stats information is from client side.
-func (s *OutTrailer) IsClient() bool { return s.Client }
+// IsUser indicates if this stats information is from User side.
+func (s *OutTrailer) IsUser() bool { return s.User }
 
 func (s *OutTrailer) isRPCStats() {}
 
 // End contains stats when an RPC ends.
 type End struct {
-	// Client is true if this End is from client side.
-	Client bool
+	// User is true if this End is from User side.
+	User bool
 	// BeginTime is the time when the RPC began.
 	BeginTime time.Time
 	// EndTime is the time when the RPC ends.
 	EndTime time.Time
 	// Trailer contains the trailer metadata received from the server. This
-	// field is only valid if this End is from the client side.
+	// field is only valid if this End is from the User side.
 	// Deprecated: use Trailer in InTrailer instead.
 	Trailer metadata.MD
 	// Error is the error the RPC ended with. It is an error generated from
@@ -202,37 +202,37 @@ type End struct {
 	Error error
 }
 
-// IsClient indicates if this is from client side.
-func (s *End) IsClient() bool { return s.Client }
+// IsUser indicates if this is from User side.
+func (s *End) IsUser() bool { return s.User }
 
 func (s *End) isRPCStats() {}
 
 // ConnStats contains stats information about connections.
 type ConnStats interface {
 	isConnStats()
-	// IsClient returns true if this ConnStats is from client side.
-	IsClient() bool
+	// IsUser returns true if this ConnStats is from User side.
+	IsUser() bool
 }
 
 // ConnBegin contains the stats of a connection when it is established.
 type ConnBegin struct {
-	// Client is true if this ConnBegin is from client side.
-	Client bool
+	// User is true if this ConnBegin is from User side.
+	User bool
 }
 
-// IsClient indicates if this is from client side.
-func (s *ConnBegin) IsClient() bool { return s.Client }
+// IsUser indicates if this is from User side.
+func (s *ConnBegin) IsUser() bool { return s.User }
 
 func (s *ConnBegin) isConnStats() {}
 
 // ConnEnd contains the stats of a connection when it ends.
 type ConnEnd struct {
-	// Client is true if this ConnEnd is from client side.
-	Client bool
+	// User is true if this ConnEnd is from User side.
+	User bool
 }
 
-// IsClient indicates if this is from client side.
-func (s *ConnEnd) IsClient() bool { return s.Client }
+// IsUser indicates if this is from User side.
+func (s *ConnEnd) IsUser() bool { return s.User }
 
 func (s *ConnEnd) isConnStats() {}
 
@@ -243,7 +243,7 @@ type outgoingTagsKey struct{}
 // the outgoing RPC with the header grpc-tags-bin.  Subsequent calls to
 // SetTags will overwrite the values from earlier calls.
 //
-// NOTE: this is provided only for backward compatibility with existing clients
+// NOTE: this is provided only for backward compatibility with existing Users
 // and will likely be removed in an upcoming release.  New uses should transmit
 // this type of data using metadata with a different, non-reserved (i.e. does
 // not begin with "grpc-") header name.
@@ -253,7 +253,7 @@ func SetTags(ctx context.Context, b []byte) context.Context {
 
 // Tags returns the tags from the context for the inbound RPC.
 //
-// NOTE: this is provided only for backward compatibility with existing clients
+// NOTE: this is provided only for backward compatibility with existing Users
 // and will likely be removed in an upcoming release.  New uses should transmit
 // this type of data using metadata with a different, non-reserved (i.e. does
 // not begin with "grpc-") header name.
@@ -285,7 +285,7 @@ type outgoingTraceKey struct{}
 // the outgoing RPC with the header grpc-trace-bin.  Subsequent calls to
 // SetTrace will overwrite the values from earlier calls.
 //
-// NOTE: this is provided only for backward compatibility with existing clients
+// NOTE: this is provided only for backward compatibility with existing Users
 // and will likely be removed in an upcoming release.  New uses should transmit
 // this type of data using metadata with a different, non-reserved (i.e. does
 // not begin with "grpc-") header name.
@@ -295,7 +295,7 @@ func SetTrace(ctx context.Context, b []byte) context.Context {
 
 // Trace returns the trace from the context for the inbound RPC.
 //
-// NOTE: this is provided only for backward compatibility with existing clients
+// NOTE: this is provided only for backward compatibility with existing Users
 // and will likely be removed in an upcoming release.  New uses should transmit
 // this type of data using metadata with a different, non-reserved (i.e. does
 // not begin with "grpc-") header name.

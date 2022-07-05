@@ -126,9 +126,9 @@ possible reasons, including:
     If this is the case, you may want to increase your [MaxConnectionAgeGrace](https://pkg.go.dev/google.golang.org/grpc/keepalive?tab=doc#ServerParameters),
     to allow longer RPC calls to finish.
 
-It can be tricky to debug this because the error happens on the client side but
+It can be tricky to debug this because the error happens on the User side but
 the root cause of the connection being closed is on the server side. Turn on
-logging on __both client and server__, and see if there are any transport
+logging on __both User and server__, and see if there are any transport
 errors.
 
 [API]: https://pkg.go.dev/google.golang.org/grpc

@@ -35,7 +35,7 @@ func newPickfirstBuilder() balancer.Builder {
 
 type pickfirstBuilder struct{}
 
-func (*pickfirstBuilder) Build(cc balancer.ClientConn, opt balancer.BuildOptions) balancer.Balancer {
+func (*pickfirstBuilder) Build(cc balancer.UserConn, opt balancer.BuildOptions) balancer.Balancer {
 	return &pickfirstBalancer{cc: cc}
 }
 
@@ -45,7 +45,7 @@ func (*pickfirstBuilder) Name() string {
 
 type pickfirstBalancer struct {
 	state   connectivity.State
-	cc      balancer.ClientConn
+	cc      balancer.UserConn
 	subConn balancer.SubConn
 }
 
@@ -68,7 +68,7 @@ func (b *pickfirstBalancer) ResolverError(err error) {
 	})
 }
 
-func (b *pickfirstBalancer) UpdateClientConnState(state balancer.ClientConnState) error {
+func (b *pickfirstBalancer) UpdateUserConnState(state balancer.UserConnState) error {
 	if len(state.ResolverState.Addresses) == 0 {
 		// The resolver reported an empty address list. Treat it like an error by
 		// calling b.ResolverError.

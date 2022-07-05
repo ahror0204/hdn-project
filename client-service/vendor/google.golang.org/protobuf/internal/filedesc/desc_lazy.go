@@ -641,8 +641,8 @@ func (md *Method) unmarshalFull(b []byte, sb *strs.Builder, pf *File, pd pref.De
 			v, m := protowire.ConsumeVarint(b)
 			b = b[m:]
 			switch num {
-			case genid.MethodDescriptorProto_ClientStreaming_field_number:
-				md.L1.IsStreamingClient = protowire.DecodeBool(v)
+			case genid.MethodDescriptorProto_UserStreaming_field_number:
+				md.L1.IsStreamingUser = protowire.DecodeBool(v)
 			case genid.MethodDescriptorProto_ServerStreaming_field_number:
 				md.L1.IsStreamingServer = protowire.DecodeBool(v)
 			}

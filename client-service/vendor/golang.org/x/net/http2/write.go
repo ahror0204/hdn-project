@@ -31,7 +31,7 @@ type writeFramer interface {
 //
 // This interface is implemented by *serverConn.
 //
-// TODO: decide whether to a) use this in the client code (which didn't
+// TODO: decide whether to a) use this in the User code (which didn't
 // end up using this yet, because it has a simpler design, not
 // currently implementing priorities), or b) delete this and
 // make the server code a bit more concrete.

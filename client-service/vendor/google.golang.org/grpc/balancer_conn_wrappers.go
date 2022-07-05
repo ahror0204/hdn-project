@@ -32,21 +32,21 @@ import (
 	"google.golang.org/grpc/resolver"
 )
 
-// ccBalancerWrapper sits between the ClientConn and the Balancer.
+// ccBalancerWrapper sits between the UserConn and the Balancer.
 //
 // ccBalancerWrapper implements methods corresponding to the ones on the
-// balancer.Balancer interface. The ClientConn is free to call these methods
-// concurrently and the ccBalancerWrapper ensures that calls from the ClientConn
+// balancer.Balancer interface. The UserConn is free to call these methods
+// concurrently and the ccBalancerWrapper ensures that calls from the UserConn
 // to the Balancer happen synchronously and in order.
 //
-// ccBalancerWrapper also implements the balancer.ClientConn interface and is
+// ccBalancerWrapper also implements the balancer.UserConn interface and is
 // passed to the Balancer implementations. It invokes unexported methods on the
-// ClientConn to handle these calls from the Balancer.
+// UserConn to handle these calls from the Balancer.
 //
 // It uses the gracefulswitch.Balancer internally to ensure that balancer
 // switches happen in a graceful manner.
 type ccBalancerWrapper struct {
-	cc *ClientConn
+	cc *UserConn
 
 	// Since these fields are accessed only from handleXxx() methods which are
 	// synchronized by the watcher goroutine, we do not need a mutex to protect
@@ -55,14 +55,14 @@ type ccBalancerWrapper struct {
 	curBalancerName string
 
 	updateCh *buffer.Unbounded // Updates written on this channel are processed by watcher().
-	resultCh *buffer.Unbounded // Results of calls to UpdateClientConnState() are pushed here.
+	resultCh *buffer.Unbounded // Results of calls to UpdateUserConnState() are pushed here.
 	closed   *grpcsync.Event   // Indicates if close has been called.
 	done     *grpcsync.Event   // Indicates if close has completed its work.
 }
 
 // newCCBalancerWrapper creates a new balancer wrapper. The underlying balancer
 // is not created until the switchTo() method is invoked.
-func newCCBalancerWrapper(cc *ClientConn, bopts balancer.BuildOptions) *ccBalancerWrapper {
+func newCCBalancerWrapper(cc *UserConn, bopts balancer.BuildOptions) *ccBalancerWrapper {
 	ccb := &ccBalancerWrapper{
 		cc:       cc,
 		updateCh: buffer.NewUnbounded(),
@@ -80,7 +80,7 @@ func newCCBalancerWrapper(cc *ClientConn, bopts balancer.BuildOptions) *ccBalanc
 // invoke the appropriate handler routine to handle the update.
 
 type ccStateUpdate struct {
-	ccs *balancer.ClientConnState
+	ccs *balancer.UserConnState
 }
 
 type scStateUpdate struct {
@@ -117,7 +117,7 @@ func (ccb *ccBalancerWrapper) watcher() {
 			}
 			switch update := u.(type) {
 			case *ccStateUpdate:
-				ccb.handleClientConnStateChange(update.ccs)
+				ccb.handleUserConnStateChange(update.ccs)
 			case *scStateUpdate:
 				ccb.handleSubConnStateChange(update)
 			case *exitIdleUpdate:
@@ -141,14 +141,14 @@ func (ccb *ccBalancerWrapper) watcher() {
 	}
 }
 
-// updateClientConnState is invoked by grpc to push a ClientConnState update to
+// updateUserConnState is invoked by grpc to push a UserConnState update to
 // the underlying balancer.
 //
 // Unlike other methods invoked by grpc to push updates to the underlying
 // balancer, this method cannot simply push the update onto the update channel
 // and return. It needs to return the error returned by the underlying balancer
 // back to grpc which propagates that to the resolver.
-func (ccb *ccBalancerWrapper) updateClientConnState(ccs *balancer.ClientConnState) error {
+func (ccb *ccBalancerWrapper) updateUserConnState(ccs *balancer.UserConnState) error {
 	ccb.updateCh.Put(&ccStateUpdate{ccs: ccs})
 
 	var res interface{}
@@ -157,7 +157,7 @@ func (ccb *ccBalancerWrapper) updateClientConnState(ccs *balancer.ClientConnStat
 		ccb.resultCh.Load()
 	case <-ccb.closed.Done():
 		// Return early if the balancer wrapper is closed while we are waiting for
-		// the underlying balancer to process a ClientConnState update.
+		// the underlying balancer to process a UserConnState update.
 		return nil
 	}
 	// If the returned error is nil, attempting to type assert to error leads to
@@ -168,13 +168,13 @@ func (ccb *ccBalancerWrapper) updateClientConnState(ccs *balancer.ClientConnStat
 	return res.(error)
 }
 
-// handleClientConnStateChange handles a ClientConnState update from the update
+// handleUserConnStateChange handles a UserConnState update from the update
 // channel and invokes the appropriate method on the underlying balancer.
 //
 // If the addresses specified in the update contain addresses of type "grpclb"
 // and the selected LB policy is not "grpclb", these addresses will be filtered
 // out and ccs will be modified with the updated address list.
-func (ccb *ccBalancerWrapper) handleClientConnStateChange(ccs *balancer.ClientConnState) {
+func (ccb *ccBalancerWrapper) handleUserConnStateChange(ccs *balancer.UserConnState) {
 	if ccb.curBalancerName != grpclbName {
 		// Filter any grpclb addresses since we don't have the grpclb balancer.
 		var addrs []resolver.Address
@@ -186,7 +186,7 @@ func (ccb *ccBalancerWrapper) handleClientConnStateChange(ccs *balancer.ClientCo
 		}
 		ccs.ResolverState.Addresses = addrs
 	}
-	ccb.resultCh.Put(ccb.balancer.UpdateClientConnState(*ccs))
+	ccb.resultCh.Put(ccb.balancer.UpdateUserConnState(*ccs))
 }
 
 // updateSubConnState is invoked by grpc to push a subConn state update to the
@@ -237,7 +237,7 @@ func (ccb *ccBalancerWrapper) handleResolverError(err error) {
 // switchTo is invoked by grpc to instruct the balancer wrapper to switch to the
 // LB policy identified by name.
 //
-// ClientConn calls newCCBalancerWrapper() at creation time. Upon receipt of the
+// UserConn calls newCCBalancerWrapper() at creation time. Upon receipt of the
 // first good update from the name resolver, it determines the LB policy to use
 // and invokes the switchTo() method. Upon receipt of every subsequent update
 // from the name resolver, it invokes this method.

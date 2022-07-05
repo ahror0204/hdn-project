@@ -18,49 +18,49 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// ServerReflectionClient is the client API for ServerReflection service.
+// ServerReflectionUser is the User API for ServerReflection service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ServerReflectionClient interface {
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#UserConn.NewStream.
+type ServerReflectionUser interface {
 	// The reflection service is structured as a bidirectional stream, ensuring
 	// all related requests go to a single server.
-	ServerReflectionInfo(ctx context.Context, opts ...grpc.CallOption) (ServerReflection_ServerReflectionInfoClient, error)
+	ServerReflectionInfo(ctx context.Context, opts ...grpc.CallOption) (ServerReflection_ServerReflectionInfoUser, error)
 }
 
-type serverReflectionClient struct {
-	cc grpc.ClientConnInterface
+type serverReflectionUser struct {
+	cc grpc.UserConnInterface
 }
 
-func NewServerReflectionClient(cc grpc.ClientConnInterface) ServerReflectionClient {
-	return &serverReflectionClient{cc}
+func NewServerReflectionUser(cc grpc.UserConnInterface) ServerReflectionUser {
+	return &serverReflectionUser{cc}
 }
 
-func (c *serverReflectionClient) ServerReflectionInfo(ctx context.Context, opts ...grpc.CallOption) (ServerReflection_ServerReflectionInfoClient, error) {
+func (c *serverReflectionUser) ServerReflectionInfo(ctx context.Context, opts ...grpc.CallOption) (ServerReflection_ServerReflectionInfoUser, error) {
 	stream, err := c.cc.NewStream(ctx, &ServerReflection_ServiceDesc.Streams[0], "/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &serverReflectionServerReflectionInfoClient{stream}
+	x := &serverReflectionServerReflectionInfoUser{stream}
 	return x, nil
 }
 
-type ServerReflection_ServerReflectionInfoClient interface {
+type ServerReflection_ServerReflectionInfoUser interface {
 	Send(*ServerReflectionRequest) error
 	Recv() (*ServerReflectionResponse, error)
-	grpc.ClientStream
+	grpc.UserStream
 }
 
-type serverReflectionServerReflectionInfoClient struct {
-	grpc.ClientStream
+type serverReflectionServerReflectionInfoUser struct {
+	grpc.UserStream
 }
 
-func (x *serverReflectionServerReflectionInfoClient) Send(m *ServerReflectionRequest) error {
-	return x.ClientStream.SendMsg(m)
+func (x *serverReflectionServerReflectionInfoUser) Send(m *ServerReflectionRequest) error {
+	return x.UserStream.SendMsg(m)
 }
 
-func (x *serverReflectionServerReflectionInfoClient) Recv() (*ServerReflectionResponse, error) {
+func (x *serverReflectionServerReflectionInfoUser) Recv() (*ServerReflectionResponse, error) {
 	m := new(ServerReflectionResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
+	if err := x.UserStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
@@ -132,7 +132,7 @@ var ServerReflection_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "ServerReflectionInfo",
 			Handler:       _ServerReflection_ServerReflectionInfo_Handler,
 			ServerStreams: true,
-			ClientStreams: true,
+			UserStreams: true,
 		},
 	},
 	Metadata: "reflection/grpc_reflection_v1alpha/reflection.proto",

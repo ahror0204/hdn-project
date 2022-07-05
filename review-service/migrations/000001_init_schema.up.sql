@@ -1,17 +1,30 @@
-CREATE TABLE IF NOT EXISTS reviews (
-    id uuid PRIMARY KEY NOT NULL,
-    client_id uuid NOT NULL,
-    business_id uuid NOT NULL,
-    likes BOOLEAN,
-    dislike BOOLEAN,
-    comment TEXT[],
-    created_at TIMESTAMP
-);
-CREATE TABLE IF NOT EXISTS reply_comments (
-    id uuid PRIMARY KEY NOT NULL,
-    review_id uuid NOT NULL,
-    reply_comment TEXT[],
-    created_at TIMESTAMP,
-    FOREIGN KEY (review_id) REFERENCES reviews (id)
+CREATE TABLE IF NOT EXISTS likes(
+    id uuid NOT NULL PRIMARY KEY,
+    user_id uuid ,
+    staff_id uuid ,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMP
+    );
 
-);
+CREATE TABLE IF NOT EXISTS comments(
+    id uuid PRIMARY KEY NOT NULL,
+    user_id uuid ,
+    staff_id uuid ,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMP
+    deleted boolean,
+    comment text
+    );
+
+CREATE TABLE IF NOT EXISTS reply_comments(
+    id uuid PRIMARY KEY NOT NULL,
+    user_id uuid ,
+    staff_id uuid ,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMP
+    deleted boolean,
+    comment text
+    );
+

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package review;
+
+import "like.proto";
+import "comment.proto";
+
+service ReviewService {
+    rpc CreateLike(Like) returns (Empty);
+    rpc DeleteUserLikes(DeleteUserLikesRequest) returns (Empty);
+    rpc DeleteLike(Like) returns(Empty);
+    rpc CountLikes(Like) returns (CountLikesResponse);
+    rpc ListLikeUsers(ListLikeUsersRequest) returns (ListLikeUsersResponse);
+
+    rpc CreateComment(Comment) returns (Comment);
+    rpc UpdateComment(Comment) returns (Comment);
+    rpc DeleteComment(DeleteUserCommentsRequest) returns (Empty);
+    rpc DeleteUserComments(DeleteUserCommentsRequest) returns (Empty);
+    rpc CountComments(Comment) returns (CountCommentsResponse);
+    rpc ListComments(ListCommentsRequest) returns (ListCommentsResponse);
+
+}

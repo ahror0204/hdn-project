@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package business;
 
+import   "client.proto";
+
 service BusinessService {
     rpc CreateBusiness (Business) returns (Business);
     rpc UpdateBusiness (Business) returns (Empty);
@@ -9,7 +11,8 @@ service BusinessService {
     rpc GetByIdBusiness (Id) returns (Business);
     rpc GetAllBusiness (Empty) returns (GetAllBusinessResponse);
     rpc GetListBusiness (GetListBusinessRequest) returns (GetAllBusinessResponse);
-    // rpc CreateService (ServiceTypeDef) returns (ServiceTypeDef);
+    //----------------------------Service----------------------------------------
+    rpc CreateService (User) returns (ServiceTypeDef);
 }
 
 
@@ -30,7 +33,7 @@ message Staff {
     string first_name = 2;
     string last_name = 3;
     repeated string phone_numbers = 4;
-    string cost = 5;
+    int64 cost = 5;
     string status = 6;
     string comment_id = 7;
     string business_id = 8;
@@ -72,8 +75,8 @@ message ServiceTypeDef{
     WomenServices women_service = 2;
 }
 
-message Empty {
-}
+// message Empty {
+// }
 
 message Id {
     string id = 1;

@@ -9,6 +9,7 @@ import (
 	"github.com/hdn-project/business-service/pkg/logger"
 	"github.com/hdn-project/business-service/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -38,7 +39,7 @@ func main() {
 	pb.RegisterBusinessServiceServer(s, businessService)
 	log.Info("main: server running",
 		logger.String("port", cfg.RPCPort))
-
+	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		log.Fatal("Error while listening: %v", logger.Error(err))
 	}

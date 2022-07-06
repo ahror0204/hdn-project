@@ -81,17 +81,16 @@ func (s *BusinessService) GetListBusiness(ctx context.Context, req *pb.GetListBu
 	}
 	return listBusinesses, nil
 }
+//-------------------------------------------------Services--------------------------------------------------------
 
 
-
-
-
-// func (s *BusinessService) CreateService (ctx context.Context, req *pb.ServiceTypeDef) (*pb.ServiceTypeDef, error) {
+func (s *BusinessService) CreateService (ctx context.Context, req *pb.User) (*pb.ServiceTypeDef, error) {
 	
-// 	service, err := s.storage.Business().CreateService(req)
-// 	if err != nil {
-// 		s.logger.Error("failed while defining service type", l.Error(err))
-// 		return nil, status.Error(codes.Internal, "failed while defining service type")
-// 	}
-// 	return service, nil
-// }
+	service, err := s.storage.Business().CreateService(req)
+	if err != nil {
+		s.logger.Error("failed while defining service type", l.Error(err))
+		return nil, status.Error(codes.Internal, "failed while defining service type")
+	}
+
+	return service, nil
+}

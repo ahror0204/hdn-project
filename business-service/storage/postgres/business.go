@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"errors"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -32,7 +33,7 @@ func (r *businessRepo) CreateBusiness(business *pb.Business) (*pb.Business, erro
 	}
 
 	busQuery := `INSERT INTO business (id, salon_name, phone_numbers, status, location, created_at)
-	VALUES ($1, $2, $3, $4, $5, $6) RETURNIN id, salon_name, phone_numbers, status, location, created_at`
+	VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, salon_name, phone_numbers, status, location, created_at`
 
 	err = r.db.QueryRow(busQuery,
 		busId,
@@ -59,7 +60,7 @@ func (r *businessRepo) CreateBusiness(business *pb.Business) (*pb.Business, erro
 		if err != nil {
 			return nil, err
 		}
-		staffQuery := `INSERT INTO staff (id, first_name, last_name, phone_number, cost, status, 
+		staffQuery := `INSERT INTO staff (id, first_name, last_name, phone_numbers, cost, status, 
 		comment_id, business_id, calendar_id, client_id, men_service_id, women_service_id, created_at)
 		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING id`
 
@@ -92,7 +93,7 @@ func (r *businessRepo) UpdateBusiness(business *pb.Business) (*pb.Empty, error) 
 
 	busQuery := `UPDATE business SET salon_name = $1, phone_numbers = $2, status = $3, location = $4, updated_at = $5 WHERE id = $6`
 
-	_, err := r.db.Query(busQuery, business.SalonName, pq.Array(business.PhoneNumbers),	business.Status, business.Location,	updTime, business.Id)
+	_, err := r.db.Query(busQuery, business.SalonName, pq.Array(business.PhoneNumbers), business.Status, business.Location, updTime, business.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +135,7 @@ func (r *businessRepo) DeleteBusiness(ID *pb.Id) (*pb.Empty, error) {
 		return nil, err
 	}
 
-	_, err = r.db.Query("UPDATE business SET deleted_at = $1 WHERE business_id = $2",	delTime, ID)
+	_, err = r.db.Query("UPDATE business SET deleted_at = $1 WHERE business_id = $2", delTime, ID)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +191,7 @@ func (r *businessRepo) GetByIdBusiness(ID *pb.Id) (*pb.Business, error) {
 
 func (r *businessRepo) GetAllBusiness(*pb.Empty) (*pb.GetAllBusinessResponse, error) {
 	var allbusiness []*pb.Business
-	
+
 	getByIdQuery := `SELECT id, salon_name, phone_numbers, status, location, created_at FROM business WHERE deleted_at = $2`
 	rows, err := r.db.Query(getByIdQuery, "")
 	for rows.Next() {
@@ -206,7 +207,7 @@ func (r *businessRepo) GetAllBusiness(*pb.Empty) (*pb.GetAllBusinessResponse, er
 		if err != nil {
 			return nil, err
 		}
-		
+
 		getStafftByIdQuery := `SELECT first_name, last_name, phone_number, cost, status, comment_id, calendar_id, 
 			client_id, men_service_id, women_service_id, created_at FROM staff WHERE business_id = $1 AND deleted_at = $2`
 
@@ -243,10 +244,10 @@ func (r *businessRepo) GetAllBusiness(*pb.Empty) (*pb.GetAllBusinessResponse, er
 }
 
 func (r *businessRepo) GetListBusiness(limit, page int64) (*pb.GetAllBusinessResponse, error) {
-	offset := (page-1)*limit
+	offset := (page - 1) * limit
 
 	var allbusiness []*pb.Business
-	
+
 	getByIdQuery := `SELECT id, salon_name, phone_numbers, status, location, created_at FROM business WHERE deleted_at = $1 LIMIT $2 OFFSET $3`
 	rows, err := r.db.Query(getByIdQuery, "", limit, offset)
 	for rows.Next() {
@@ -262,7 +263,7 @@ func (r *businessRepo) GetListBusiness(limit, page int64) (*pb.GetAllBusinessRes
 		if err != nil {
 			return nil, err
 		}
-		
+
 		getStafftByIdQuery := `SELECT first_name, last_name, phone_number, cost, status, comment_id, calendar_id, 
 			client_id, men_service_id, women_service_id, created_at FROM staff WHERE business_id = $1 AND deleted_at = $2`
 
@@ -298,98 +299,93 @@ func (r *businessRepo) GetListBusiness(limit, page int64) (*pb.GetAllBusinessRes
 	}, nil
 }
 
+func (r *businessRepo) CreateService(client *pb.User) (*pb.ServiceTypeDef, error) {
 
+	var (
+		services pb.ServiceTypeDef
+		menServise   pb.MenServices
+		womenServise pb.WomenServices
+	)
 
+	serviceID, err := uuid.NewV4()
+	if err != nil {
+		return nil, err
+	}
 
+	if client.Gender == "man" {
 
+		menSerQuery := `INSERT INTO men_services (id, hair_cut, beard_cut, hair_coloring,
+			special_hair_cut, beard_coloring, beard_trim, beard_shave, face_shave, boy_hair_cut, client_id) 
+			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, $11) RETURNING id, hair_cut, beard_cut, hair_coloring,
+			special_hair_cut, beard_coloring, beard_trim, beard_shave, face_shave, boy_hair_cut, client_id`
+		err = r.db.QueryRow(menSerQuery,
+			serviceID,
+			services.MenService.HairCut,
+			services.MenService.BeardCut,
+			services.MenService.HairColoring,
+			services.MenService.SpecialHairCut,
+			services.MenService.BeardColoring,
+			services.MenService.BeardTrim,
+			services.MenService.BeardShave,
+			services.MenService.FaceShave,
+			services.MenService.BoyHairCut,
+			client.Id,
+		).Scan(
+			&menServise.Id,
+			&menServise.HairCut,
+			&menServise.BeardCut,
+			&menServise.HairColoring,
+			&menServise.SpecialHairCut,
+			&menServise.BeardColoring,
+			&menServise.BeardTrim,
+			&menServise.BeardShave,
+			&menServise.FaceShave,
+			&menServise.BoyHairCut,
+			&menServise.ClientId,
+		)
+		if err != nil {
+			return nil, err
+		}
 
-// func (r *businessRepo) CreateService(services *pb.ServiceTypeDef) (*pb.ServiceTypeDef, error) {
-	
-// 	var (
-// 		menServise pb.MenServices
-// 		womenServise pb.WomenServices
-// 	)
+		return &pb.ServiceTypeDef{
+			MenService:   &menServise,
+			WomenService: nil,
+		}, nil
 
-// 	serviceID, err := uuid.NewV4()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-	
-// 	if services.MenService != nil {
+	} else if client.Gender == "woman" {
 
-// 		menSerQuery := `INSERT INTO men_services (id, hair_cut, beard_cut, hair_coloring,
-// 			special_hair_cut, beard_coloring, beard_trim, beard_shave, face_shave, boy_hair_cut) 
-// 			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id, hair_cut, beard_cut, hair_coloring,
-// 			special_hair_cut, beard_coloring, beard_trim, beard_shave, face_shave, boy_hair_cut`
-// 		err = r.db.QueryRow(menSerQuery,
-// 			serviceID,
-// 			services.MenService.HairCut,
-// 			services.MenService.BeardCut,
-// 			services.MenService.HairColoring,
-// 			services.MenService.SpecialHairCut,
-// 			services.MenService.BeardColoring,
-// 			services.MenService.BeardTrim,
-// 			services.MenService.BeardShave,
-// 			services.MenService.FaceShave,
-// 			services.MenService.BoyHairCut,
-// 			services.MenService.ClientId,
-// 		).Scan(
-// 			&menServise.Id,
-// 			&menServise.HairCut,
-// 			&menServise.BeardCut,
-// 			&menServise.HairColoring,
-// 			&menServise.SpecialHairCut,
-// 			&menServise.BeardColoring,
-// 			&menServise.BeardTrim,
-// 			&menServise.BeardShave,
-// 			&menServise.FaceShave,
-// 			&menServise.BoyHairCut,
-// 			&menServise.ClientId,
-// 		)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-		
-// 		return &pb.ServiceTypeDef {
-// 			MenService: &menServise, 
-// 			WomenService: nil,
-// 		}, nil
+		womenServise.Id = serviceID.String()
 
-// 	}else if services.WomenService != nil {
-		
-// 		womenServise.Id = serviceID.String()
-		
+		womenSerQuery := `INSERT INTO women_services (id, hair_cut, hair_coloring,
+			eyebrow_coloring, special_hair_cut, client_id) 
+			VALUES ($1,$2,$3,$4,$5, $6) RETURNING id, hair_cut, hair_coloring,
+			eyebrow_coloring, special_hair_cut, client_id`
+		err = r.db.QueryRow(womenSerQuery,
+			serviceID,
+			services.WomenService.HairCut,
+			services.WomenService.HairColoring,
+			services.WomenService.EyebrowArching,
+			services.WomenService.SpecialHairCut,
+			client.Id,
+		).Scan(
+			&womenServise.Id,
+			&womenServise.HairCut,
+			&womenServise.HairColoring,
+			&womenServise.EyebrowArching,
+			&womenServise.SpecialHairCut,
+			&womenServise.ClientId,
+		)
+		if err != nil {
+			return nil, err
+		}
 
-// 		womenSerQuery := `INSERT INTO women_services (id, hair_cut, hair_coloring,
-// 			eyebrow_coloring, special_hair_cut) 
-// 			VALUES ($1,$2,$3,$4,$5) RETURNING id, hair_cut, hair_coloring,
-// 			eyebrow_coloring, special_hair_cut`
-// 		err = r.db.QueryRow(womenSerQuery,
-// 			serviceID,
-// 			services.WomenService.HairCut,
-// 			services.WomenService.HairColoring,
-// 			services.WomenService.EyebrowArching,
-// 			services.WomenService.SpecialHairCut,
-// 			services.WomenService.ClientId,
-// 		).Scan(
-// 			&womenServise.Id,
-// 			&womenServise.HairCut,
-// 			&womenServise.HairColoring,
-// 			&womenServise.EyebrowArching,
-// 			&womenServise.SpecialHairCut,
-// 			&womenServise.ClientId,
-// 		)
-// 		if err != nil {
-// 			return nil, err
-// 		}
+		return &pb.ServiceTypeDef{
+			MenService:   nil,
+			WomenService: &womenServise,
+		}, nil
+	}
 
-// 		return &pb.ServiceTypeDef {
-// 			MenService: nil, 
-// 			WomenService: &womenServise,
-// 		}, nil
-// 	}
+	err = errors.New("Gender Type Error")
 
-// 	err = errors.New("Gender Type Error")
-
-// 	return nil, err
-// }
+	return nil, err
+}

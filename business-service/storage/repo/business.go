@@ -12,6 +12,6 @@ type BusinessStorageI interface {
 	GetByIdBusiness(*pb.Id) (*pb.Business, error)
 	GetAllBusiness(*pb.Empty) (*pb.GetAllBusinessResponse, error)
 	GetListBusiness(limit int64, page int64) (*pb.GetAllBusinessResponse, error)
-
-	// CreateService(*pb.ServiceTypeDef) (*pb.ServiceTypeDef, error)
+	//----------------------------Services-----------------------------------
+	CreateService(*pb.User) (*pb.ServiceTypeDef, error)
 }

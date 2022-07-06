@@ -25,7 +25,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-22fe76e8-17f9-4fef-b361-9fd9c746498f.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-15303233-3614-486e-ab5f-d38b8eeb9f99.sock
 # environment
 LC_NAME = en_US.UTF-8
 # environment
@@ -53,7 +53,7 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 .VARIABLES := 
 # environment
-PWD = /home/baxrom/go/src/github.com/hdn-project/review-service
+PWD = /home/baxrom/go/src/github.com/hdn-project/client-service
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # environment
@@ -77,7 +77,7 @@ XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.FGK0O1
 # makefile
 MAKEFLAGS = pqrR
 # makefile
-CURDIR := /home/baxrom/go/src/github.com/hdn-project/review-service
+CURDIR := /home/baxrom/go/src/github.com/hdn-project/client-service
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -209,6 +209,7 @@ SNAP_ARCH = amd64
 # environment
 SYSTEMD_EXEC_PID = 1633
 # environment
+ 
 DISPLAY = :0
 # environment
 USER = baxrom
@@ -280,7 +281,6 @@ SNAP_COMMON = /var/snap/code/common
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
 SNAP_USER_DATA = /home/baxrom/snap/code/99
- 
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -298,7 +298,7 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 40, inode 925301): 17 files, no impossibilities.
+# . (device 40, inode 924222): 17 files, no impossibilities.
 
 # 17 files, no impossibilities in 1 directories.
 
@@ -325,7 +325,7 @@ lint:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-30 10:07:03.050889387
+#  Last modified 2022-07-05 13:36:18.127258315
 #  File has been updated.
 #  Successfully updated.
 
@@ -341,7 +341,7 @@ migrate-force:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 20):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/reviewdb?sslmode=disable force 
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clinetdb?sslmode=disable force 
 
 # Not a target:
 .DEFAULT:
@@ -368,14 +368,14 @@ migrate-down:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 17):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/reviewdb?sslmode=disable down
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable down
 
 migrate-up:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 14):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/reviewdb?sslmode=disable up
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable up
 
 # files hash-table stats:
 # Load=11/1024=1%, Rehash=0, Collisions=0/21=0%
@@ -390,6 +390,7 @@ migrate-up:
 
 # strcache performance: lookups = 40 / hit rate = 27%
 # hash-table stats:
+ 
 # Load=29/8192=0%, Rehash=0, Collisions=0/40=0%
 # Finished Make data base on Wed Jul  6 09:20:24 2022
 

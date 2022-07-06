@@ -8,22 +8,29 @@ import (
 
 //IStorage ...
 type IStorage interface {
-    Review() repo.ReviewStorageI
+    Like() repo.LikeStorageI
+    Comment() repo.CommentStorageI
 }
 
 type storagePg struct {
     db         *sqlx.DB
-    reviewRepo   repo.ReviewStorageI
+    likeRepo   repo.LikeStorageI
+    commentRepo repo.CommentStorageI
 }
 
 //NewStoragePg ...
 func NewStoragePg(db *sqlx.DB) *storagePg {
     return &storagePg{
         db:         db,
-        reviewRepo:   postgres.NewReviewRepo(db),
+        likeRepo:   postgres.NewLikeRepo(db),
+        commentRepo: postgres.NewCommentRepo(db),
     }
 }
 
-func (s storagePg) Review() repo.ReviewStorageI {
-    return s.reviewRepo
+func (s storagePg) Like() repo.LikeStorageI {
+    return s.likeRepo
+}
+
+func (s storagePg) Comment() repo.CommentStorageI {
+    return s.commentRepo
 }

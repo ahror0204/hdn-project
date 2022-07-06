@@ -1,3 +1,2 @@
-DROP TABLE reply_comments;
-DROP TABLE reviews;
+DROP TABLE likes;
 DROP TABLE schema_migrations;

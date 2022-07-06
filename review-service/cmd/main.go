@@ -10,6 +10,7 @@ import (
 	"github.com/hdn-project/review-service/pkg/logger"
 	"github.com/hdn-project/review-service/service"
 	"google.golang.org/grpc"
+    grpcClient "github.com/hdn-project/review-service/service/grpc_client"
 )
 
 func main() {
@@ -27,8 +28,12 @@ func main() {
     if err != nil {
         log.Fatal("sqlx connection to postgres error", logger.Error(err))
     }
-
-    reviewService := service.NewReviewService(connDB, log)
+    grpcC, err := grpcClient.New(cfg)
+	if err != nil {
+		log.Fatal("grpc client error", logger.Error(err))	
+		return
+	}
+    reviewService := service.NewReviewService(connDB, log,grpcC)
 
     lis, err := net.Listen("tcp", cfg.RPCPort)
     if err != nil {

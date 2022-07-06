@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package review;
+
+message DeleteUserLikesRequest {
+    string user_id = 1;
+}
+message Like {
+    string id =1;
+    string created_at = 2;
+    string user_id = 3;
+    string staff_id = 6;
+    
+    
+}
+message LikedUser {
+    string id = 1;
+    string first_name = 3;
+    string last_name = 4;
+    string created_at = 6;
+}
+message Empty {
+  
+}
+message CountLikesResponse {
+    int64 count = 1;
+    bool liked = 2;
+}
+message ListLikeUsersRequest {
+    string staff_id = 1;
+    string user_id = 2;
+    int64 limit = 3;
+    int64 page = 4;
+}
+
+message ListLikeUsersResponse {
+    repeated LikedUser users = 1;
+    int64 count = 2;
+}

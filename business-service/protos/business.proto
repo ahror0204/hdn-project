@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package business;
 
-import   "client.proto";
+import   "user.proto";
 
 service BusinessService {
     rpc CreateBusiness (Business) returns (Business);
@@ -13,6 +13,14 @@ service BusinessService {
     rpc GetListBusiness (GetListBusinessRequest) returns (GetAllBusinessResponse);
     //----------------------------Service----------------------------------------
     rpc CreateService (User) returns (ServiceTypeDef);
+    rpc UpdateMenServiceByUserId (MenServices) returns (Empty);
+    rpc UpdateWomenServiceByUserId (WomenServices) returns (Empty);
+    rpc GetMenServiceByUserId (Id) returns (MenServices);
+    rpc GetWomenServiceByUserId (Id) returns (WomenServices);
+    rpc DeleteMenServiceByUserId (Id) returns (Empty);
+    rpc DeleteWomenServiceByUserId (Id) returns (Empty);
+    rpc GetAllMenSetvices(Empty) returns (AllMenSetvices);
+    rpc GetAllWomenSetvices(Empty) returns (AllWomenSetvices);
 }
 
 
@@ -35,15 +43,15 @@ message Staff {
     repeated string phone_numbers = 4;
     int64 cost = 5;
     string status = 6;
-    string comment_id = 7;
-    string business_id = 8;
-    string calendar_id = 9;
-    string client_id = 10;
-    string men_services_id = 11;
-    string women_services_id = 12;
-    string created_at = 13;
-    string updated_at = 14;
-    string deleted_at = 15;
+    // string comment_id = 7;
+    string business_id = 7;
+    string calendar_id = 8;
+    string user_id = 9;
+    // string men_services_id = 11;
+    // string women_services_id = 12;
+    string created_at = 10;
+    string updated_at = 11;
+    string deleted_at = 12;
 }
 
 message MenServices {
@@ -57,26 +65,23 @@ message MenServices {
     bool beard_shave = 8;
     bool face_shave = 9;
     bool boy_hair_cut = 10;
-    string others = 11;
-    string client_id = 12;
+    // string others = 11;
+    string user_id = 11;
 }
 
 message WomenServices {
     string id = 1;
     bool hair_cut = 2;
     bool hair_coloring = 3;
-    bool eyebrow_arching = 4;
-    bool special_hair_cut = 5;
-    string client_id = 6;
+    bool special_hair_cut = 4;
+    bool eyebrow_arching = 5;
+    string user_id = 6;
 }
 
 message ServiceTypeDef{
     MenServices men_service = 1;
     WomenServices women_service = 2;
 }
-
-// message Empty {
-// }
 
 message Id {
     string id = 1;
@@ -89,4 +94,12 @@ message GetAllBusinessResponse {
 message GetListBusinessRequest {
     int64 limit = 1;
     int64 page = 2;
+}
+
+message AllMenSetvices {
+    repeated MenServices men_services = 1;
+}
+
+message AllWomenSetvices {
+    repeated WomenServices women_services = 1;
 }

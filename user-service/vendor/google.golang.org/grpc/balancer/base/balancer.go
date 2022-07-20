@@ -36,7 +36,7 @@ type baseBuilder struct {
 	config        Config
 }
 
-func (bb *baseBuilder) Build(cc balancer.UserConn, opt balancer.BuildOptions) balancer.Balancer {
+func (bb *baseBuilder) Build(cc balancer.ClientConn, opt balancer.BuildOptions) balancer.Balancer {
 	bal := &baseBalancer{
 		cc:            cc,
 		pickerBuilder: bb.pickerBuilder,
@@ -58,7 +58,7 @@ func (bb *baseBuilder) Name() string {
 }
 
 type baseBalancer struct {
-	cc            balancer.UserConn
+	cc            balancer.ClientConn
 	pickerBuilder PickerBuilder
 
 	csEvltr *balancer.ConnectivityStateEvaluator
@@ -91,10 +91,10 @@ func (b *baseBalancer) ResolverError(err error) {
 	})
 }
 
-func (b *baseBalancer) UpdateUserConnState(s balancer.UserConnState) error {
+func (b *baseBalancer) UpdateClientConnState(s balancer.ClientConnState) error {
 	// TODO: handle s.ResolverState.ServiceConfig?
 	if logger.V(2) {
-		logger.Info("base.baseBalancer: got new UserConn state: ", s)
+		logger.Info("base.baseBalancer: got new ClientConn state: ", s)
 	}
 	// Successful resolution; clear resolver error and ensure we return nil.
 	b.resolverErr = nil
@@ -126,7 +126,7 @@ func (b *baseBalancer) UpdateUserConnState(s balancer.UserConnState) error {
 			// The entry will be deleted in UpdateSubConnState.
 		}
 	}
-	// If resolver state contains no addresses, return an error so UserConn
+	// If resolver state contains no addresses, return an error so ClientConn
 	// will trigger re-resolve. Also records this as an resolver error, so when
 	// the overall state turns transient failure, the error message will have
 	// the zero address information.

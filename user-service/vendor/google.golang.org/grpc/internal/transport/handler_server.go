@@ -214,7 +214,7 @@ func (ht *serverHandlerTransport) WriteStatus(s *Stream, st *status.Status) erro
 
 		if md := s.Trailer(); len(md) > 0 {
 			for k, vv := range md {
-				// Users don't tolerate reading restricted headers after some non restricted ones were sent.
+				// Clients don't tolerate reading restricted headers after some non restricted ones were sent.
 				if isReservedHeader(k) {
 					continue
 				}

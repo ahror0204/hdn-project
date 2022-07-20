@@ -5,11 +5,11 @@ import (
 
 	"google.golang.org/grpc/reflection"
 
-	"github.com/hdn-project/User-service/config"
-	pb "github.com/hdn-project/User-service/genproto"
-	"github.com/hdn-project/User-service/pkg/db"
-	"github.com/hdn-project/User-service/pkg/logger"
-	"github.com/hdn-project/User-service/service"
+	"github.com/hdn-project/user-service/config"
+	pb "github.com/hdn-project/user-service/genproto"
+	"github.com/hdn-project/user-service/pkg/db"
+	"github.com/hdn-project/user-service/pkg/logger"
+	"github.com/hdn-project/user-service/service"
 	"google.golang.org/grpc"
 )
 

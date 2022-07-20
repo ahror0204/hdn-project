@@ -48,7 +48,7 @@ const (
 	// mentioned cases.
 	Unknown Code = 2
 
-	// InvalidArgument indicates User specified an invalid argument.
+	// InvalidArgument indicates client specified an invalid argument.
 	// Note that this differs from FailedPrecondition. It indicates arguments
 	// that are problematic regardless of the state of the system
 	// (e.g., a malformed file name).
@@ -104,15 +104,15 @@ const (
 	//
 	// A litmus test that may help a service implementor in deciding
 	// between FailedPrecondition, Aborted, and Unavailable:
-	//  (a) Use Unavailable if the User can retry just the failing call.
-	//  (b) Use Aborted if the User should retry at a higher-level
+	//  (a) Use Unavailable if the client can retry just the failing call.
+	//  (b) Use Aborted if the client should retry at a higher-level
 	//      (e.g., restarting a read-modify-write sequence).
-	//  (c) Use FailedPrecondition if the User should not retry until
+	//  (c) Use FailedPrecondition if the client should not retry until
 	//      the system state has been explicitly fixed. E.g., if an "rmdir"
 	//      fails because the directory is non-empty, FailedPrecondition
-	//      should be returned since the User should not retry unless
+	//      should be returned since the client should not retry unless
 	//      they have first fixed up the directory by deleting files from it.
-	//  (d) Use FailedPrecondition if the User performs conditional
+	//  (d) Use FailedPrecondition if the client performs conditional
 	//      REST Get/Update/Delete on a resource and the resource on the
 	//      server does not match the condition. E.g., conflicting
 	//      read-modify-write on the same resource.

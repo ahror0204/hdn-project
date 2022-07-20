@@ -32,9 +32,9 @@ import (
 )
 
 // ccResolverWrapper is a wrapper on top of cc for resolvers.
-// It implements resolver.UserConn interface.
+// It implements resolver.ClientConn interface.
 type ccResolverWrapper struct {
-	cc         *UserConn
+	cc         *ClientConn
 	resolverMu sync.Mutex
 	resolver   resolver.Resolver
 	done       *grpcsync.Event
@@ -45,7 +45,7 @@ type ccResolverWrapper struct {
 
 // newCCResolverWrapper uses the resolver.Builder to build a Resolver and
 // returns a ccResolverWrapper object which wraps the newly built resolver.
-func newCCResolverWrapper(cc *UserConn, rb resolver.Builder) (*ccResolverWrapper, error) {
+func newCCResolverWrapper(cc *ClientConn, rb resolver.Builder) (*ccResolverWrapper, error) {
 	ccr := &ccResolverWrapper{
 		cc:   cc,
 		done: grpcsync.NewEvent(),

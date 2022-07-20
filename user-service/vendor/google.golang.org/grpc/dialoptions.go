@@ -38,11 +38,11 @@ import (
 // dialOptions configure a Dial call. dialOptions are set by the DialOption
 // values passed to Dial.
 type dialOptions struct {
-	unaryInt  UnaryUserInterceptor
-	streamInt StreamUserInterceptor
+	unaryInt  UnaryClientInterceptor
+	streamInt StreamClientInterceptor
 
-	chainUnaryInts  []UnaryUserInterceptor
-	chainStreamInts []StreamUserInterceptor
+	chainUnaryInts  []UnaryClientInterceptor
+	chainStreamInts []StreamClientInterceptor
 
 	cp                          Compressor
 	dc                          Decompressor
@@ -140,7 +140,7 @@ func WithInitialConnWindowSize(s int32) DialOption {
 }
 
 // WithMaxMsgSize returns a DialOption which sets the maximum message size the
-// User can receive.
+// client can receive.
 //
 // Deprecated: use WithDefaultCallOptions(MaxCallRecvMsgSize(s)) instead.  Will
 // be supported throughout 1.x.
@@ -205,7 +205,7 @@ func WithServiceConfig(c <-chan ServiceConfig) DialOption {
 	})
 }
 
-// WithConnectParams configures the UserConn to use the provided ConnectParams
+// WithConnectParams configures the ClientConn to use the provided ConnectParams
 // for creating and maintaining connections to servers.
 //
 // The backoff configuration specified as part of the ConnectParams overrides
@@ -259,7 +259,7 @@ func WithBlock() DialOption {
 	})
 }
 
-// WithReturnConnectionError returns a DialOption which makes the User connection
+// WithReturnConnectionError returns a DialOption which makes the client connection
 // return a string containing both the last connection error that occurred and
 // the context.DeadlineExceeded error.
 // Implies WithBlock()
@@ -276,7 +276,7 @@ func WithReturnConnectionError() DialOption {
 }
 
 // WithInsecure returns a DialOption which disables transport security for this
-// UserConn. Under the hood, it uses insecure.NewCredentials().
+// ClientConn. Under the hood, it uses insecure.NewCredentials().
 //
 // Note that using this DialOption with per-RPC credentials (through
 // WithCredentialsBundle or WithPerRPCCredentials) which require transport
@@ -291,7 +291,7 @@ func WithInsecure() DialOption {
 }
 
 // WithNoProxy returns a DialOption which disables the use of proxies for this
-// UserConn. This is ignored if WithDialer or WithContextDialer are used.
+// ClientConn. This is ignored if WithDialer or WithContextDialer are used.
 //
 // Experimental
 //
@@ -321,7 +321,7 @@ func WithPerRPCCredentials(creds credentials.PerRPCCredentials) DialOption {
 }
 
 // WithCredentialsBundle returns a DialOption to set a credentials bundle for
-// the UserConn.WithCreds. This should not be used together with
+// the ClientConn.WithCreds. This should not be used together with
 // WithTransportCredentials.
 //
 // Experimental
@@ -335,7 +335,7 @@ func WithCredentialsBundle(b credentials.Bundle) DialOption {
 }
 
 // WithTimeout returns a DialOption that configures a timeout for dialing a
-// UserConn initially. This is valid if and only if WithBlock() is present.
+// ClientConn initially. This is valid if and only if WithBlock() is present.
 //
 // Deprecated: use DialContext instead of Dial and context.WithTimeout
 // instead.  Will be supported throughout 1.x.
@@ -377,7 +377,7 @@ func WithDialer(f func(string, time.Duration) (net.Conn, error)) DialOption {
 }
 
 // WithStatsHandler returns a DialOption that specifies the stats handler for
-// all the RPCs and underlying network connections in this UserConn.
+// all the RPCs and underlying network connections in this ClientConn.
 func WithStatsHandler(h stats.Handler) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.copts.StatsHandler = h
@@ -411,8 +411,8 @@ func WithUserAgent(s string) DialOption {
 }
 
 // WithKeepaliveParams returns a DialOption that specifies keepalive parameters
-// for the User transport.
-func WithKeepaliveParams(kp keepalive.UserParameters) DialOption {
+// for the client transport.
+func WithKeepaliveParams(kp keepalive.ClientParameters) DialOption {
 	if kp.Time < internal.KeepaliveMinPingTime {
 		logger.Warningf("Adjusting keepalive ping interval to minimum period of %v", internal.KeepaliveMinPingTime)
 		kp.Time = internal.KeepaliveMinPingTime
@@ -424,7 +424,7 @@ func WithKeepaliveParams(kp keepalive.UserParameters) DialOption {
 
 // WithUnaryInterceptor returns a DialOption that specifies the interceptor for
 // unary RPCs.
-func WithUnaryInterceptor(f UnaryUserInterceptor) DialOption {
+func WithUnaryInterceptor(f UnaryClientInterceptor) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.unaryInt = f
 	})
@@ -435,7 +435,7 @@ func WithUnaryInterceptor(f UnaryUserInterceptor) DialOption {
 // while the last interceptor will be the inner most wrapper around the real call.
 // All interceptors added by this method will be chained, and the interceptor
 // defined by WithUnaryInterceptor will always be prepended to the chain.
-func WithChainUnaryInterceptor(interceptors ...UnaryUserInterceptor) DialOption {
+func WithChainUnaryInterceptor(interceptors ...UnaryClientInterceptor) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.chainUnaryInts = append(o.chainUnaryInts, interceptors...)
 	})
@@ -443,7 +443,7 @@ func WithChainUnaryInterceptor(interceptors ...UnaryUserInterceptor) DialOption 
 
 // WithStreamInterceptor returns a DialOption that specifies the interceptor for
 // streaming RPCs.
-func WithStreamInterceptor(f StreamUserInterceptor) DialOption {
+func WithStreamInterceptor(f StreamClientInterceptor) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.streamInt = f
 	})
@@ -454,7 +454,7 @@ func WithStreamInterceptor(f StreamUserInterceptor) DialOption {
 // while the last interceptor will be the inner most wrapper around the real call.
 // All interceptors added by this method will be chained, and the interceptor
 // defined by WithStreamInterceptor will always be prepended to the chain.
-func WithChainStreamInterceptor(interceptors ...StreamUserInterceptor) DialOption {
+func WithChainStreamInterceptor(interceptors ...StreamClientInterceptor) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.chainStreamInts = append(o.chainStreamInts, interceptors...)
 	})
@@ -469,7 +469,7 @@ func WithAuthority(a string) DialOption {
 }
 
 // WithChannelzParentID returns a DialOption that specifies the channelz ID of
-// current UserConn's parent. This function is used in nested channel creation
+// current ClientConn's parent. This function is used in nested channel creation
 // (e.g. grpclb dial).
 //
 // Experimental
@@ -506,7 +506,7 @@ func WithDisableServiceConfig() DialOption {
 // For more information about service configs, see:
 // https://github.com/grpc/grpc/blob/master/doc/service_config.md
 // For a simple example of usage, see:
-// examples/features/load_balancing/User/main.go
+// examples/features/load_balancing/client/main.go
 func WithDefaultServiceConfig(s string) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.defaultServiceConfigRawJSON = &s
@@ -527,7 +527,7 @@ func WithDisableRetry() DialOption {
 }
 
 // WithMaxHeaderListSize returns a DialOption that specifies the maximum
-// (uncompressed) size of header list that the User is prepared to accept.
+// (uncompressed) size of header list that the client is prepared to accept.
 func WithMaxHeaderListSize(s uint32) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.copts.MaxHeaderListSize = &s
@@ -535,7 +535,7 @@ func WithMaxHeaderListSize(s uint32) DialOption {
 }
 
 // WithDisableHealthCheck disables the LB channel health checking for all
-// SubConns of this UserConn.
+// SubConns of this ClientConn.
 //
 // Experimental
 //
@@ -568,7 +568,7 @@ func defaultDialOptions() dialOptions {
 	}
 }
 
-// withGetMinConnectDeadline specifies the function that Userconn uses to
+// withGetMinConnectDeadline specifies the function that clientconn uses to
 // get minConnectDeadline. This can be used to make connection attempts happen
 // faster/slower.
 //
@@ -580,7 +580,7 @@ func withMinConnectDeadline(f func() time.Duration) DialOption {
 }
 
 // WithResolvers allows a list of resolver implementations to be registered
-// locally with the UserConn without needing to be globally registered via
+// locally with the ClientConn without needing to be globally registered via
 // resolver.Register.  They will be matched against the scheme used for the
 // current Dial only, and will take precedence over the global registry.
 //

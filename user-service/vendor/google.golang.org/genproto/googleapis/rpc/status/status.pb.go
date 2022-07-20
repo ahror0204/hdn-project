@@ -57,7 +57,7 @@ type Status struct {
 	Code int32 `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
 	// A developer-facing error message, which should be in English. Any
 	// user-facing error message should be localized and sent in the
-	// [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the User.
+	// [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
 	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	// A list of messages that carry the error details.  There is a common set of
 	// message types for APIs to use.

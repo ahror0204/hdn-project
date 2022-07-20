@@ -40,7 +40,7 @@ func NewCredentials() credentials.TransportCredentials {
 // NoSecurity.
 type insecureTC struct{}
 
-func (insecureTC) UserHandshake(ctx context.Context, _ string, conn net.Conn) (net.Conn, credentials.AuthInfo, error) {
+func (insecureTC) ClientHandshake(ctx context.Context, _ string, conn net.Conn) (net.Conn, credentials.AuthInfo, error) {
 	return conn, info{credentials.CommonAuthInfo{SecurityLevel: credentials.NoSecurity}}, nil
 }
 

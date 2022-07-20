@@ -2241,8 +2241,8 @@ const (
 	SYS_MAKECONTEXT                     = 0x432
 	SYS_SWAPCONTEXT                     = 0x433
 	SYS_PTHREAD_GETSPECIFIC_D8_NP       = 0x434
-	SYS_GETUserID                       = 0x470
-	SYS___GETUserID                     = 0x471
+	SYS_GETCLIENTID                     = 0x470
+	SYS___GETCLIENTID                   = 0x471
 	SYS_GETSTABLESIZE                   = 0x472
 	SYS_GETIBMOPT                       = 0x473
 	SYS_GETIBMSOCKOPT                   = 0x474

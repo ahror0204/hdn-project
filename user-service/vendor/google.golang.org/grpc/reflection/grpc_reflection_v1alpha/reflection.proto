@@ -27,10 +27,10 @@ service ServerReflection {
       returns (stream ServerReflectionResponse);
 }
 
-// The message sent by the User when calling ServerReflectionInfo method.
+// The message sent by the client when calling ServerReflectionInfo method.
 message ServerReflectionRequest {
   string host = 1;
-  // To use reflection service, the User should set one of the following
+  // To use reflection service, the client should set one of the following
   // fields in message_request. The server distinguishes requests by their
   // defined field and then handles them using corresponding methods.
   oneof message_request {
@@ -62,7 +62,7 @@ message ServerReflectionRequest {
   }
 }
 
-// The type name and extension number sent by the User when requesting
+// The type name and extension number sent by the client when requesting
 // file_containing_extension.
 message ExtensionRequest {
   // Fully-qualified type name. The format should be <package>.<type>

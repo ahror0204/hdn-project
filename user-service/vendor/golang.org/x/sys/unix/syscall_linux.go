@@ -493,7 +493,7 @@ func (sa *SockaddrL2) sockaddr() (unsafe.Pointer, _Socklen, error) {
 //      fmt.Printf("conn addr=%v fd=%d", sa.(*unix.SockaddrRFCOMM).Addr, nfd)
 //      Read(nfd, buf)
 //
-// User example:
+// Client example:
 //
 //      fd, _ := Socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM)
 //      _ = Connect(fd, &SockaddrRFCOMM{

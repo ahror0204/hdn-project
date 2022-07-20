@@ -49,7 +49,7 @@ type lbConfig struct {
 }
 
 // ServiceConfig is provided by the service provider and contains parameters for how
-// Users that connect to the service should behave.
+// clients that connect to the service should behave.
 //
 // Deprecated: Users should not use this struct. Service config should be received
 // through name resolver, as specified here
@@ -76,10 +76,10 @@ type ServiceConfig struct {
 	Methods map[string]MethodConfig
 
 	// If a retryThrottlingPolicy is provided, gRPC will automatically throttle
-	// retry attempts and hedged RPCs when the User’s ratio of failures to
+	// retry attempts and hedged RPCs when the client’s ratio of failures to
 	// successes exceeds a threshold.
 	//
-	// For each server name, the gRPC User will maintain a token_count which is
+	// For each server name, the gRPC client will maintain a token_count which is
 	// initially set to maxTokens, and can take values between 0 and maxTokens.
 	//
 	// Every outgoing RPC (regardless of service or method invoked) will change
@@ -115,7 +115,7 @@ type jsonRetryPolicy struct {
 
 // retryThrottlingPolicy defines the go-native version of the retry throttling
 // policy defined by the service config here:
-// https://github.com/grpc/proposal/blob/master/A6-User-retries.md#integration-with-service-config
+// https://github.com/grpc/proposal/blob/master/A6-client-retries.md#integration-with-service-config
 type retryThrottlingPolicy struct {
 	// The number of tokens starts at maxTokens. The token_count will always be
 	// between 0 and maxTokens.

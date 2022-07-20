@@ -38,7 +38,7 @@ type WriteScheduler interface {
 
 // OpenStreamOptions specifies extra options for WriteScheduler.OpenStream.
 type OpenStreamOptions struct {
-	// PusherID is zero if the stream was initiated by the User. Otherwise,
+	// PusherID is zero if the stream was initiated by the client. Otherwise,
 	// PusherID names the stream that pushed the newly opened stream.
 	PusherID uint32
 }

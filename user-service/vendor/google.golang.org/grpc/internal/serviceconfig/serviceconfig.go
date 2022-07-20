@@ -130,22 +130,22 @@ func (bc *BalancerConfig) UnmarshalJSON(b []byte) error {
 type MethodConfig struct {
 	// WaitForReady indicates whether RPCs sent to this method should wait until
 	// the connection is ready by default (!failfast). The value specified via the
-	// gRPC User API will override the value set here.
+	// gRPC client API will override the value set here.
 	WaitForReady *bool
 	// Timeout is the default timeout for RPCs sent to this method. The actual
 	// deadline used will be the minimum of the value specified here and the value
-	// set by the application via the gRPC User API.  If either one is not set,
+	// set by the application via the gRPC client API.  If either one is not set,
 	// then the other will be used.  If neither is set, then the RPC has no deadline.
 	Timeout *time.Duration
 	// MaxReqSize is the maximum allowed payload size for an individual request in a
-	// stream (User->server) in bytes. The size which is measured is the serialized
+	// stream (client->server) in bytes. The size which is measured is the serialized
 	// payload after per-message compression (but before stream compression) in bytes.
 	// The actual value used is the minimum of the value specified here and the value set
-	// by the application via the gRPC User API. If either one is not set, then the other
+	// by the application via the gRPC client API. If either one is not set, then the other
 	// will be used.  If neither is set, then the built-in default is used.
 	MaxReqSize *int
 	// MaxRespSize is the maximum allowed payload size for an individual response in a
-	// stream (server->User) in bytes.
+	// stream (server->client) in bytes.
 	MaxRespSize *int
 	// RetryPolicy configures retry options for the method.
 	RetryPolicy *RetryPolicy
@@ -153,7 +153,7 @@ type MethodConfig struct {
 
 // RetryPolicy defines the go-native version of the retry policy defined by the
 // service config here:
-// https://github.com/grpc/proposal/blob/master/A6-User-retries.md#integration-with-service-config
+// https://github.com/grpc/proposal/blob/master/A6-client-retries.md#integration-with-service-config
 type RetryPolicy struct {
 	// MaxAttempts is the maximum number of attempts, including the original RPC.
 	//

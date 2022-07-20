@@ -406,7 +406,7 @@ const (
 	SYS_WORK_INTERVAL_CTL              = 499
 	SYS_GETENTROPY                     = 500
 	SYS_NECP_OPEN                      = 501
-	SYS_NECP_User_ACTION             = 502
+	SYS_NECP_CLIENT_ACTION             = 502
 	SYS___NEXUS_OPEN                   = 503
 	SYS___NEXUS_REGISTER               = 504
 	SYS___NEXUS_DEREGISTER             = 505

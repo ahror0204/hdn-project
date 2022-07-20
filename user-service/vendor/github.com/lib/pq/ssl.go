@@ -50,7 +50,7 @@ func ssl(o values) (func(net.Conn) (net.Conn, error), error) {
 		return nil, fmterrorf(`unsupported sslmode %q; only "require" (default), "verify-full", "verify-ca", and "disable" supported`, mode)
 	}
 
-	err := sslUserCertificates(&tlsConf, o)
+	err := sslClientCertificates(&tlsConf, o)
 	if err != nil {
 		return nil, err
 	}
@@ -64,31 +64,31 @@ func ssl(o values) (func(net.Conn) (net.Conn, error), error) {
 	// Renegotiation was deprecated then removed from PostgreSQL 9.5, but
 	// the default configuration of older versions has it enabled. Redshift
 	// also initiates renegotiations and cannot be reconfigured.
-	tlsConf.Renegotiation = tls.RenegotiateFreelyAsUser
+	tlsConf.Renegotiation = tls.RenegotiateFreelyAsClient
 
 	return func(conn net.Conn) (net.Conn, error) {
-		User := tls.User(conn, &tlsConf)
+		client := tls.Client(conn, &tlsConf)
 		if verifyCaOnly {
-			err := sslVerifyCertificateAuthority(User, &tlsConf)
+			err := sslVerifyCertificateAuthority(client, &tlsConf)
 			if err != nil {
 				return nil, err
 			}
 		}
-		return User, nil
+		return client, nil
 	}, nil
 }
 
-// sslUserCertificates adds the certificate specified in the "sslcert" and
+// sslClientCertificates adds the certificate specified in the "sslcert" and
 // "sslkey" settings, or if they aren't set, from the .postgresql directory
 // in the user's home directory. The configured files must exist and have
 // the correct permissions.
-func sslUserCertificates(tlsConf *tls.Config, o values) error {
+func sslClientCertificates(tlsConf *tls.Config, o values) error {
 	// user.Current() might fail when cross-compiling. We have to ignore the
 	// error and continue without home directory defaults, since we wouldn't
 	// know from where to load them.
 	user, _ := user.Current()
 
-	// In libpq, the User certificate is only loaded if the setting is not blank.
+	// In libpq, the client certificate is only loaded if the setting is not blank.
 	//
 	// https://github.com/postgres/postgres/blob/REL9_6_2/src/interfaces/libpq/fe-secure-openssl.c#L1036-L1037
 	sslcert := o["sslcert"]
@@ -153,14 +153,14 @@ func sslCertificateAuthority(tlsConf *tls.Config, o values) error {
 // sslVerifyCertificateAuthority carries out a TLS handshake to the server and
 // verifies the presented certificate against the CA, i.e. the one specified in
 // sslrootcert or the system CA if sslrootcert was not specified.
-func sslVerifyCertificateAuthority(User *tls.Conn, tlsConf *tls.Config) error {
-	err := User.Handshake()
+func sslVerifyCertificateAuthority(client *tls.Conn, tlsConf *tls.Config) error {
+	err := client.Handshake()
 	if err != nil {
 		return err
 	}
-	certs := User.ConnectionState().PeerCertificates
+	certs := client.ConnectionState().PeerCertificates
 	opts := x509.VerifyOptions{
-		DNSName:       User.ConnectionState().ServerName,
+		DNSName:       client.ConnectionState().ServerName,
 		Intermediates: x509.NewCertPool(),
 		Roots:         tlsConf.RootCAs,
 	}

@@ -875,7 +875,7 @@ type FieldDescriptorProto struct {
 	// tracks presence regardless of field type.
 	//
 	// When proto3_optional is true, this field must be belong to a oneof to
-	// signal to old proto3 Users that presence is tracked for this field. This
+	// signal to old proto3 clients that presence is tracked for this field. This
 	// oneof is known as a "synthetic" oneof, and this field must be its sole
 	// member (each proto3 optional field gets its own synthetic oneof). Synthetic
 	// oneofs exist in the descriptor only, and do not generate any API. Synthetic
@@ -1285,15 +1285,15 @@ type MethodDescriptorProto struct {
 	InputType  *string        `protobuf:"bytes,2,opt,name=input_type,json=inputType" json:"input_type,omitempty"`
 	OutputType *string        `protobuf:"bytes,3,opt,name=output_type,json=outputType" json:"output_type,omitempty"`
 	Options    *MethodOptions `protobuf:"bytes,4,opt,name=options" json:"options,omitempty"`
-	// Identifies if User streams multiple User messages
-	UserStreaming *bool `protobuf:"varint,5,opt,name=User_streaming,json=UserStreaming,def=0" json:"User_streaming,omitempty"`
+	// Identifies if client streams multiple client messages
+	ClientStreaming *bool `protobuf:"varint,5,opt,name=client_streaming,json=clientStreaming,def=0" json:"client_streaming,omitempty"`
 	// Identifies if server streams multiple server messages
 	ServerStreaming *bool `protobuf:"varint,6,opt,name=server_streaming,json=serverStreaming,def=0" json:"server_streaming,omitempty"`
 }
 
 // Default values for MethodDescriptorProto fields.
 const (
-	Default_MethodDescriptorProto_UserStreaming = bool(false)
+	Default_MethodDescriptorProto_ClientStreaming = bool(false)
 	Default_MethodDescriptorProto_ServerStreaming = bool(false)
 )
 
@@ -1357,11 +1357,11 @@ func (x *MethodDescriptorProto) GetOptions() *MethodOptions {
 	return nil
 }
 
-func (x *MethodDescriptorProto) GetUserStreaming() bool {
-	if x != nil && x.UserStreaming != nil {
-		return *x.UserStreaming
+func (x *MethodDescriptorProto) GetClientStreaming() bool {
+	if x != nil && x.ClientStreaming != nil {
+		return *x.ClientStreaming
 	}
-	return Default_MethodDescriptorProto_UserStreaming
+	return Default_MethodDescriptorProto_ClientStreaming
 }
 
 func (x *MethodDescriptorProto) GetServerStreaming() bool {

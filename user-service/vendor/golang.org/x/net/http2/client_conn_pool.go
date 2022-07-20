@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Transport code's User connection pooling.
+// Transport code's client connection pooling.
 
 package http2
 
@@ -12,39 +12,39 @@ import (
 	"sync"
 )
 
-// UserConnPool manages a pool of HTTP/2 User connections.
-type UserConnPool interface {
-	GetUserConn(req *http.Request, addr string) (*UserConn, error)
-	MarkDead(*UserConn)
+// ClientConnPool manages a pool of HTTP/2 client connections.
+type ClientConnPool interface {
+	GetClientConn(req *http.Request, addr string) (*ClientConn, error)
+	MarkDead(*ClientConn)
 }
 
-// UserConnPoolIdleCloser is the interface implemented by UserConnPool
+// clientConnPoolIdleCloser is the interface implemented by ClientConnPool
 // implementations which can close their idle connections.
-type UserConnPoolIdleCloser interface {
-	UserConnPool
+type clientConnPoolIdleCloser interface {
+	ClientConnPool
 	closeIdleConnections()
 }
 
 var (
-	_ UserConnPoolIdleCloser = (*UserConnPool)(nil)
-	_ UserConnPoolIdleCloser = noDialUserConnPool{}
+	_ clientConnPoolIdleCloser = (*clientConnPool)(nil)
+	_ clientConnPoolIdleCloser = noDialClientConnPool{}
 )
 
 // TODO: use singleflight for dialing and addConnCalls?
-type UserConnPool struct {
+type clientConnPool struct {
 	t *Transport
 
 	mu sync.Mutex // TODO: maybe switch to RWMutex
 	// TODO: add support for sharing conns based on cert names
 	// (e.g. share conn for googleapis.com and appspot.com)
-	conns        map[string][]*UserConn // key is host:port
-	dialing      map[string]*dialCall   // currently in-flight dials
-	keys         map[*UserConn][]string
+	conns        map[string][]*ClientConn // key is host:port
+	dialing      map[string]*dialCall     // currently in-flight dials
+	keys         map[*ClientConn][]string
 	addConnCalls map[string]*addConnCall // in-flight addConnIfNeede calls
 }
 
-func (p *UserConnPool) GetUserConn(req *http.Request, addr string) (*UserConn, error) {
-	return p.getUserConn(req, addr, dialOnMiss)
+func (p *clientConnPool) GetClientConn(req *http.Request, addr string) (*ClientConn, error) {
+	return p.getClientConn(req, addr, dialOnMiss)
 }
 
 const (
@@ -52,19 +52,19 @@ const (
 	noDialOnMiss = false
 )
 
-// shouldTraceGetConn reports whether getUserConn should call any
-// UserTrace.GetConn hook associated with the http.Request.
+// shouldTraceGetConn reports whether getClientConn should call any
+// ClientTrace.GetConn hook associated with the http.Request.
 //
 // This complexity is needed to avoid double calls of the GetConn hook
 // during the back-and-forth between net/http and x/net/http2 (when the
 // net/http.Transport is upgraded to also speak http2), as well as support
 // the case where x/net/http2 is being used directly.
-func (p *UserConnPool) shouldTraceGetConn(st UserConnIdleState) bool {
+func (p *clientConnPool) shouldTraceGetConn(st clientConnIdleState) bool {
 	// If our Transport wasn't made via ConfigureTransport, always
 	// trace the GetConn hook if provided, because that means the
 	// http2 package is being used directly and it's the one
 	// dialing, as opposed to net/http.
-	if _, ok := p.t.ConnPool.(noDialUserConnPool); !ok {
+	if _, ok := p.t.ConnPool.(noDialClientConnPool); !ok {
 		return true
 	}
 	// Otherwise, only use the GetConn hook if this connection has
@@ -73,12 +73,12 @@ func (p *UserConnPool) shouldTraceGetConn(st UserConnIdleState) bool {
 	return !st.freshConn
 }
 
-func (p *UserConnPool) getUserConn(req *http.Request, addr string, dialOnMiss bool) (*UserConn, error) {
+func (p *clientConnPool) getClientConn(req *http.Request, addr string, dialOnMiss bool) (*ClientConn, error) {
 	if isConnectionCloseRequest(req) && dialOnMiss {
 		// It gets its own connection.
 		traceGetConn(req, addr)
 		const singleUse = true
-		cc, err := p.t.dialUserConn(addr, singleUse)
+		cc, err := p.t.dialClientConn(addr, singleUse)
 		if err != nil {
 			return nil, err
 		}
@@ -108,14 +108,14 @@ func (p *UserConnPool) getUserConn(req *http.Request, addr string, dialOnMiss bo
 // dialCall is an in-flight Transport dial call to a host.
 type dialCall struct {
 	_    incomparable
-	p    *UserConnPool
+	p    *clientConnPool
 	done chan struct{} // closed when done
-	res  *UserConn     // valid after done is closed
+	res  *ClientConn   // valid after done is closed
 	err  error         // valid after done is closed
 }
 
 // requires p.mu is held.
-func (p *UserConnPool) getStartDialLocked(addr string) *dialCall {
+func (p *clientConnPool) getStartDialLocked(addr string) *dialCall {
 	if call, ok := p.dialing[addr]; ok {
 		// A dial is already in-flight. Don't start another.
 		return call
@@ -132,7 +132,7 @@ func (p *UserConnPool) getStartDialLocked(addr string) *dialCall {
 // run in its own goroutine.
 func (c *dialCall) dial(addr string) {
 	const singleUse = false // shared conn
-	c.res, c.err = c.p.t.dialUserConn(addr, singleUse)
+	c.res, c.err = c.p.t.dialClientConn(addr, singleUse)
 	close(c.done)
 
 	c.p.mu.Lock()
@@ -143,7 +143,7 @@ func (c *dialCall) dial(addr string) {
 	c.p.mu.Unlock()
 }
 
-// addConnIfNeeded makes a NewUserConn out of c if a connection for key doesn't
+// addConnIfNeeded makes a NewClientConn out of c if a connection for key doesn't
 // already exist. It coalesces concurrent calls with the same key.
 // This is used by the http1 Transport code when it creates a new connection. Because
 // the http1 Transport doesn't de-dup TCP dials to outbound hosts (because it doesn't know
@@ -151,7 +151,7 @@ func (c *dialCall) dial(addr string) {
 // This code decides which ones live or die.
 // The return value used is whether c was used.
 // c is never closed.
-func (p *UserConnPool) addConnIfNeeded(key string, t *Transport, c *tls.Conn) (used bool, err error) {
+func (p *clientConnPool) addConnIfNeeded(key string, t *Transport, c *tls.Conn) (used bool, err error) {
 	p.mu.Lock()
 	for _, cc := range p.conns[key] {
 		if cc.CanTakeNewRequest() {
@@ -182,13 +182,13 @@ func (p *UserConnPool) addConnIfNeeded(key string, t *Transport, c *tls.Conn) (u
 
 type addConnCall struct {
 	_    incomparable
-	p    *UserConnPool
+	p    *clientConnPool
 	done chan struct{} // closed when done
 	err  error
 }
 
 func (c *addConnCall) run(t *Transport, key string, tc *tls.Conn) {
-	cc, err := t.NewUserConn(tc)
+	cc, err := t.NewClientConn(tc)
 
 	p := c.p
 	p.mu.Lock()
@@ -203,23 +203,23 @@ func (c *addConnCall) run(t *Transport, key string, tc *tls.Conn) {
 }
 
 // p.mu must be held
-func (p *UserConnPool) addConnLocked(key string, cc *UserConn) {
+func (p *clientConnPool) addConnLocked(key string, cc *ClientConn) {
 	for _, v := range p.conns[key] {
 		if v == cc {
 			return
 		}
 	}
 	if p.conns == nil {
-		p.conns = make(map[string][]*UserConn)
+		p.conns = make(map[string][]*ClientConn)
 	}
 	if p.keys == nil {
-		p.keys = make(map[*UserConn][]string)
+		p.keys = make(map[*ClientConn][]string)
 	}
 	p.conns[key] = append(p.conns[key], cc)
 	p.keys[cc] = append(p.keys[cc], key)
 }
 
-func (p *UserConnPool) MarkDead(cc *UserConn) {
+func (p *clientConnPool) MarkDead(cc *ClientConn) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	for _, key := range p.keys[cc] {
@@ -227,7 +227,7 @@ func (p *UserConnPool) MarkDead(cc *UserConn) {
 		if !ok {
 			continue
 		}
-		newList := filterOutUserConn(vv, cc)
+		newList := filterOutClientConn(vv, cc)
 		if len(newList) > 0 {
 			p.conns[key] = newList
 		} else {
@@ -237,7 +237,7 @@ func (p *UserConnPool) MarkDead(cc *UserConn) {
 	delete(p.keys, cc)
 }
 
-func (p *UserConnPool) closeIdleConnections() {
+func (p *clientConnPool) closeIdleConnections() {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	// TODO: don't close a cc if it was just added to the pool
@@ -253,7 +253,7 @@ func (p *UserConnPool) closeIdleConnections() {
 	}
 }
 
-func filterOutUserConn(in []*UserConn, exclude *UserConn) []*UserConn {
+func filterOutClientConn(in []*ClientConn, exclude *ClientConn) []*ClientConn {
 	out := in[:0]
 	for _, v := range in {
 		if v != exclude {
@@ -268,11 +268,11 @@ func filterOutUserConn(in []*UserConn, exclude *UserConn) []*UserConn {
 	return out
 }
 
-// noDialUserConnPool is an implementation of http2.UserConnPool
-// which never dials. We let the HTTP/1.1 User dial and use its TLS
+// noDialClientConnPool is an implementation of http2.ClientConnPool
+// which never dials. We let the HTTP/1.1 client dial and use its TLS
 // connection instead.
-type noDialUserConnPool struct{ *UserConnPool }
+type noDialClientConnPool struct{ *clientConnPool }
 
-func (p noDialUserConnPool) GetUserConn(req *http.Request, addr string) (*UserConn, error) {
-	return p.getUserConn(req, addr, noDialOnMiss)
+func (p noDialClientConnPool) GetClientConn(req *http.Request, addr string) (*ClientConn, error) {
+	return p.getClientConn(req, addr, noDialOnMiss)
 }

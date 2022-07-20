@@ -29,9 +29,9 @@ const (
 	// The initial window size for flow control.
 	initialWindowSize             = defaultWindowSize // for an RPC
 	infinity                      = time.Duration(math.MaxInt64)
-	defaultUserKeepaliveTime      = infinity
-	defaultUserKeepaliveTimeout   = 20 * time.Second
-	defaultMaxStreamsUser         = 100
+	defaultClientKeepaliveTime    = infinity
+	defaultClientKeepaliveTimeout = 20 * time.Second
+	defaultMaxStreamsClient       = 100
 	defaultMaxConnectionIdle      = infinity
 	defaultMaxConnectionAge       = infinity
 	defaultMaxConnectionAgeGrace  = infinity
@@ -44,6 +44,6 @@ const (
 	// bytes that each stream can schedule before some of it being
 	// flushed out.
 	defaultWriteQuota              = 64 * 1024
-	defaultUserMaxHeaderListSize   = uint32(16 << 20)
+	defaultClientMaxHeaderListSize = uint32(16 << 20)
 	defaultServerMaxHeaderListSize = uint32(16 << 20)
 )

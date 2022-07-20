@@ -381,14 +381,14 @@ const (
 	MethodDescriptorProto_InputType_field_name       protoreflect.Name = "input_type"
 	MethodDescriptorProto_OutputType_field_name      protoreflect.Name = "output_type"
 	MethodDescriptorProto_Options_field_name         protoreflect.Name = "options"
-	MethodDescriptorProto_UserStreaming_field_name protoreflect.Name = "User_streaming"
+	MethodDescriptorProto_ClientStreaming_field_name protoreflect.Name = "client_streaming"
 	MethodDescriptorProto_ServerStreaming_field_name protoreflect.Name = "server_streaming"
 
 	MethodDescriptorProto_Name_field_fullname            protoreflect.FullName = "google.protobuf.MethodDescriptorProto.name"
 	MethodDescriptorProto_InputType_field_fullname       protoreflect.FullName = "google.protobuf.MethodDescriptorProto.input_type"
 	MethodDescriptorProto_OutputType_field_fullname      protoreflect.FullName = "google.protobuf.MethodDescriptorProto.output_type"
 	MethodDescriptorProto_Options_field_fullname         protoreflect.FullName = "google.protobuf.MethodDescriptorProto.options"
-	MethodDescriptorProto_UserStreaming_field_fullname protoreflect.FullName = "google.protobuf.MethodDescriptorProto.User_streaming"
+	MethodDescriptorProto_ClientStreaming_field_fullname protoreflect.FullName = "google.protobuf.MethodDescriptorProto.client_streaming"
 	MethodDescriptorProto_ServerStreaming_field_fullname protoreflect.FullName = "google.protobuf.MethodDescriptorProto.server_streaming"
 )
 
@@ -398,7 +398,7 @@ const (
 	MethodDescriptorProto_InputType_field_number       protoreflect.FieldNumber = 2
 	MethodDescriptorProto_OutputType_field_number      protoreflect.FieldNumber = 3
 	MethodDescriptorProto_Options_field_number         protoreflect.FieldNumber = 4
-	MethodDescriptorProto_UserStreaming_field_number protoreflect.FieldNumber = 5
+	MethodDescriptorProto_ClientStreaming_field_number protoreflect.FieldNumber = 5
 	MethodDescriptorProto_ServerStreaming_field_number protoreflect.FieldNumber = 6
 )
 

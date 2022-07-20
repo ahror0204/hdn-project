@@ -84,8 +84,8 @@ func (ml *methodLogger) Build(c LogEntryConfig) *pb.GrpcLogEntry {
 	m.SequenceIdWithinCall = ml.idWithinCallGen.next()
 
 	switch pay := m.Payload.(type) {
-	case *pb.GrpcLogEntry_UserHeader:
-		m.PayloadTruncated = ml.truncateMetadata(pay.UserHeader.GetMetadata())
+	case *pb.GrpcLogEntry_ClientHeader:
+		m.PayloadTruncated = ml.truncateMetadata(pay.ClientHeader.GetMetadata())
 	case *pb.GrpcLogEntry_ServerHeader:
 		m.PayloadTruncated = ml.truncateMetadata(pay.ServerHeader.GetMetadata())
 	case *pb.GrpcLogEntry_Message:
@@ -145,36 +145,36 @@ type LogEntryConfig interface {
 	toProto() *pb.GrpcLogEntry
 }
 
-// UserHeader configs the binary log entry to be a UserHeader entry.
-type UserHeader struct {
-	OnUserSide bool
-	Header     metadata.MD
-	MethodName string
-	Authority  string
-	Timeout    time.Duration
+// ClientHeader configs the binary log entry to be a ClientHeader entry.
+type ClientHeader struct {
+	OnClientSide bool
+	Header       metadata.MD
+	MethodName   string
+	Authority    string
+	Timeout      time.Duration
 	// PeerAddr is required only when it's on server side.
 	PeerAddr net.Addr
 }
 
-func (c *UserHeader) toProto() *pb.GrpcLogEntry {
+func (c *ClientHeader) toProto() *pb.GrpcLogEntry {
 	// This function doesn't need to set all the fields (e.g. seq ID). The Log
 	// function will set the fields when necessary.
-	UserHeader := &pb.UserHeader{
+	clientHeader := &pb.ClientHeader{
 		Metadata:   mdToMetadataProto(c.Header),
 		MethodName: c.MethodName,
 		Authority:  c.Authority,
 	}
 	if c.Timeout > 0 {
-		UserHeader.Timeout = ptypes.DurationProto(c.Timeout)
+		clientHeader.Timeout = ptypes.DurationProto(c.Timeout)
 	}
 	ret := &pb.GrpcLogEntry{
-		Type: pb.GrpcLogEntry_EVENT_TYPE_User_HEADER,
-		Payload: &pb.GrpcLogEntry_UserHeader{
-			UserHeader: UserHeader,
+		Type: pb.GrpcLogEntry_EVENT_TYPE_CLIENT_HEADER,
+		Payload: &pb.GrpcLogEntry_ClientHeader{
+			ClientHeader: clientHeader,
 		},
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}
@@ -186,9 +186,9 @@ func (c *UserHeader) toProto() *pb.GrpcLogEntry {
 
 // ServerHeader configs the binary log entry to be a ServerHeader entry.
 type ServerHeader struct {
-	OnUserSide bool
-	Header     metadata.MD
-	// PeerAddr is required only when it's on User side.
+	OnClientSide bool
+	Header       metadata.MD
+	// PeerAddr is required only when it's on client side.
 	PeerAddr net.Addr
 }
 
@@ -201,8 +201,8 @@ func (c *ServerHeader) toProto() *pb.GrpcLogEntry {
 			},
 		},
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}
@@ -212,15 +212,15 @@ func (c *ServerHeader) toProto() *pb.GrpcLogEntry {
 	return ret
 }
 
-// UserMessage configs the binary log entry to be a UserMessage entry.
-type UserMessage struct {
-	OnUserSide bool
+// ClientMessage configs the binary log entry to be a ClientMessage entry.
+type ClientMessage struct {
+	OnClientSide bool
 	// Message can be a proto.Message or []byte. Other messages formats are not
 	// supported.
 	Message interface{}
 }
 
-func (c *UserMessage) toProto() *pb.GrpcLogEntry {
+func (c *ClientMessage) toProto() *pb.GrpcLogEntry {
 	var (
 		data []byte
 		err  error
@@ -236,7 +236,7 @@ func (c *UserMessage) toProto() *pb.GrpcLogEntry {
 		grpclogLogger.Infof("binarylogging: message to log is neither proto.message nor []byte")
 	}
 	ret := &pb.GrpcLogEntry{
-		Type: pb.GrpcLogEntry_EVENT_TYPE_User_MESSAGE,
+		Type: pb.GrpcLogEntry_EVENT_TYPE_CLIENT_MESSAGE,
 		Payload: &pb.GrpcLogEntry_Message{
 			Message: &pb.Message{
 				Length: uint32(len(data)),
@@ -244,8 +244,8 @@ func (c *UserMessage) toProto() *pb.GrpcLogEntry {
 			},
 		},
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}
@@ -254,7 +254,7 @@ func (c *UserMessage) toProto() *pb.GrpcLogEntry {
 
 // ServerMessage configs the binary log entry to be a ServerMessage entry.
 type ServerMessage struct {
-	OnUserSide bool
+	OnClientSide bool
 	// Message can be a proto.Message or []byte. Other messages formats are not
 	// supported.
 	Message interface{}
@@ -284,26 +284,26 @@ func (c *ServerMessage) toProto() *pb.GrpcLogEntry {
 			},
 		},
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}
 	return ret
 }
 
-// UserHalfClose configs the binary log entry to be a UserHalfClose entry.
-type UserHalfClose struct {
-	OnUserSide bool
+// ClientHalfClose configs the binary log entry to be a ClientHalfClose entry.
+type ClientHalfClose struct {
+	OnClientSide bool
 }
 
-func (c *UserHalfClose) toProto() *pb.GrpcLogEntry {
+func (c *ClientHalfClose) toProto() *pb.GrpcLogEntry {
 	ret := &pb.GrpcLogEntry{
-		Type:    pb.GrpcLogEntry_EVENT_TYPE_User_HALF_CLOSE,
+		Type:    pb.GrpcLogEntry_EVENT_TYPE_CLIENT_HALF_CLOSE,
 		Payload: nil, // No payload here.
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}
@@ -312,11 +312,11 @@ func (c *UserHalfClose) toProto() *pb.GrpcLogEntry {
 
 // ServerTrailer configs the binary log entry to be a ServerTrailer entry.
 type ServerTrailer struct {
-	OnUserSide bool
-	Trailer    metadata.MD
+	OnClientSide bool
+	Trailer      metadata.MD
 	// Err is the status error.
 	Err error
-	// PeerAddr is required only when it's on User side and the RPC is trailer
+	// PeerAddr is required only when it's on client side and the RPC is trailer
 	// only.
 	PeerAddr net.Addr
 }
@@ -348,8 +348,8 @@ func (c *ServerTrailer) toProto() *pb.GrpcLogEntry {
 			},
 		},
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}
@@ -361,7 +361,7 @@ func (c *ServerTrailer) toProto() *pb.GrpcLogEntry {
 
 // Cancel configs the binary log entry to be a Cancel entry.
 type Cancel struct {
-	OnUserSide bool
+	OnClientSide bool
 }
 
 func (c *Cancel) toProto() *pb.GrpcLogEntry {
@@ -369,8 +369,8 @@ func (c *Cancel) toProto() *pb.GrpcLogEntry {
 		Type:    pb.GrpcLogEntry_EVENT_TYPE_CANCEL,
 		Payload: nil,
 	}
-	if c.OnUserSide {
-		ret.Logger = pb.GrpcLogEntry_LOGGER_User
+	if c.OnClientSide {
+		ret.Logger = pb.GrpcLogEntry_LOGGER_CLIENT
 	} else {
 		ret.Logger = pb.GrpcLogEntry_LOGGER_SERVER
 	}

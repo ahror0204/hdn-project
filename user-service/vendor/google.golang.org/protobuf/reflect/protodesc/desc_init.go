@@ -211,7 +211,7 @@ func (r descsByName) initMethodsFromDescriptorProto(mds []*descriptorpb.MethodDe
 			opts = proto.Clone(opts).(*descriptorpb.MethodOptions)
 			m.L1.Options = func() protoreflect.ProtoMessage { return opts }
 		}
-		m.L1.IsStreamingUser = md.GetUserStreaming()
+		m.L1.IsStreamingClient = md.GetClientStreaming()
 		m.L1.IsStreamingServer = md.GetServerStreaming()
 	}
 	return ms, nil

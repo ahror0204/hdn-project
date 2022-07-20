@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 
-	"github.com/hdn-project/User-service/config"
+	"github.com/hdn-project/user-service/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" //postgres drivers
 )

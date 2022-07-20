@@ -81,7 +81,7 @@ func doneChannelzWrapper(acw *acBalancerWrapper, done func(balancer.DoneInfo)) f
 // - the current picker returns other errors and failfast is false.
 // - the subConn returned by the current picker is not READY
 // When one of these situations happens, pick blocks until the picker gets updated.
-func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.PickInfo) (transport.UserTransport, func(balancer.DoneInfo), error) {
+func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.PickInfo) (transport.ClientTransport, func(balancer.DoneInfo), error) {
 	var ch chan struct{}
 
 	var lastPickErr error
@@ -89,7 +89,7 @@ func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.
 		pw.mu.Lock()
 		if pw.done {
 			pw.mu.Unlock()
-			return nil, nil, ErrUserConnClosing
+			return nil, nil, ErrClientConnClosing
 		}
 
 		if pw.picker == nil {

@@ -75,17 +75,17 @@ func NewConnector(dsn string) (*Connector, error) {
 		}
 	}
 
-	// We can't work with any User_encoding other than UTF-8 currently.
+	// We can't work with any client_encoding other than UTF-8 currently.
 	// However, we have historically allowed the user to set it to UTF-8
 	// explicitly, and there's no reason to break such programs, so allow that.
-	// Note that the "options" setting could also set User_encoding, but
+	// Note that the "options" setting could also set client_encoding, but
 	// parsing its value is not worth it.  Instead, we always explicitly send
-	// User_encoding as a separate run-time parameter, which should override
+	// client_encoding as a separate run-time parameter, which should override
 	// anything set in options.
-	if enc, ok := o["User_encoding"]; ok && !isUTF8(enc) {
-		return nil, errors.New("User_encoding must be absent or 'UTF8'")
+	if enc, ok := o["client_encoding"]; ok && !isUTF8(enc) {
+		return nil, errors.New("client_encoding must be absent or 'UTF8'")
 	}
-	o["User_encoding"] = "UTF8"
+	o["client_encoding"] = "UTF8"
 	// DateStyle needs a similar treatment.
 	if datestyle, ok := o["datestyle"]; ok {
 		if datestyle != "ISO, MDY" {

@@ -36,7 +36,7 @@ type RPCTagInfo struct {
 	// FullMethodName is the RPC method in the format of /package.service/method.
 	FullMethodName string
 	// FailFast indicates if this RPC is failfast.
-	// This field is only valid on User side, it's always false on server side.
+	// This field is only valid on client side, it's always false on server side.
 	FailFast bool
 }
 
@@ -56,7 +56,7 @@ type Handler interface {
 	// For RPC stats handling,
 	//  - On server side, the context used in HandleRPC for all RPCs on this
 	// connection will be derived from the context returned.
-	//  - On User side, the context is not derived from the context returned.
+	//  - On client side, the context is not derived from the context returned.
 	TagConn(context.Context, *ConnTagInfo) context.Context
 	// HandleConn processes the Conn stats.
 	HandleConn(context.Context, ConnStats)

@@ -118,7 +118,7 @@ func textDecode(parameterStatus *parameterStatus, s []byte, typ oid.Oid) interfa
 		return i
 	case oid.T_float4, oid.T_float8:
 		// We always use 64 bit parsing, regardless of whether the input text is for
-		// a float4 or float8, because Users expect float64s for all float datatypes
+		// a float4 or float8, because clients expect float64s for all float datatypes
 		// and returning a 32-bit parsed float64 produces lossy results.
 		f, err := strconv.ParseFloat(string(s), 64)
 		if err != nil {
@@ -246,7 +246,7 @@ func (p *timestampParser) mustAtoi(str string, begin int, end int) int {
 	return result
 }
 
-// The location cache caches the time zones typically used by the User.
+// The location cache caches the time zones typically used by the client.
 type locationCache struct {
 	cache map[int]*time.Location
 	lock  sync.Mutex

@@ -28,3 +28,6 @@ message User {
     string updated_at = 11;
     string deleted_at = 12;
 }
+message UserResponse {
+    User user = 1;
+}

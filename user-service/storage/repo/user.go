@@ -1,7 +1,7 @@
 package repo
 
 import (
-	pb "github.com/hdn-project/User-service/genproto"
+	pb "github.com/hdn-project/user-service/genproto"
 )
 
 //UserStorageI ...

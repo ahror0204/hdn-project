@@ -314,7 +314,7 @@ const (
 	CAP_SEND                       = 0x200000000000002
 	CAP_SETSOCKOPT                 = 0x200002000000000
 	CAP_SHUTDOWN                   = 0x200004000000000
-	CAP_SOCK_User                = 0x200007780000003
+	CAP_SOCK_CLIENT                = 0x200007780000003
 	CAP_SOCK_SERVER                = 0x200007f60000003
 	CAP_SYMLINKAT                  = 0x200000008000400
 	CAP_TTYHOOK                    = 0x400000000000100

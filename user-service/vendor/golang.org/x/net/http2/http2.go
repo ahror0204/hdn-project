@@ -51,9 +51,9 @@ func init() {
 }
 
 const (
-	// UserPreface is the string that must be sent by new
-	// connections from Users.
-	UserPreface = "PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"
+	// ClientPreface is the string that must be sent by new
+	// connections from clients.
+	ClientPreface = "PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"
 
 	// SETTINGS_MAX_FRAME_SIZE default
 	// http://http2.github.io/http2-spec/#rfc.section.6.5.2
@@ -72,7 +72,7 @@ const (
 )
 
 var (
-	UserPreface = []byte(UserPreface)
+	clientPreface = []byte(ClientPreface)
 )
 
 type streamState int
@@ -87,7 +87,7 @@ type streamState int
 // liberally than allowable. More discussion here:
 // https://lists.w3.org/Archives/Public/ietf-http-wg/2016JulSep/0599.html
 //
-// "reserved (remote)" is omitted since the User code does not
+// "reserved (remote)" is omitted since the client code does not
 // support server push.
 const (
 	stateIdle streamState = iota

@@ -41,14 +41,14 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-// The message sent by the User when calling ServerReflectionInfo method.
+// The message sent by the client when calling ServerReflectionInfo method.
 type ServerReflectionRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
-	// To use reflection service, the User should set one of the following
+	// To use reflection service, the client should set one of the following
 	// fields in message_request. The server distinguishes requests by their
 	// defined field and then handles them using corresponding methods.
 	//
@@ -193,7 +193,7 @@ func (*ServerReflectionRequest_AllExtensionNumbersOfType) isServerReflectionRequ
 
 func (*ServerReflectionRequest_ListServices) isServerReflectionRequest_MessageRequest() {}
 
-// The type name and extension number sent by the User when requesting
+// The type name and extension number sent by the client when requesting
 // file_containing_extension.
 type ExtensionRequest struct {
 	state         protoimpl.MessageState

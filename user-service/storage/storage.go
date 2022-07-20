@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"github.com/hdn-project/User-service/storage/postgres"
-	"github.com/hdn-project/User-service/storage/repo"
+	"github.com/hdn-project/user-service/storage/postgres"
+	"github.com/hdn-project/user-service/storage/repo"
 	"github.com/jmoiron/sqlx"
 )
 

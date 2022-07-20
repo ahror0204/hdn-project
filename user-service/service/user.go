@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 
-	pb "github.com/hdn-project/User-service/genproto"
-	l "github.com/hdn-project/User-service/pkg/logger"
-	"github.com/hdn-project/User-service/storage"
+	pb "github.com/hdn-project/user-service/genproto"
+	l "github.com/hdn-project/user-service/pkg/logger"
+	"github.com/hdn-project/user-service/storage"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

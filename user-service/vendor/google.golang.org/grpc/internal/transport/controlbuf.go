@@ -91,7 +91,7 @@ func (il *itemList) isEmpty() bool {
 
 // maxQueuedTransportResponseFrames is the most queued "transport response"
 // frames we will buffer before preventing new reads from occurring on the
-// transport.  These are control frames sent in response to User requests,
+// transport.  These are control frames sent in response to client requests,
 // such as RST_STREAM due to bad headers or settings acks.
 const maxQueuedTransportResponseFrames = 50
 
@@ -107,16 +107,16 @@ type registerStream struct {
 
 func (*registerStream) isTransportResponseFrame() bool { return false }
 
-// headerFrame is also used to register stream on the User-side.
+// headerFrame is also used to register stream on the client-side.
 type headerFrame struct {
 	streamID   uint32
 	hf         []hpack.HeaderField
 	endStream  bool               // Valid on server side.
-	initStream func(uint32) error // Used only on the User side.
+	initStream func(uint32) error // Used only on the client side.
 	onWrite    func()
 	wq         *writeQuota    // write quota for the stream created.
 	cleanup    *cleanupStream // Valid on the server side.
-	onOrphaned func(error)    // Valid on User-side
+	onOrphaned func(error)    // Valid on client-side
 }
 
 func (h *headerFrame) isTransportResponseFrame() bool {
@@ -446,7 +446,7 @@ func (c *controlBuffer) finish() {
 type side int
 
 const (
-	UserSide side = iota
+	clientSide side = iota
 	serverSide
 )
 
@@ -465,7 +465,7 @@ type loopyWriter struct {
 	sendQuota uint32
 	oiws      uint32 // outbound initial window size.
 	// estdStreams is map of all established streams that are not cleaned-up yet.
-	// On User-side, this is all streams whose headers were sent out.
+	// On client-side, this is all streams whose headers were sent out.
 	// On server-side, this is all streams whose headers were received.
 	estdStreams map[uint32]*outStream // Established streams.
 	// activeStreams is a linked-list of all streams that have data to send and some
@@ -648,7 +648,7 @@ func (l *loopyWriter) headerHandler(h *headerFrame) error {
 		}
 		return l.cleanupStreamHandler(h.cleanup)
 	}
-	// Case 2: User wants to originate stream.
+	// Case 2: Client wants to originate stream.
 	str := &outStream{
 		id:    h.streamID,
 		state: empty,
@@ -763,15 +763,15 @@ func (l *loopyWriter) cleanupStreamHandler(c *cleanupStream) error {
 			return err
 		}
 	}
-	if l.side == UserSide && l.draining && len(l.estdStreams) == 0 {
+	if l.side == clientSide && l.draining && len(l.estdStreams) == 0 {
 		return ErrConnClosing
 	}
 	return nil
 }
 
 func (l *loopyWriter) earlyAbortStreamHandler(eas *earlyAbortStream) error {
-	if l.side == UserSide {
-		return errors.New("earlyAbortStream not handled on User")
+	if l.side == clientSide {
+		return errors.New("earlyAbortStream not handled on client")
 	}
 	// In case the caller forgets to set the http status, default to 200.
 	if eas.httpStatus == 0 {
@@ -796,7 +796,7 @@ func (l *loopyWriter) earlyAbortStreamHandler(eas *earlyAbortStream) error {
 }
 
 func (l *loopyWriter) incomingGoAwayHandler(*incomingGoAway) error {
-	if l.side == UserSide {
+	if l.side == clientSide {
 		l.draining = true
 		if len(l.estdStreams) == 0 {
 			return ErrConnClosing
@@ -891,7 +891,7 @@ func (l *loopyWriter) processData() (bool, error) {
 	// maximum possilbe HTTP2 frame size.
 
 	if len(dataItem.h) == 0 && len(dataItem.d) == 0 { // Empty data frame
-		// User sends out empty data frame with endStream = true
+		// Client sends out empty data frame with endStream = true
 		if err := l.framer.fr.WriteData(dataItem.streamID, dataItem.endStream, nil); err != nil {
 			return false, err
 		}

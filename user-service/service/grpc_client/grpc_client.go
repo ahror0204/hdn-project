@@ -1,7 +1,7 @@
 package grpcUser
 
 import (
-	"github.com/hdn-project/User-service/config"
+	"github.com/hdn-project/user-service/config"
 )
 
 //GrpcUserI ...

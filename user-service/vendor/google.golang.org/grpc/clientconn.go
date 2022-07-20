@@ -59,12 +59,12 @@ const (
 )
 
 var (
-	// ErrUserConnClosing indicates that the operation is illegal because
-	// the UserConn is closing.
+	// ErrClientConnClosing indicates that the operation is illegal because
+	// the ClientConn is closing.
 	//
 	// Deprecated: this error should not be relied upon by users; use the status
 	// code of Canceled instead.
-	ErrUserConnClosing = status.Error(codes.Canceled, "grpc: the User connection is closing")
+	ErrClientConnClosing = status.Error(codes.Canceled, "grpc: the client connection is closing")
 	// errConnDrain indicates that the connection starts to be drained and does not accept any new RPCs.
 	errConnDrain = errors.New("grpc: the connection is drained")
 	// errConnClosing indicates that the connection is closing.
@@ -77,7 +77,7 @@ var (
 // The following errors are returned from Dial and DialContext
 var (
 	// errNoTransportSecurity indicates that there is no transport security
-	// being set for UserConn. Users should either set one or explicitly
+	// being set for ClientConn. Users should either set one or explicitly
 	// call WithInsecure DialOption to disable security.
 	errNoTransportSecurity = errors.New("grpc: no transport security set (use grpc.WithTransportCredentials(insecure.NewCredentials()) explicitly or set credentials)")
 	// errTransportCredsAndBundle indicates that creds bundle is used together
@@ -93,15 +93,15 @@ var (
 )
 
 const (
-	defaultUserMaxReceiveMessageSize = 1024 * 1024 * 4
-	defaultUserMaxSendMessageSize    = math.MaxInt32
+	defaultClientMaxReceiveMessageSize = 1024 * 1024 * 4
+	defaultClientMaxSendMessageSize    = math.MaxInt32
 	// http2IOBufSize specifies the buffer size for sending frames.
 	defaultWriteBufSize = 32 * 1024
 	defaultReadBufSize  = 32 * 1024
 )
 
-// Dial creates a User connection to the given target.
-func Dial(target string, opts ...DialOption) (*UserConn, error) {
+// Dial creates a client connection to the given target.
+func Dial(target string, opts ...DialOption) (*ClientConn, error) {
 	return DialContext(context.Background(), target, opts...)
 }
 
@@ -116,7 +116,7 @@ func (dcs *defaultConfigSelector) SelectConfig(rpcInfo iresolver.RPCInfo) (*ires
 	}, nil
 }
 
-// DialContext creates a User connection to the given target. By default, it's
+// DialContext creates a client connection to the given target. By default, it's
 // a non-blocking dial (the function won't wait for connections to be
 // established, and connecting happens in the background). To make it a blocking
 // dial, use WithBlock() dial option.
@@ -126,14 +126,14 @@ func (dcs *defaultConfigSelector) SelectConfig(rpcInfo iresolver.RPCInfo) (*ires
 //
 // In the blocking case, ctx can be used to cancel or expire the pending
 // connection. Once this function returns, the cancellation and expiration of
-// ctx will be noop. Users should call UserConn.Close to terminate all the
+// ctx will be noop. Users should call ClientConn.Close to terminate all the
 // pending operations after this function returns.
 //
 // The target name syntax is defined in
 // https://github.com/grpc/grpc/blob/master/doc/naming.md.
 // e.g. to use dns resolver, a "dns:///" prefix should be applied to the target.
-func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *UserConn, err error) {
-	cc := &UserConn{
+func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *ClientConn, err error) {
+	cc := &ClientConn{
 		target:            target,
 		csMgr:             &connectivityStateManager{},
 		conns:             make(map[*addrConn]struct{}),
@@ -150,8 +150,8 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 		opt.apply(&cc.dopts)
 	}
 
-	chainUnaryUserInterceptors(cc)
-	chainStreamUserInterceptors(cc)
+	chainUnaryClientInterceptors(cc)
+	chainStreamClientInterceptors(cc)
 
 	defer func() {
 		if err != nil {
@@ -297,7 +297,7 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 	cc.resolverWrapper = rWrapper
 	cc.mu.Unlock()
 
-	// A blocking dial blocks until the UserConn is ready.
+	// A blocking dial blocks until the clientConn is ready.
 	if cc.dopts.block {
 		for {
 			cc.Connect()
@@ -327,21 +327,21 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 	return cc, nil
 }
 
-// chainUnaryUserInterceptors chains all unary User interceptors into one.
-func chainUnaryUserInterceptors(cc *UserConn) {
+// chainUnaryClientInterceptors chains all unary client interceptors into one.
+func chainUnaryClientInterceptors(cc *ClientConn) {
 	interceptors := cc.dopts.chainUnaryInts
 	// Prepend dopts.unaryInt to the chaining interceptors if it exists, since unaryInt will
 	// be executed before any other chained interceptors.
 	if cc.dopts.unaryInt != nil {
-		interceptors = append([]UnaryUserInterceptor{cc.dopts.unaryInt}, interceptors...)
+		interceptors = append([]UnaryClientInterceptor{cc.dopts.unaryInt}, interceptors...)
 	}
-	var chainedInt UnaryUserInterceptor
+	var chainedInt UnaryClientInterceptor
 	if len(interceptors) == 0 {
 		chainedInt = nil
 	} else if len(interceptors) == 1 {
 		chainedInt = interceptors[0]
 	} else {
-		chainedInt = func(ctx context.Context, method string, req, reply interface{}, cc *UserConn, invoker UnaryInvoker, opts ...CallOption) error {
+		chainedInt = func(ctx context.Context, method string, req, reply interface{}, cc *ClientConn, invoker UnaryInvoker, opts ...CallOption) error {
 			return interceptors[0](ctx, method, req, reply, cc, getChainUnaryInvoker(interceptors, 0, invoker), opts...)
 		}
 	}
@@ -349,47 +349,47 @@ func chainUnaryUserInterceptors(cc *UserConn) {
 }
 
 // getChainUnaryInvoker recursively generate the chained unary invoker.
-func getChainUnaryInvoker(interceptors []UnaryUserInterceptor, curr int, finalInvoker UnaryInvoker) UnaryInvoker {
+func getChainUnaryInvoker(interceptors []UnaryClientInterceptor, curr int, finalInvoker UnaryInvoker) UnaryInvoker {
 	if curr == len(interceptors)-1 {
 		return finalInvoker
 	}
-	return func(ctx context.Context, method string, req, reply interface{}, cc *UserConn, opts ...CallOption) error {
+	return func(ctx context.Context, method string, req, reply interface{}, cc *ClientConn, opts ...CallOption) error {
 		return interceptors[curr+1](ctx, method, req, reply, cc, getChainUnaryInvoker(interceptors, curr+1, finalInvoker), opts...)
 	}
 }
 
-// chainStreamUserInterceptors chains all stream User interceptors into one.
-func chainStreamUserInterceptors(cc *UserConn) {
+// chainStreamClientInterceptors chains all stream client interceptors into one.
+func chainStreamClientInterceptors(cc *ClientConn) {
 	interceptors := cc.dopts.chainStreamInts
 	// Prepend dopts.streamInt to the chaining interceptors if it exists, since streamInt will
 	// be executed before any other chained interceptors.
 	if cc.dopts.streamInt != nil {
-		interceptors = append([]StreamUserInterceptor{cc.dopts.streamInt}, interceptors...)
+		interceptors = append([]StreamClientInterceptor{cc.dopts.streamInt}, interceptors...)
 	}
-	var chainedInt StreamUserInterceptor
+	var chainedInt StreamClientInterceptor
 	if len(interceptors) == 0 {
 		chainedInt = nil
 	} else if len(interceptors) == 1 {
 		chainedInt = interceptors[0]
 	} else {
-		chainedInt = func(ctx context.Context, desc *StreamDesc, cc *UserConn, method string, streamer Streamer, opts ...CallOption) (UserStream, error) {
+		chainedInt = func(ctx context.Context, desc *StreamDesc, cc *ClientConn, method string, streamer Streamer, opts ...CallOption) (ClientStream, error) {
 			return interceptors[0](ctx, desc, cc, method, getChainStreamer(interceptors, 0, streamer), opts...)
 		}
 	}
 	cc.dopts.streamInt = chainedInt
 }
 
-// getChainStreamer recursively generate the chained User stream constructor.
-func getChainStreamer(interceptors []StreamUserInterceptor, curr int, finalStreamer Streamer) Streamer {
+// getChainStreamer recursively generate the chained client stream constructor.
+func getChainStreamer(interceptors []StreamClientInterceptor, curr int, finalStreamer Streamer) Streamer {
 	if curr == len(interceptors)-1 {
 		return finalStreamer
 	}
-	return func(ctx context.Context, desc *StreamDesc, cc *UserConn, method string, opts ...CallOption) (UserStream, error) {
+	return func(ctx context.Context, desc *StreamDesc, cc *ClientConn, method string, opts ...CallOption) (ClientStream, error) {
 		return interceptors[curr+1](ctx, desc, cc, method, getChainStreamer(interceptors, curr+1, finalStreamer), opts...)
 	}
 }
 
-// connectivityStateManager keeps the connectivity.State of UserConn.
+// connectivityStateManager keeps the connectivity.State of ClientConn.
 // This struct will eventually be exported so the balancers can access it.
 type connectivityStateManager struct {
 	mu         sync.Mutex
@@ -398,7 +398,7 @@ type connectivityStateManager struct {
 	channelzID *channelz.Identifier
 }
 
-// updateState updates the connectivity.State of UserConn.
+// updateState updates the connectivity.State of ClientConn.
 // If there's a change it notifies goroutines waiting on state change to
 // happen.
 func (csm *connectivityStateManager) updateState(state connectivity.State) {
@@ -434,33 +434,33 @@ func (csm *connectivityStateManager) getNotifyChan() <-chan struct{} {
 	return csm.notifyChan
 }
 
-// UserConnInterface defines the functions Users need to perform unary and
-// streaming RPCs.  It is implemented by *UserConn, and is only intended to
+// ClientConnInterface defines the functions clients need to perform unary and
+// streaming RPCs.  It is implemented by *ClientConn, and is only intended to
 // be referenced by generated code.
-type UserConnInterface interface {
+type ClientConnInterface interface {
 	// Invoke performs a unary RPC and returns after the response is received
 	// into reply.
 	Invoke(ctx context.Context, method string, args interface{}, reply interface{}, opts ...CallOption) error
 	// NewStream begins a streaming RPC.
-	NewStream(ctx context.Context, desc *StreamDesc, method string, opts ...CallOption) (UserStream, error)
+	NewStream(ctx context.Context, desc *StreamDesc, method string, opts ...CallOption) (ClientStream, error)
 }
 
-// Assert *UserConn implements UserConnInterface.
-var _ UserConnInterface = (*UserConn)(nil)
+// Assert *ClientConn implements ClientConnInterface.
+var _ ClientConnInterface = (*ClientConn)(nil)
 
-// UserConn represents a virtual connection to a conceptual endpoint, to
+// ClientConn represents a virtual connection to a conceptual endpoint, to
 // perform RPCs.
 //
-// A UserConn is free to have zero or more actual connections to the endpoint
+// A ClientConn is free to have zero or more actual connections to the endpoint
 // based on configuration, load, etc. It is also free to determine which actual
-// endpoints to use and may change it every RPC, permitting User-side load
+// endpoints to use and may change it every RPC, permitting client-side load
 // balancing.
 //
-// A UserConn encapsulates a range of functionality including name
+// A ClientConn encapsulates a range of functionality including name
 // resolution, TCP connection establishment (with retries and backoff) and TLS
 // handshakes. It also handles errors on established connections by
 // re-resolving the name and reconnecting.
-type UserConn struct {
+type ClientConn struct {
 	ctx    context.Context    // Initialized using the background context at dial time.
 	cancel context.CancelFunc // Cancelled on close.
 
@@ -487,23 +487,23 @@ type UserConn struct {
 	// mu protects the following fields.
 	// TODO: split mu so the same mutex isn't used for everything.
 	mu              sync.RWMutex
-	resolverWrapper *ccResolverWrapper       // Initialized in Dial; cleared in Close.
-	sc              *ServiceConfig           // Latest service config received from the resolver.
-	conns           map[*addrConn]struct{}   // Set to nil on close.
-	mkp             keepalive.UserParameters // May be updated upon receipt of a GoAway.
+	resolverWrapper *ccResolverWrapper         // Initialized in Dial; cleared in Close.
+	sc              *ServiceConfig             // Latest service config received from the resolver.
+	conns           map[*addrConn]struct{}     // Set to nil on close.
+	mkp             keepalive.ClientParameters // May be updated upon receipt of a GoAway.
 
 	lceMu               sync.Mutex // protects lastConnectionError
 	lastConnectionError error
 }
 
-// WaitForStateChange waits until the connectivity.State of UserConn changes from sourceState or
+// WaitForStateChange waits until the connectivity.State of ClientConn changes from sourceState or
 // ctx expires. A true value is returned in former case and false in latter.
 //
 // Experimental
 //
 // Notice: This API is EXPERIMENTAL and may be changed or removed in a
 // later release.
-func (cc *UserConn) WaitForStateChange(ctx context.Context, sourceState connectivity.State) bool {
+func (cc *ClientConn) WaitForStateChange(ctx context.Context, sourceState connectivity.State) bool {
 	ch := cc.csMgr.getNotifyChan()
 	if cc.csMgr.getState() != sourceState {
 		return true
@@ -516,17 +516,17 @@ func (cc *UserConn) WaitForStateChange(ctx context.Context, sourceState connecti
 	}
 }
 
-// GetState returns the connectivity.State of UserConn.
+// GetState returns the connectivity.State of ClientConn.
 //
 // Experimental
 //
 // Notice: This API is EXPERIMENTAL and may be changed or removed in a later
 // release.
-func (cc *UserConn) GetState() connectivity.State {
+func (cc *ClientConn) GetState() connectivity.State {
 	return cc.csMgr.getState()
 }
 
-// Connect causes all subchannels in the UserConn to attempt to connect if
+// Connect causes all subchannels in the ClientConn to attempt to connect if
 // the channel is idle.  Does not wait for the connection attempts to begin
 // before returning.
 //
@@ -534,11 +534,11 @@ func (cc *UserConn) GetState() connectivity.State {
 //
 // Notice: This API is EXPERIMENTAL and may be changed or removed in a later
 // release.
-func (cc *UserConn) Connect() {
+func (cc *ClientConn) Connect() {
 	cc.balancerWrapper.exitIdle()
 }
 
-func (cc *UserConn) scWatcher() {
+func (cc *ClientConn) scWatcher() {
 	for {
 		select {
 		case sc, ok := <-cc.dopts.scChan:
@@ -560,7 +560,7 @@ func (cc *UserConn) scWatcher() {
 // waitForResolvedAddrs blocks until the resolver has provided addresses or the
 // context expires.  Returns nil unless the context expires first; otherwise
 // returns a status error based on the context.
-func (cc *UserConn) waitForResolvedAddrs(ctx context.Context) error {
+func (cc *ClientConn) waitForResolvedAddrs(ctx context.Context) error {
 	// This is on the RPC path, so we use a fast path to avoid the
 	// more-expensive "select" below after the resolver has returned once.
 	if cc.firstResolveEvent.HasFired() {
@@ -572,7 +572,7 @@ func (cc *UserConn) waitForResolvedAddrs(ctx context.Context) error {
 	case <-ctx.Done():
 		return status.FromContextError(ctx.Err()).Err()
 	case <-cc.ctx.Done():
-		return ErrUserConnClosing
+		return ErrClientConnClosing
 	}
 }
 
@@ -586,7 +586,7 @@ func init() {
 	emptyServiceConfig = cfg.Config.(*ServiceConfig)
 }
 
-func (cc *UserConn) maybeApplyDefaultServiceConfig(addrs []resolver.Address) {
+func (cc *ClientConn) maybeApplyDefaultServiceConfig(addrs []resolver.Address) {
 	if cc.sc != nil {
 		cc.applyServiceConfigAndBalancer(cc.sc, nil, addrs)
 		return
@@ -598,11 +598,11 @@ func (cc *UserConn) maybeApplyDefaultServiceConfig(addrs []resolver.Address) {
 	}
 }
 
-func (cc *UserConn) updateResolverState(s resolver.State, err error) error {
+func (cc *ClientConn) updateResolverState(s resolver.State, err error) error {
 	defer cc.firstResolveEvent.Fire()
 	cc.mu.Lock()
-	// Check if the UserConn is already closed. Some fields (e.g.
-	// balancerWrapper) are set to nil when closing the UserConn, and could
+	// Check if the ClientConn is already closed. Some fields (e.g.
+	// balancerWrapper) are set to nil when closing the ClientConn, and could
 	// cause nil pointer panic if we don't have this check.
 	if cc.conns == nil {
 		cc.mu.Unlock()
@@ -660,7 +660,7 @@ func (cc *UserConn) updateResolverState(s resolver.State, err error) error {
 	bw := cc.balancerWrapper
 	cc.mu.Unlock()
 
-	uccsErr := bw.updateUserConnState(&balancer.UserConnState{ResolverState: s, BalancerConfig: balCfg})
+	uccsErr := bw.updateClientConnState(&balancer.ClientConnState{ResolverState: s, BalancerConfig: balCfg})
 	if ret == nil {
 		ret = uccsErr // prefer ErrBadResolver state since any other error is
 		// currently meaningless to the caller.
@@ -676,7 +676,7 @@ func (cc *UserConn) updateResolverState(s resolver.State, err error) error {
 // set to TransientFailure.
 //
 // Caller must hold cc.mu.
-func (cc *UserConn) applyFailingLB(sc *serviceconfig.ParseResult) {
+func (cc *ClientConn) applyFailingLB(sc *serviceconfig.ParseResult) {
 	var err error
 	if sc.Err != nil {
 		err = status.Errorf(codes.Unavailable, "error parsing service config: %v", sc.Err)
@@ -688,14 +688,14 @@ func (cc *UserConn) applyFailingLB(sc *serviceconfig.ParseResult) {
 	cc.csMgr.updateState(connectivity.TransientFailure)
 }
 
-func (cc *UserConn) handleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
+func (cc *ClientConn) handleSubConnStateChange(sc balancer.SubConn, s connectivity.State, err error) {
 	cc.balancerWrapper.updateSubConnState(sc, s, err)
 }
 
 // newAddrConn creates an addrConn for addrs and adds it to cc.conns.
 //
 // Caller needs to make sure len(addrs) > 0.
-func (cc *UserConn) newAddrConn(addrs []resolver.Address, opts balancer.NewSubConnOptions) (*addrConn, error) {
+func (cc *ClientConn) newAddrConn(addrs []resolver.Address, opts balancer.NewSubConnOptions) (*addrConn, error) {
 	ac := &addrConn{
 		state:        connectivity.Idle,
 		cc:           cc,
@@ -710,7 +710,7 @@ func (cc *UserConn) newAddrConn(addrs []resolver.Address, opts balancer.NewSubCo
 	cc.mu.Lock()
 	if cc.conns == nil {
 		cc.mu.Unlock()
-		return nil, ErrUserConnClosing
+		return nil, ErrClientConnClosing
 	}
 
 	var err error
@@ -732,9 +732,9 @@ func (cc *UserConn) newAddrConn(addrs []resolver.Address, opts balancer.NewSubCo
 	return ac, nil
 }
 
-// removeAddrConn removes the addrConn in the subConn from UserConn.
+// removeAddrConn removes the addrConn in the subConn from clientConn.
 // It also tears down the ac with the given error.
-func (cc *UserConn) removeAddrConn(ac *addrConn, err error) {
+func (cc *ClientConn) removeAddrConn(ac *addrConn, err error) {
 	cc.mu.Lock()
 	if cc.conns == nil {
 		cc.mu.Unlock()
@@ -745,7 +745,7 @@ func (cc *UserConn) removeAddrConn(ac *addrConn, err error) {
 	ac.tearDown(err)
 }
 
-func (cc *UserConn) channelzMetric() *channelz.ChannelInternalMetric {
+func (cc *ClientConn) channelzMetric() *channelz.ChannelInternalMetric {
 	return &channelz.ChannelInternalMetric{
 		State:                    cc.GetState(),
 		Target:                   cc.target,
@@ -756,26 +756,26 @@ func (cc *UserConn) channelzMetric() *channelz.ChannelInternalMetric {
 	}
 }
 
-// Target returns the target string of the UserConn.
+// Target returns the target string of the ClientConn.
 //
 // Experimental
 //
 // Notice: This API is EXPERIMENTAL and may be changed or removed in a
 // later release.
-func (cc *UserConn) Target() string {
+func (cc *ClientConn) Target() string {
 	return cc.target
 }
 
-func (cc *UserConn) incrCallsStarted() {
+func (cc *ClientConn) incrCallsStarted() {
 	atomic.AddInt64(&cc.czData.callsStarted, 1)
 	atomic.StoreInt64(&cc.czData.lastCallStartedTime, time.Now().UnixNano())
 }
 
-func (cc *UserConn) incrCallsSucceeded() {
+func (cc *ClientConn) incrCallsSucceeded() {
 	atomic.AddInt64(&cc.czData.callsSucceeded, 1)
 }
 
-func (cc *UserConn) incrCallsFailed() {
+func (cc *ClientConn) incrCallsFailed() {
 	atomic.AddInt64(&cc.czData.callsFailed, 1)
 }
 
@@ -869,7 +869,7 @@ func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 
 // getServerName determines the serverName to be used in the connection
 // handshake. The default value for the serverName is the authority on the
-// UserConn, which either comes from the user's dial target or through an
+// ClientConn, which either comes from the user's dial target or through an
 // authority override specified using the WithAuthority dial option. Name
 // resolvers can specify a per-address override for the serverName through the
 // resolver.Address.ServerName field which is used only if the WithAuthority
@@ -877,7 +877,7 @@ func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 // overrides specified by the name resolver can represent a security risk, while
 // an override specified by the user is more dependable since they probably know
 // what they are doing.
-func (cc *UserConn) getServerName(addr resolver.Address) string {
+func (cc *ClientConn) getServerName(addr resolver.Address) string {
 	if cc.dopts.authority != "" {
 		return cc.dopts.authority
 	}
@@ -909,14 +909,14 @@ func getMethodConfig(sc *ServiceConfig, method string) MethodConfig {
 //
 // If there is a default MethodConfig for the service, we return it.
 // Otherwise, we return an empty MethodConfig.
-func (cc *UserConn) GetMethodConfig(method string) MethodConfig {
+func (cc *ClientConn) GetMethodConfig(method string) MethodConfig {
 	// TODO: Avoid the locking here.
 	cc.mu.RLock()
 	defer cc.mu.RUnlock()
 	return getMethodConfig(cc.sc, method)
 }
 
-func (cc *UserConn) healthCheckConfig() *healthCheckConfig {
+func (cc *ClientConn) healthCheckConfig() *healthCheckConfig {
 	cc.mu.RLock()
 	defer cc.mu.RUnlock()
 	if cc.sc == nil {
@@ -925,14 +925,14 @@ func (cc *UserConn) healthCheckConfig() *healthCheckConfig {
 	return cc.sc.healthCheckConfig
 }
 
-func (cc *UserConn) getTransport(ctx context.Context, failfast bool, method string) (transport.UserTransport, func(balancer.DoneInfo), error) {
+func (cc *ClientConn) getTransport(ctx context.Context, failfast bool, method string) (transport.ClientTransport, func(balancer.DoneInfo), error) {
 	return cc.blockingpicker.pick(ctx, failfast, balancer.PickInfo{
 		Ctx:            ctx,
 		FullMethodName: method,
 	})
 }
 
-func (cc *UserConn) applyServiceConfigAndBalancer(sc *ServiceConfig, configSelector iresolver.ConfigSelector, addrs []resolver.Address) {
+func (cc *ClientConn) applyServiceConfigAndBalancer(sc *ServiceConfig, configSelector iresolver.ConfigSelector, addrs []resolver.Address) {
 	if sc == nil {
 		// should never reach here.
 		return
@@ -976,7 +976,7 @@ func (cc *UserConn) applyServiceConfigAndBalancer(sc *ServiceConfig, configSelec
 	cc.balancerWrapper.switchTo(newBalancerName)
 }
 
-func (cc *UserConn) resolveNow(o resolver.ResolveNowOptions) {
+func (cc *ClientConn) resolveNow(o resolver.ResolveNowOptions) {
 	cc.mu.RLock()
 	r := cc.resolverWrapper
 	cc.mu.RUnlock()
@@ -991,7 +991,7 @@ func (cc *UserConn) resolveNow(o resolver.ResolveNowOptions) {
 // times used for subsequent attempts regardless of the current state.
 //
 // In general, this function should not be used.  Typical service or network
-// outages result in a reasonable User reconnection strategy by default.
+// outages result in a reasonable client reconnection strategy by default.
 // However, if a previously unavailable network becomes available, this may be
 // used to trigger an immediate reconnect.
 //
@@ -999,7 +999,7 @@ func (cc *UserConn) resolveNow(o resolver.ResolveNowOptions) {
 //
 // Notice: This API is EXPERIMENTAL and may be changed or removed in a
 // later release.
-func (cc *UserConn) ResetConnectBackoff() {
+func (cc *ClientConn) ResetConnectBackoff() {
 	cc.mu.Lock()
 	conns := cc.conns
 	cc.mu.Unlock()
@@ -1008,14 +1008,14 @@ func (cc *UserConn) ResetConnectBackoff() {
 	}
 }
 
-// Close tears down the UserConn and all underlying connections.
-func (cc *UserConn) Close() error {
+// Close tears down the ClientConn and all underlying connections.
+func (cc *ClientConn) Close() error {
 	defer cc.cancel()
 
 	cc.mu.Lock()
 	if cc.conns == nil {
 		cc.mu.Unlock()
-		return ErrUserConnClosing
+		return ErrClientConnClosing
 	}
 	conns := cc.conns
 	cc.conns = nil
@@ -1037,7 +1037,7 @@ func (cc *UserConn) Close() error {
 	}
 
 	for ac := range conns {
-		ac.tearDown(ErrUserConnClosing)
+		ac.tearDown(ErrClientConnClosing)
 	}
 	ted := &channelz.TraceEventDesc{
 		Desc:     "Channel deleted",
@@ -1063,7 +1063,7 @@ type addrConn struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 
-	cc     *UserConn
+	cc     *ClientConn
 	dopts  dialOptions
 	acbw   balancer.SubConn
 	scopts balancer.NewSubConnOptions
@@ -1072,7 +1072,7 @@ type addrConn struct {
 	// health checking may require server to report healthy to set ac to READY), and is reset
 	// to nil when the current transport should no longer be used to create a stream (e.g. after GoAway
 	// is received, transport is closed, ac has been torn down).
-	transport transport.UserTransport // The current transport.
+	transport transport.ClientTransport // The current transport.
 
 	mu      sync.Mutex
 	curAddr resolver.Address   // The current address.
@@ -1268,7 +1268,7 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 	defer cancel()
 	copts.ChannelzParentID = ac.channelzID
 
-	newTr, err := transport.NewUserTransport(connectCtx, ac.cc.ctx, addr, copts, func() { prefaceReceived.Fire() }, onGoAway, onClose)
+	newTr, err := transport.NewClientTransport(connectCtx, ac.cc.ctx, addr, copts, func() { prefaceReceived.Fire() }, onGoAway, onClose)
 	if err != nil {
 		// newTr is either nil, or closed.
 		hcancel()
@@ -1382,7 +1382,7 @@ func (ac *addrConn) startHealthCheck(ctx context.Context) {
 			return nil, status.Error(codes.Canceled, "the provided transport is no longer valid to use")
 		}
 		ac.mu.Unlock()
-		return newNonRetryUserStream(ctx, &StreamDesc{ServerStreams: true}, method, currentTr, ac)
+		return newNonRetryClientStream(ctx, &StreamDesc{ServerStreams: true}, method, currentTr, ac)
 	}
 	setConnectivityState := func(s connectivity.State, lastErr error) {
 		ac.mu.Lock()
@@ -1414,7 +1414,7 @@ func (ac *addrConn) resetConnectBackoff() {
 }
 
 // getReadyTransport returns the transport if ac's state is READY or nil if not.
-func (ac *addrConn) getReadyTransport() transport.UserTransport {
+func (ac *addrConn) getReadyTransport() transport.ClientTransport {
 	ac.mu.Lock()
 	defer ac.mu.Unlock()
 	if ac.state == connectivity.Ready {
@@ -1536,21 +1536,21 @@ func (rt *retryThrottler) successfulRPC() {
 }
 
 type channelzChannel struct {
-	cc *UserConn
+	cc *ClientConn
 }
 
 func (c *channelzChannel) ChannelzMetric() *channelz.ChannelInternalMetric {
 	return c.cc.channelzMetric()
 }
 
-// ErrUserConnTimeout indicates that the UserConn cannot establish the
+// ErrClientConnTimeout indicates that the ClientConn cannot establish the
 // underlying connections within the specified timeout.
 //
 // Deprecated: This error is never returned by grpc and should not be
 // referenced by users.
-var ErrUserConnTimeout = errors.New("grpc: timed out when dialing")
+var ErrClientConnTimeout = errors.New("grpc: timed out when dialing")
 
-func (cc *UserConn) getResolver(scheme string) resolver.Builder {
+func (cc *ClientConn) getResolver(scheme string) resolver.Builder {
 	for _, rb := range cc.dopts.resolvers {
 		if scheme == rb.Scheme() {
 			return rb
@@ -1559,19 +1559,19 @@ func (cc *UserConn) getResolver(scheme string) resolver.Builder {
 	return resolver.Get(scheme)
 }
 
-func (cc *UserConn) updateConnectionError(err error) {
+func (cc *ClientConn) updateConnectionError(err error) {
 	cc.lceMu.Lock()
 	cc.lastConnectionError = err
 	cc.lceMu.Unlock()
 }
 
-func (cc *UserConn) connectionError() error {
+func (cc *ClientConn) connectionError() error {
 	cc.lceMu.Lock()
 	defer cc.lceMu.Unlock()
 	return cc.lastConnectionError
 }
 
-func (cc *UserConn) parseTargetAndFindResolver() (resolver.Builder, error) {
+func (cc *ClientConn) parseTargetAndFindResolver() (resolver.Builder, error) {
 	channelz.Infof(logger, cc.channelzID, "original dial target is: %q", cc.target)
 
 	var rb resolver.Builder
@@ -1659,7 +1659,7 @@ func determineAuthority(endpoint, target string, dopts dialOptions) (string, err
 	}
 	authorityFromDialOption := dopts.authority
 	if (authorityFromCreds != "" && authorityFromDialOption != "") && authorityFromCreds != authorityFromDialOption {
-		return "", fmt.Errorf("UserConn's authority from transport creds %q and dial option %q don't match", authorityFromCreds, authorityFromDialOption)
+		return "", fmt.Errorf("ClientConn's authority from transport creds %q and dial option %q don't match", authorityFromCreds, authorityFromDialOption)
 	}
 
 	switch {

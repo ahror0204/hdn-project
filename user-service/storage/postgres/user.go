@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gofrs/uuid"
-	pb "github.com/hdn-project/User-service/genproto"
+	pb "github.com/hdn-project/user-service/genproto"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 )

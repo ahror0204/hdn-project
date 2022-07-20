@@ -543,7 +543,7 @@ func (cn *conn) Commit() (err error) {
 	defer cn.errRecover(&err)
 
 	cn.checkIsInTransaction(true)
-	// We don't want the User to think that everything is okay if it tries
+	// We don't want the client to think that everything is okay if it tries
 	// to commit a failed transaction.  However, no matter what we return,
 	// database/sql will release this connection back into the free connection
 	// pool so we have to abort the current transaction here.  Note that you
@@ -1138,7 +1138,7 @@ func (cn *conn) auth(r *readBuf, o values) {
 			errorf("unexpected authentication response: %q", t)
 		}
 	case 10:
-		sc := scram.NewUser(sha256.New, o["user"], o["password"])
+		sc := scram.NewClient(sha256.New, o["user"], o["password"])
 		sc.Step(nil)
 		if sc.Err() != nil {
 			errorf("SCRAM-SHA-256 error: %s", sc.Err().Error())
@@ -1889,8 +1889,8 @@ func parseEnviron(env []string) (out map[string]string) {
 			unsupported()
 		case "PGCONNECT_TIMEOUT":
 			accrue("connect_timeout")
-		case "PGUserENCODING":
-			accrue("User_encoding")
+		case "PGCLIENTENCODING":
+			accrue("client_encoding")
 		case "PGDATESTYLE":
 			accrue("datestyle")
 		case "PGTZ":

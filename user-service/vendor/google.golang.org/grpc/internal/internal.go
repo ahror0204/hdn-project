@@ -31,7 +31,7 @@ import (
 var (
 	// WithHealthCheckFunc is set by dialoptions.go
 	WithHealthCheckFunc interface{} // func (HealthChecker) DialOption
-	// HealthCheckFunc is used to provide User-side LB channel health checking
+	// HealthCheckFunc is used to provide client-side LB channel health checking
 	HealthCheckFunc HealthChecker
 	// BalancerUnregister is exported by package balancer to unregister a balancer.
 	BalancerUnregister func(name string)
@@ -65,7 +65,7 @@ var (
 	DrainServerTransports interface{} // func(*grpc.Server, string)
 )
 
-// HealthChecker defines the signature of the User-side LB channel health checking function.
+// HealthChecker defines the signature of the client-side LB channel health checking function.
 //
 // The implementation is expected to create a health checking RPC stream by
 // calling newStream(), watch for the health status of serviceName, and report

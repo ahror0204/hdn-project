@@ -1,290 +1,300 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target 'all'.  Stop.
 
-# GNU Make 4.2.1
+# GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
-# Copyright (C) 1988-2016 Free Software Foundation, Inc.
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jul 20 16:20:08 2022
+# Make data base, printed on Sun Jul 24 13:04:25 2022
 
 # Variables
 
-# 'override' directive
-GNUMAKEFLAGS := 
-# automatic
-<D = $(patsubst %/,%,$(dir $<))
-# automatic
-?F = $(notdir $?)
 # environment
-PAPERSIZE = letter
+GDK_BACKEND = x11
 # environment
-DESKTOP_SESSION = ubuntu
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# environment
+GNOME_SHELL_SESSION_MODE = ubuntu
+# environment
+SSH_AGENT_LAUNCHER = gnome-keyring
+# environment
+SNAP_INSTANCE_KEY = 
+# environment
+GJS_DEBUG_OUTPUT = stderr
+# environment
+LC_NAME = en_US.UTF-8
+# environment
+LC_NUMERIC = en_US.UTF-8
+# environment
+VSCODE_CWD = /home/baxrom/go/src/github.com/hdn-project
+# makefile (from 'Makefile', line 2)
+APP = template
+# environment
+LC_ADDRESS = en_US.UTF-8
+# environment
+GDM_LANG = en_US
+# default
+MAKE_COMMAND := make
+# environment
+QT_ACCESSIBILITY = 1
+# environment
+GOPATH = /home/baxrom/go
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+SNAP_INSTANCE_NAME = code
+# environment
+GDK_PIXBUF_MODULEDIR = /snap/code/102/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# environment
+PWD = /home/baxrom/go/src/github.com/hdn-project/user-service
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+XDG_DATA_DIRS = /usr/share/ubuntu:/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+# environment
+OLDPWD = /home/baxrom/go/src/github.com
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = /home/baxrom/.config/Code/CachedData/3b889b090b5ad5793f524b5d1d39fda662b96a2a
+# environment
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session0
+# environment
+LANG = C
+# environment
+XAUTHORITY = /home/baxrom/.Xauthority
+# default
+.LOADED := 
+# default
+.INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
+# environment
+GNOME_TERMINAL_SERVICE = :1.113
+# makefile
+MAKEFLAGS = pqrR
+# makefile
+CURDIR := /home/baxrom/go/src/github.com/hdn-project/user-service
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+LESSOPEN = | /usr/bin/lesspipe %s
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+MFLAGS = -pqrR
+# environment
+SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # default
 .SHELLFLAGS := -c
 # environment
-XDG_SESSION_CLASS = user
+XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
+# automatic
++D = $(patsubst %/,%,$(dir $+))
 # environment
-SNAP_COMMON = /var/snap/code/common
+XDG_SESSION_DESKTOP = ubuntu
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# environment
+SNAP_REEXEC = 
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_PID = 8694
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
-# automatic
-@D = $(patsubst %/,%,$(dir $@))
 # environment
-XAUTHORITY = /run/user/1000/gdm/Xauthority
+BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-GDMSESSION = ubuntu
-# environment
-XMODIFIERS = @im=ibus
-# makefile
-CURDIR := /home/bakhrom/.local/share/Trash/files/go/src/github.com/hdn-project/user-service
-# makefile
-SHELL = /bin/sh
-# environment
-SNAP_DATA = /var/snap/code/102
-# environment
-VTE_VERSION = 6003
-# environment
-VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
-# environment
-JOURNAL_STREAM = 8:43385
-# environment
-XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
-# environment
-SNAP_INSTANCE_NAME = code
-# environment
-SNAP_ARCH = amd64
-# makefile (from 'Makefile', line 1)
-MAKEFILE_LIST :=  Makefile
-# automatic
-@F = $(notdir $@)
-# environment
-IM_CONFIG_PHASE = 1
-# environment
-USERNAME = bakhrom
-# environment
-MAKELEVEL := 0
-# environment
-XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-# environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
-# environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
-# environment
-MANAGERPID = 1351
-# environment
-LESSOPEN = | /usr/bin/lesspipe %s
-# environment
-LC_NAME = en_US.UTF-8
-# environment
-VSCODE_CWD = /home/bakhrom/.local/share/Trash/files/go/src/github.com/hdn-project
-# environment
-GOPROXY = https://proxy.golang.org,direct
-# environment
-GSETTINGS_SCHEMA_DIR = /snap/code/102/usr/share/glib-2.0/schemas
-# default
-MAKE_HOST := x86_64-pc-linux-gnu
-# environment
-PATH = /usr/local/go/bin:/home/bakhrom/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-# environment
-GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
-# environment
-SESSION_MANAGER = local/bakhrom:@/tmp/.ICE-unix/1568,unix/bakhrom:/tmp/.ICE-unix/1568
-# environment
-XDG_RUNTIME_DIR = /run/user/1000
-# environment
-GDK_PIXBUF_MODULE_FILE = /home/bakhrom/snap/code/common/.cache/gdk-pixbuf-loaders.cache
-# environment
-SNAP = /snap/code/102
-# environment
-GOPATH = /home/bakhrom/Go
-# environment
-SNAP_VERSION = 3b889b09
-# environment
-XDG_MENU_PREFIX = gnome-
-# environment
-DISABLE_WAYLAND = 1
-# environment
-ELECTRON_RUN_AS_NODE = 1
-# environment
-INVOCATION_ID = 17e8440d266144a48ad0b987e72d38f8
-# environment
-GDK_PIXBUF_MODULEDIR = /snap/code/102/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
-# default
-.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
-# environment
-LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
-# environment
-XDG_SESSION_DESKTOP = ubuntu
-# environment
-SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
-# makefile (from 'Makefile', line 1)
-CURRENT_DIR = $(shell pwd)
-# automatic
-%F = $(notdir $%)
-# environment
-DISPLAY = :0
-# environment
-SNAP_INSTANCE_KEY = 
-# environment
-PWD = /home/bakhrom/.local/share/Trash/files/go/src/github.com/hdn-project/user-service
-# default
-.LOADED := 
-# environment
-SSH_AGENT_PID = 1530
-# environment
-ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
-# environment
-GTK_MODULES = gail:atk-bridge
-# environment
-GOMODCACHE = /home/bakhrom/Go/pkg/mod
-# environment
-HOME = /home/bakhrom
-# environment
-LESSCLOSE = /usr/bin/lesspipe %s %s
-# environment
-VSCODE_CLI = 1
-# environment
-VSCODE_CODE_CACHE_PATH = /home/bakhrom/.config/Code/CachedData/3b889b090b5ad5793f524b5d1d39fda662b96a2a
-# environment
-LOGNAME = bakhrom
-# environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
-# environment
-SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
-# environment
-SNAP_CONTEXT = -UscqmDey5m1GhuWh8u937hmbd5lVmXm_ifaB5BvSGDI3QkRzTaG
-# automatic
-+F = $(notdir $+)
-# environment
-ELECTRON_NO_ATTACH_CONSOLE = 1
-# environment
-SNAP_USER_COMMON = /home/bakhrom/snap/code/common
-# environment
-VSCODE_HANDLES_UNCAUGHT_ERRORS = true
-# environment
-GNOME_DESKTOP_SESSION_ID = this-is-deprecated
-# automatic
-^D = $(patsubst %/,%,$(dir $^))
-# environment
-LC_TIME = en_US.UTF-8
-# environment
-SNAP_REAL_HOME = /home/bakhrom
-# environment
-COLORTERM = truecolor
-# default
-MAKE = $(MAKE_COMMAND)
-# default
-MAKECMDGOALS := all
-# environment
-QT_IM_MODULE = ibus
-# environment
-SNAP_USER_DATA = /home/bakhrom/snap/code/102
-# environment
-SHLVL = 1
-# environment
-GNOME_SHELL_SESSION_MODE = ubuntu
-# default
-MAKE_VERSION := 4.2.1
-# environment
-USER = bakhrom
-# environment
-SNAP_REVISION = 102
-# environment
-LC_MONETARY = en_US.UTF-8
-# makefile
-.DEFAULT_GOAL := build
-# environment
-XDG_CURRENT_DESKTOP = Unity
-# environment
-GOROOT = /usr/local/go
-# automatic
-%D = $(patsubst %/,%,$(dir $%))
-# environment
-LC_TELEPHONE = en_US.UTF-8
-# makefile (from 'Makefile', line 2)
-APP = template
-# default
-MAKE_COMMAND := make
-# environment
-OLDPWD = /home/bakhrom/Go/src/github.com/baxromumarov
-# default
-.VARIABLES := 
+SESSION_MANAGER = local/acer:@/tmp/.ICE-unix/2385,unix/acer:/tmp/.ICE-unix/2385
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-c52ce765-1.69.2-main.sock
-# makefile
-MAKEFLAGS = pqrR
+CHROME_DESKTOP = code-url-handler.desktop
 # environment
-MFLAGS = -pqrR
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # automatic
-*D = $(patsubst %/,%,$(dir $*))
-# automatic
-+D = $(patsubst %/,%,$(dir $+))
+<D = $(patsubst %/,%,$(dir $<))
 # environment
-GDK_BACKEND = x11
-# environment
-LC_PAPER = en_US.UTF-8
-# environment
-NO_AT_BRIDGE = 1
-# environment
-LC_IDENTIFICATION = en_US.UTF-8
-# environment
-QT_ACCESSIBILITY = 1
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # default
-MAKEFILES := 
+MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-SNAP_COOKIE = -UscqmDey5m1GhuWh8u937hmbd5lVmXm_ifaB5BvSGDI3QkRzTaG
+GNOME_DESKTOP_SESSION_ID = this-is-deprecated
+# makefile
+SHELL = /bin/sh
+# default
+MAKECMDGOALS := all
 # environment
-LC_NUMERIC = en_US.UTF-8
-# automatic
-<F = $(notdir $<)
-# environment
-LC_MEASUREMENT = en_US.UTF-8
-# environment
-SNAP_NAME = code
-# environment
-LC_ALL = C
+XMODIFIERS = @im=ibus
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/fa111bec_b5d3_4140_8785_fe6fff2cc734
-# automatic
-^F = $(notdir $^)
+SHLVL = 1
 # environment
-GNOME_TERMINAL_SERVICE = :1.137
-# default
-SUFFIXES := 
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/e59e9778_6394_440d_964e_ee05a611d938
 # environment
-SNAP_REEXEC = 
-# environment
-CHROME_DESKTOP = code-url-handler.desktop
-# environment
-WINDOWPATH = 2
-# default
-.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
-# environment
-GJS_DEBUG_OUTPUT = stderr
+MAKELEVEL := 0
 # makefile (from 'Makefile', line 3)
 APP_CMD_DIR = ./cmd
 # default
-.RECIPEPREFIX := 
+MAKE = $(MAKE_COMMAND)
 # environment
-LC_ADDRESS = en_US.UTF-8
+SNAP_COOKIE = LK5k0CudXglewwwH41KcwUD_GUO0pjsjd-QOU9PJG5Kl2D_hx7FO
 # environment
-LANG = C
+PATH = /usr/local/go/bin:/usr/local/go/bin:/usr/local/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/baxrom/.local/bin/
+# default
+MAKEFILES := 
+# environment
+LANGUAGE = en_US
+# environment
+LC_MONETARY = en_US.UTF-8
+# automatic
+^F = $(notdir $^)
+# environment
+SNAP_USER_COMMON = /home/baxrom/snap/code/common
+# environment
+LC_TIME = en_US.UTF-8
+# environment
+SNAP = /snap/code/102
+# environment
+INVOCATION_ID = ad29dde79c14481db8a0bf275aaa09d7
+# environment
+SNAP_REVISION = 102
+# environment
+SNAP_REAL_HOME = /home/baxrom
+# environment
+LC_TELEPHONE = en_US.UTF-8
+# environment
+LESSCLOSE = /usr/bin/lesspipe %s %s
+# automatic
+?F = $(notdir $?)
+# environment
+XDG_CURRENT_DESKTOP = Unity
+# environment
+LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+# automatic
++F = $(notdir $+)
+# environment
+XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
+# environment
+DESKTOP_SESSION = ubuntu
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = baxrom
+# makefile (from 'Makefile', line 1)
+CURRENT_DIR = $(shell pwd)
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+SNAP_ARCH = amd64
+# makefile
+.DEFAULT_GOAL := build
+# environment
+SYSTEMD_EXEC_PID = 6458
+# environment
+DISPLAY = :0
+# environment
+USER = baxrom
+# environment
+GTK_MODULES = gail:atk-bridge
+# default
+MAKE_VERSION := 4.3
+# environment
+DISABLE_WAYLAND = 1
+# environment
+SNAP_DATA = /var/snap/code/102
+# environment
+SNAP_CONTEXT = LK5k0CudXglewwwH41KcwUD_GUO0pjsjd-QOU9PJG5Kl2D_hx7FO
+# environment
+MANAGERPID = 2190
+# environment
+LC_MEASUREMENT = en_US.UTF-8
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 8648
+# environment
+LC_PAPER = en_US.UTF-8
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
+# environment
+COLORTERM = truecolor
+# environment
+GDK_PIXBUF_MODULE_FILE = /home/baxrom/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+# environment
+JOURNAL_STREAM = 8:32201
+# environment
+GOMODCACHE = /home/baxrom/go/pkg/mod
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /home/baxrom
+# environment
+QT_IM_MODULE = ibus
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-c93bfc24-1.69.2-main.sock
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 7521
-# variable set hash-table stats:
-# Load=135/1024=13%, Rehash=0, Collisions=22/160=14%
+SNAP_NAME = code
+# environment
+GSETTINGS_SCHEMA_DIR = /snap/code/102/usr/share/glib-2.0/schemas
+# environment
+PAPERSIZE = letter
+# environment
+GOPROXY = https://proxy.golang.org,direct
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# environment
+SNAP_VERSION = 3b889b09
+# default
+SUFFIXES := 
+# environment
+VSCODE_CLI = 1
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+VTE_VERSION = 6800
+# environment
+SNAP_COMMON = /var/snap/code/common
+# environment
+XDG_GREETER_DATA_DIR = /var/lib/lightdm-data/baxrom
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
+# environment
+SNAP_USER_DATA = /home/baxrom/snap/code/102
+# environment
+XDG_MENU_PREFIX = gnome-
+# environment
+GDMSESSION = ubuntu
+# environment
+LC_IDENTIFICATION = en_US.UTF-8
+# environment
+SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
  
+# variable set hash-table stats:
+# Load=140/1024=14%, Rehash=0, Collisions=13/170=8%
 
 # Pattern-specific Variable Values
 
@@ -292,43 +302,15 @@ VSCODE_PID = 7521
 
 # Directories
 
-# . (device 66306, inode 1705210): 17 files, no impossibilities.
+# . (device 66306, inode 8786554): 16 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 # No implicit rules.
 
 # Files
-
-migrate-up:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 14):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable up
-
-migrate-down:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 17):
-	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable down
-
-# Not a target:
-all:
-#  Command line target.
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has not been updated.
-
-proto-gen:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 9):
-	./scripts/gen-proto.sh	${CURRENT_DIR}
 
 migrate-create:
 #  Implicit rule search has not been done.
@@ -337,25 +319,26 @@ migrate-create:
 #  recipe to execute (from 'Makefile', line 23):
 	migrate create -ext sql -dir migrations -seq init_schema
 
+lint:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 12):
+	golangci-lint -c .golangci.yaml run --build-tags "musl" ./...
+
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-20 11:52:12.765100697
+#  Last modified 2022-07-22 15:37:33.048928312
 #  File has been updated.
 #  Successfully updated.
 
-build:
+proto-gen:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 6):
-	CGO_ENABLED=0 GOOS=darwin go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go
-
-# Not a target:
-.DEFAULT:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 9):
+	./scripts/gen-proto.sh	${CURRENT_DIR}
 
 migrate-force:
 #  Implicit rule search has not been done.
@@ -364,12 +347,39 @@ migrate-force:
 #  recipe to execute (from 'Makefile', line 20):
 	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/clinetdb?sslmode=disable force 
 
-lint:
+# Not a target:
+.DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 12):
-	golangci-lint -c .golangci.yaml run --build-tags "musl" ./...
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+build:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 6):
+	CGO_ENABLED=0 GOOS=darwin go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go
+
+migrate-down:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 17):
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable down
+
+migrate-up:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 14):
+	migrate -path migrations/ -database postgres://postgres:1234@localhost:5432/Userdb?sslmode=disable up
 
 # files hash-table stats:
 # Load=11/1024=1%, Rehash=0, Collisions=0/21=0%
@@ -379,12 +389,12 @@ lint:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 244 B / avg = 8 B
-# current buf: size = 8162 B / used = 244 B / count = 29 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 28 / storage = 235 B / avg = 8 B
+# current buf: size = 8162 B / used = 235 B / count = 28 / avg = 8 B
 
-# strcache performance: lookups = 40 / hit rate = 27%
+# strcache performance: lookups = 39 / hit rate = 28%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=1/40=2%
-# Finished Make data base on Wed Jul 20 16:20:08 2022
+# Load=28/8192=0%, Rehash=0, Collisions=0/39=0%
+# Finished Make data base on Sun Jul 24 13:04:25 2022
 
  
